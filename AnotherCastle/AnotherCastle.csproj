@@ -33,10 +33,18 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="general_font.fnt" />
-    <None Include="general_font.tga" />
-    <None Include="title_font.fnt" />
-    <None Include="title_font.tga" />
+    <None Include="general_font.fnt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="general_font.tga">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="title_font.fnt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="title_font.tga">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Engine\Engine\Engine\Engine.csproj">
@@ -54,6 +62,7 @@
     <Compile Include="LevelDescription.cs" />
     <Compile Include="PersistentGameData.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="StartMenuState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
