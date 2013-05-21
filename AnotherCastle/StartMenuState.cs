@@ -24,7 +24,7 @@ namespace AnotherCastle
             _system = system;
             _generalFont = generalFont;
             InitializeMenu();
-            _title = new Text("AnotherCastle", titleFont);
+            _title = new Text("Another Castle", titleFont);
             _title.SetColor(new Color(0, 0, 0, 1));
 
             // Center on x and move toward the top

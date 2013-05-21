@@ -61,6 +61,7 @@ namespace AnotherCastle
 
             // Game states are loaded here
             _system.AddState("start_menu", new StartMenuState(_titleFont, _generalFont, _input, _system));
+            _system.ChangeState("start_menu");
         }
 
         private void InitializeTextures()
