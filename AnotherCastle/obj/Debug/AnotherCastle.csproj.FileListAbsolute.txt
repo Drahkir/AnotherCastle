@@ -1,3 +1,4 @@
+C:\Users\Rik\Documents\GitHub\AnotherCastle\AnotherCastle\obj\Debug\AnotherCastle.csprojResolveAssemblyReference.cache
 C:\Users\Rik\Documents\GitHub\AnotherCastle\AnotherCastle\bin\Debug\general_font.fnt
 C:\Users\Rik\Documents\GitHub\AnotherCastle\AnotherCastle\bin\Debug\general_font.tga
 C:\Users\Rik\Documents\GitHub\AnotherCastle\AnotherCastle\bin\Debug\title_font.fnt
@@ -7,6 +8,5 @@ C:\Users\Rik\Documents\GitHub\AnotherCastle\AnotherCastle\bin\Debug\AnotherCastl
 C:\Users\Rik\Documents\GitHub\AnotherCastle\AnotherCastle\bin\Debug\AnotherCastle.pdb
 C:\Users\Rik\Documents\GitHub\AnotherCastle\AnotherCastle\bin\Debug\Engine.dll
 C:\Users\Rik\Documents\GitHub\AnotherCastle\AnotherCastle\bin\Debug\Engine.pdb
-C:\Users\Rik\Documents\GitHub\AnotherCastle\AnotherCastle\obj\Debug\AnotherCastle.csprojResolveAssemblyReference.cache
 C:\Users\Rik\Documents\GitHub\AnotherCastle\AnotherCastle\obj\Debug\AnotherCastle.exe
 C:\Users\Rik\Documents\GitHub\AnotherCastle\AnotherCastle\obj\Debug\AnotherCastle.pdb
