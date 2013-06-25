@@ -11,7 +11,8 @@ namespace AnotherCastle
     public class Enemy : Entity
     {
         public int Health { get; set; }
-        double _scale = 0.3;
+        public int damage = 20;
+        double _scale = .2;
         static readonly double HitFlashTime = 0.25;
         double _hitFlashCountDown = 0;
         EffectsManager _effectsManager;
@@ -20,8 +21,10 @@ namespace AnotherCastle
         public double MinTimeToShoot { get; set; }
         Random _random = new Random();
         double _shootCountDown;
+        double _speed = 256;
         MissileManager _missileManager;
-        Texture _bulletTexture;
+        Texture _missileTexture;
+        IEnemyBrain _enemyBrain;
 
         public void RestartShootCountDown()
         {
@@ -30,14 +33,18 @@ namespace AnotherCastle
 
         public Enemy(TextureManager textureManager, EffectsManager effectsManager, MissileManager missileManager)
         {
+            _enemyBrain = new SkeletonBrain();
             Health = 50;
-            _sprite.Texture = textureManager.Get("enemy_ship");
+            _sprite.Texture = textureManager.Get("villager");
+            //_sprite.TextureList.Add(textureManager.Get("skeleton"));
+            //_sprite.TextureList.Add(textureManager.Get("skeleton_b"));
             _sprite.SetScale(_scale, _scale);
-            _sprite.SetRotation(Math.PI);
+            //_sprite.SetRotation(Math.PI);
             _sprite.SetPosition(200, 0);
+            _sprite.Speed = 1;
             _effectsManager = effectsManager;
             _missileManager = missileManager;
-            _bulletTexture = textureManager.Get("bullet");
+            //_missileTexture = textureManager.Get("missile");
             MaxTimeToShoot = 12;
             MinTimeToShoot = 1;
             RestartShootCountDown();
@@ -45,10 +52,10 @@ namespace AnotherCastle
 
         internal void OnCollision(PlayerCharacter playerCharacter)
         {
-            // Handle Collision with player.
+            playerCharacter.OnCollision(this);
         }
 
-        internal void OnCollision(Missile bullet)
+        internal void OnCollision(Missile missile)
         {
             if (Health == 0)
             {
@@ -63,6 +70,21 @@ namespace AnotherCastle
             {
                 OnDestroyed();
             }
+        }
+
+        internal void OnCollision(Enemy enemy)
+        {
+            ReverseCourse();
+        }
+
+        public void ReverseCourse()
+        {
+            //comment
+        }
+
+        public bool IsPathDone()
+        {
+            return this._sprite.GetPosition() == this._sprite.VertexPositions[this._sprite.VertexPositions.Length - 1];
         }
 
         private void OnDestroyed()
@@ -80,25 +102,36 @@ namespace AnotherCastle
             _sprite.SetPosition(position);
         }
 
+        public void Move(Vector amount)
+        {
+            amount *= _speed;
+            _sprite.SetPosition(_sprite.GetPosition() + amount);
+        }
+
         public void Update(double elapsedTime)
         {
             _shootCountDown = _shootCountDown - elapsedTime;
 
-            if (_shootCountDown <= 0)
+            //if (_shootCountDown <= 0)
+            //{
+            //    Missile missile = new Missile(_missileTexture);
+            //    missile.Speed = 350;
+            //    missile.Direction = new Vector(-1, 0, 0);
+            //    missile.SetPosition(_sprite.GetPosition());
+            //    missile.SetColor(new Engine.Color(1, 0, 0, 1));
+            //    _missileManager.EnemyShoot(missile);
+            //    RestartShootCountDown();
+            //}
+
+            //if (Path != null)
+            //{
+            //    Path.UpdatePosition(elapsedTime, this);
+            //}
+            if (_enemyBrain != null)
             {
-                Missile bullet = new Missile(_bulletTexture);
-                bullet.Speed = 350;
-                bullet.Direction = new Vector(-1, 0, 0);
-                bullet.SetPosition(_sprite.GetPosition());
-                bullet.SetColor(new Engine.Color(1, 0, 0, 1));
-                _missileManager.EnemyShoot(bullet);
-                RestartShootCountDown();
+                Move(_enemyBrain.NextMove(_sprite.GetPosition(), elapsedTime) * elapsedTime);
             }
 
-            if (Path != null)
-            {
-                Path.UpdatePosition(elapsedTime, this);
-            }
             if (_hitFlashCountDown != 0)
             {
                 _hitFlashCountDown = Math.Max(0, _hitFlashCountDown - elapsedTime);

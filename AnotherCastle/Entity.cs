@@ -21,7 +21,6 @@ namespace AnotherCastle
         }
 
         // Render a bounding box
-
         public void Render_Debug()
         {
             Gl.glDisable(Gl.GL_TEXTURE_2D);

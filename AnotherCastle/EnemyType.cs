@@ -7,6 +7,7 @@ namespace AnotherCastle
 {
     public enum EnemyType
     {
+        skeleton,
         cannon_fodder,
         cannon_fodder_low,
         cannon_fodder_high,

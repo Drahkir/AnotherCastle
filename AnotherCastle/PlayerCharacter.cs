@@ -12,23 +12,35 @@ namespace AnotherCastle
     {
         int _health;
         bool _isDead;
-        double _speed = 512; // pixels per second
-        double _scale = 1;
+        bool _isInvulnerable;
+        double _invulnerabilityTimer;
+        double _scale = 2;
+        double _speed = 256;
         MissileManager _missileManager;
         Texture _missileTexture;
+        Texture _upTexture;
+        Texture _downTexture;
+        Texture _leftTexture;
+        Texture _rightTexture;
 
         public PlayerCharacter(TextureManager textureManager, MissileManager missileManager)
         {
             _missileManager = missileManager;
-            _missileTexture = textureManager.Get("arrow");
-            _sprite.Texture = textureManager.Get("player_character");
+            //_missileTexture = textureManager.Get("arrow");
+            _sprite.Texture = textureManager.Get("pixela_down");
+            _upTexture = textureManager.Get("pixela_up");
+            _downTexture = textureManager.Get("pixela_down");
+            _leftTexture = textureManager.Get("pixela_left");
+            _rightTexture = textureManager.Get("pixela_right");
             _sprite.SetScale(_scale, _scale);
             //_sprite.SetRotation(Math.PI / 2);
+            Health = 100;
         }
 
         public void Render(Renderer renderer)
         {
             renderer.DrawSprite(_sprite);
+            //Render_Debug();
         }
 
         public bool IsDead
@@ -44,15 +56,48 @@ namespace AnotherCastle
 
         internal void OnCollision(Enemy enemy)
         {
-            // Probably do something like this
-            // Health -= enemy.Damage;
-            throw new NotImplementedException();
+            if (!_isInvulnerable)
+            {
+                Health -= enemy.damage;
+                _isInvulnerable = true;
+            }
         }
 
         internal void OnCollision(Missile missile)
         {
-            // Probably do something like this
-            // Health -= bullet.Damage;
+            if (!_isInvulnerable)
+            {
+                //Health -= missile.damage;
+                _isInvulnerable = true;
+            }
+        }
+
+        public void Update(double elapsedTime)
+        {
+            // Normally some fire recovery code would go here
+            if (Health <= 0) _isDead = true;
+            if (_isInvulnerable)
+            {
+                if (_invulnerabilityTimer == -1)
+                {
+                    _invulnerabilityTimer = 0;
+                }
+
+                else if (_invulnerabilityTimer > 2)
+                {
+                    _invulnerabilityTimer = -1;
+                    _isInvulnerable = false;
+                }
+
+                else
+                {
+                    _invulnerabilityTimer += elapsedTime;
+                }
+            }
+        }
+
+        public void Attack()
+        {
             throw new NotImplementedException();
         }
 
@@ -62,14 +107,24 @@ namespace AnotherCastle
             _sprite.SetPosition(_sprite.GetPosition() + amount);
         }
 
-        public void Update(double elapsedTime)
+        public void MoveUp()
         {
-            // Normally some fire recovery code would go here
+            _sprite.Texture = _upTexture;
         }
 
-        public void Attack()
+        public void MoveDown()
         {
-            throw new NotImplementedException();
+            _sprite.Texture = _downTexture;
+        }
+
+        public void MoveLeft()
+        {
+            _sprite.Texture = _leftTexture;
+        }
+
+        public void MoveRight()
+        {
+            _sprite.Texture = _rightTexture;
         }
     }
 }

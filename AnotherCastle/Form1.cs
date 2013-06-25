@@ -23,7 +23,7 @@ namespace AnotherCastle
         TextureManager _textureManager = new TextureManager();
         Engine.Font _generalFont;
         Engine.Font _titleFont;
-        PersistentGameData _persistentGameData = new PersistentGameData();
+        PersistentGameData _gameData = new PersistentGameData();
         //SoundManager _soundManager = new SoundManager();
 
         public Form1()
@@ -57,10 +57,12 @@ namespace AnotherCastle
         private void InitializeGameState()
         {
             LevelDescription level = new LevelDescription();
-            _persistentGameData.CurrentLevel = level;
+            _gameData.CurrentLevel = level;
 
             // Game states are loaded here
             _system.AddState("start_menu", new StartMenuState(_titleFont, _generalFont, _input, _system));
+            _system.AddState("inner_game", new InnerGameState(_system, _input, _textureManager, _gameData, _generalFont));
+            _system.AddState("game_over", new GameOverState(_gameData, _system, _input, _generalFont, _titleFont));
             _system.ChangeState("start_menu");
         }
 
@@ -75,6 +77,16 @@ namespace AnotherCastle
             // Textures are loaded here
             _textureManager.LoadTexture("title_font", "title_font.tga");
             _textureManager.LoadTexture("general_font", "general_font.tga");
+            //_textureManager.LoadTexture("pixel_princess", "pixel_princess.png");
+            _textureManager.LoadTexture("pixela_up", "pixela_up.png");
+            _textureManager.LoadTexture("pixela_down", "pixela_down.png");
+            _textureManager.LoadTexture("pixela_left", "pixela_left.png");
+            _textureManager.LoadTexture("pixela_right", "pixela_right.png");
+            _textureManager.LoadTexture("villager", "villager.png");
+            _textureManager.LoadTexture("background", "background.png");
+            _textureManager.LoadTexture("background_layer_1", "background_p.tga");
+            _textureManager.LoadTexture("rock_wall", "rock_wall.png");
+            _textureManager.LoadTexture("dirt_floor", "dirt_floor.png");
         }
 
         private void UpdateInput(double elapsedTime)
@@ -101,6 +113,7 @@ namespace AnotherCastle
             else
             {
                 ClientSize = new Size(1280, 720);
+                //ClientSize = new Size(256, 240);
             }
             Setup2DGraphics(ClientSize.Width, ClientSize.Height);
         }

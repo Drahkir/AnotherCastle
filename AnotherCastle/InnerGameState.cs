@@ -13,7 +13,7 @@ namespace AnotherCastle
     {
         Level _level;
         TextureManager _textureManager;
-        Renderer _renderer;
+        Renderer _renderer = new Renderer();
         Input _input;
         StateSystem _system;
         PersistentGameData _gameData;
@@ -42,19 +42,19 @@ namespace AnotherCastle
         public void Update(double elapsedTime)
         {
             _level.Update(elapsedTime, _gameTime);
-            _gameTime -= elapsedTime;
+            _gameTime += elapsedTime;
 
             if (_gameTime <= 0)
             {
-                OnGameStart();
+                //OnGameStart();
                 //_gameData.JustWon = true;
-                _system.ChangeState("game_over");
+                //_system.ChangeState("game_over");
             }
 
             if (_level.HasPlayerDied())
             {
                 OnGameStart();
-                //_gameData.JustWon = false;
+                _gameData.JustWon = false;
                 _system.ChangeState("game_over");
             }
         }

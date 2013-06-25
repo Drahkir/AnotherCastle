@@ -32,9 +32,9 @@ namespace AnotherCastle
             _sprite.SetColor(color);
         }
 
-        public Missile(Texture bulletTexture)
+        public Missile(Texture missileTexture)
         {
-            _sprite.Texture = bulletTexture;
+            _sprite.Texture = missileTexture;
 
             // Some default values
             Dead = false;

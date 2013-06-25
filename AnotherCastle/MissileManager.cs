@@ -19,9 +19,9 @@ namespace AnotherCastle
             _bounds = playArea;
         }
 
-        public void Shoot(Missile bullet)
+        public void Shoot(Missile missile)
         {
-            _missiles.Add(bullet);
+            _missiles.Add(missile);
         }
 
         public void EnemyShoot(Missile missile)
@@ -47,11 +47,11 @@ namespace AnotherCastle
             UpdateMissileList(_enemyMissiles, elapsedTime);
         }
 
-        public void UpdateMissileList(List<Missile> bulletList, double elapsedTime)
+        public void UpdateMissileList(List<Missile> missileList, double elapsedTime)
         {
-            bulletList.ForEach(x => x.Update(elapsedTime));
+            missileList.ForEach(x => x.Update(elapsedTime));
             CheckOutOfBounds(_missiles);
-            RemoveDeadBullets(bulletList);
+            RemoveDeadMissile(missileList);
         }
 
         private void CheckOutOfBounds(List<Missile> missileList)
@@ -65,16 +65,16 @@ namespace AnotherCastle
             }
         }
 
-        private void RemoveDeadBullets(List<Missile> bulletList)
+        private void RemoveDeadMissile(List<Missile> missileList)
         {
-            //foreach(Bullet bullet in bulletList)
-            for (int i = bulletList.Count - 1; i >= 0; i--)
+            //foreach(Missile missile in missileList)
+            for (int i = missileList.Count - 1; i >= 0; i--)
             {
-                //if(bullet.Dead)
-                if (bulletList[i].Dead)
+                //if(missile.Dead)
+                if (missileList[i].Dead)
                 {
-                    //bulletList.Remove(bullet);
-                    bulletList.RemoveAt(i);
+                    //missileList.Remove(missile);
+                    missileList.RemoveAt(i);
                 }
             }
         }
@@ -87,12 +87,12 @@ namespace AnotherCastle
 
         internal void UpdateEnemyCollisions(Enemy enemy)
         {
-            foreach (Missile bullet in _missiles)
+            foreach (Missile missile in _missiles)
             {
-                if (bullet.GetBoundingBox().IntersectsWith(enemy.GetBoundingBox()))
+                if (missile.GetBoundingBox().IntersectsWith(enemy.GetBoundingBox()))
                 {
-                    bullet.Dead = true;
-                    enemy.OnCollision(bullet);
+                    missile.Dead = true;
+                    enemy.OnCollision(missile);
                 }
             }
 

@@ -23,17 +23,17 @@ namespace AnotherCastle
         public ScrollingBackground(Texture background)
         {
             _background.Texture = background;
-            Speed = 0.15f;
+            Speed = 0.05f;
             Direction = new Vector(1, 0, 0);
         }
 
         public void Update(float elapsedTime)
         {
-            _background.SetUVs(_topLeft, _bottomRight);
-            _topLeft.X += (float)(0.15f * Direction.X * elapsedTime);
-            _bottomRight.X += (float)(0.15f * Direction.X * elapsedTime);
-            _topLeft.Y += (float)(0.15f * Direction.Y * elapsedTime);
-            _bottomRight.Y += (float)(0.15f * Direction.Y * elapsedTime);
+            //_background.SetUVs(_topLeft, _bottomRight);
+            //_topLeft.X += (float)(0.15f * Direction.X * elapsedTime);
+            //_bottomRight.X += (float)(0.15f * Direction.X * elapsedTime);
+            //_topLeft.Y += (float)(0.15f * Direction.Y * elapsedTime);
+            //_bottomRight.Y += (float)(0.15f * Direction.Y * elapsedTime);
         }
 
         public void Render(Renderer renderer)
