@@ -61,6 +61,11 @@
   <ItemGroup>
     <Compile Include="Cell.cs" />
     <Compile Include="CellTypes.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="MapObject.cs" />
+    <Compile Include="MapObjectDef.cs" />
+    <Compile Include="MapObjectManager.cs" />
+    <Compile Include="MapObjectType.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="SkeletonBrain.cs" />
     <Compile Include="EnemyDef.cs" />

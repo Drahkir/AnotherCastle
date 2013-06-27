@@ -11,10 +11,16 @@ namespace AnotherCastle
     public class Cell : Entity
     {
         private CellTypes _cellType;
+        private string _cellName;
+        public double X;
+        public double Y;
 
-        public Cell(TextureManager textureManager, CellTypes cellType, double x, double y)
+        public Cell(string cellName, TextureManager textureManager, CellTypes cellType, double x, double y)
         {
-            _cellType = cellType;
+            X = x;
+            Y = y;
+            CellName = cellName;
+            CellType = cellType;
             _sprite.SetPosition(x, y);
             if (cellType == CellTypes.rock_wall)
                 _sprite.Texture = textureManager.Get("rock_wall");
@@ -22,6 +28,17 @@ namespace AnotherCastle
                 _sprite.Texture = textureManager.Get("dirt_floor");
         }
 
+        public string CellName
+        {
+            get { return _cellName; }
+            set { _cellName = value; }
+        }
+
+        public CellTypes CellType
+        {
+            get { return _cellType; }
+            set { _cellType = value; }
+        }
         // Need a constructor to convert XML (?) data to the cell array
         //public BuildCellArray() {
 

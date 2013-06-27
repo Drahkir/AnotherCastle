@@ -9,7 +9,7 @@ namespace AnotherCastle
 {
     public class Room
     {
-        private List<Cell> _cells;
+        private Dictionary<string, Cell> _cellDictionary;
         private const double startX = -600;
         private const double startY = 340;
         private const double incrementX = 85;
@@ -20,11 +20,13 @@ namespace AnotherCastle
         {
             var curX = startX;
             var curY = startY;
-            _cells = new List<Cell>();
+            _cellDictionary = new Dictionary<string, Cell>();
+            int i = 0;
 
             foreach (var cellType in cellTypeList)
             {
-                _cells.Add(new Cell(textureManager, cellType, curX, curY));
+                var roomName = Constants.RoomNames[i++];
+                _cellDictionary.Add(roomName, new Cell(roomName, textureManager, cellType, curX, curY));
                 curX += incrementX;
 
                 if(curX >= 600) {
@@ -34,11 +36,16 @@ namespace AnotherCastle
             }
         }
 
+        public Cell GetCell(string cellName)
+        {
+            return _cellDictionary[cellName];
+        }
 
         public void Render(Renderer renderer)
         {
-            foreach (var cell in _cells)
+            foreach (var cellPair in _cellDictionary)
             {
+                var cell = cellPair.Value;
                 cell.Render(renderer);
             }
         }

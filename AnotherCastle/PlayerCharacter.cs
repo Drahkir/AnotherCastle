@@ -14,7 +14,7 @@ namespace AnotherCastle
         bool _isDead;
         bool _isInvulnerable;
         double _invulnerabilityTimer;
-        double _scale = 2;
+        double _scale = 1;
         double _speed = 256;
         MissileManager _missileManager;
         Texture _missileTexture;
@@ -40,7 +40,7 @@ namespace AnotherCastle
         public void Render(Renderer renderer)
         {
             renderer.DrawSprite(_sprite);
-            //Render_Debug();
+            Render_Debug();
         }
 
         public bool IsDead
@@ -70,6 +70,12 @@ namespace AnotherCastle
                 //Health -= missile.damage;
                 _isInvulnerable = true;
             }
+        }
+
+        internal void OnCollision(MapObject mapObject)
+        {
+            //Impede Movement
+
         }
 
         public void Update(double elapsedTime)
@@ -104,6 +110,11 @@ namespace AnotherCastle
         public void Move(Vector amount)
         {
             amount *= _speed;
+            _sprite.SetPosition(_sprite.GetPosition() + amount);
+        }
+
+        public void HandleCollision(Vector amount)
+        {
             _sprite.SetPosition(_sprite.GetPosition() + amount);
         }
 
