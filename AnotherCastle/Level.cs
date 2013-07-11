@@ -40,6 +40,7 @@ namespace AnotherCastle
                 CellTypes.rock_wall, CellTypes.dirt_floor,  CellTypes.dirt_floor,  CellTypes.dirt_floor,  CellTypes.dirt_floor,  CellTypes.dirt_floor,  CellTypes.dirt_floor,  CellTypes.dirt_floor,  CellTypes.dirt_floor,  CellTypes.dirt_floor,  CellTypes.dirt_floor,  CellTypes.dirt_floor,  CellTypes.dirt_floor,  CellTypes.dirt_floor,  CellTypes.rock_wall,    
                 CellTypes.rock_wall, CellTypes.rock_wall,  CellTypes.rock_wall,  CellTypes.rock_wall,  CellTypes.rock_wall,  CellTypes.rock_wall,  CellTypes.rock_wall,  CellTypes.rock_wall,  CellTypes.rock_wall,  CellTypes.rock_wall,  CellTypes.rock_wall,  CellTypes.rock_wall,  CellTypes.rock_wall,  CellTypes.rock_wall,  CellTypes.rock_wall,        
             };
+            var _levelTwo = new List<CellTypes>();
             _currentRoom = new Room(textureManager, _levelOne);
             _input = input;
             _gameData = gameData;
