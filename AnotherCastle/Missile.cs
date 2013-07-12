@@ -14,27 +14,27 @@ namespace AnotherCastle
 
         public double X
         {
-            get { return _sprite.GetPosition().X; }
+            get { return Sprite.GetPosition().X; }
         }
 
         public double Y
         {
-            get { return _sprite.GetPosition().Y; }
+            get { return Sprite.GetPosition().Y; }
         }
 
         public void SetPosition(Vector position)
         {
-            _sprite.SetPosition(position);
+            Sprite.SetPosition(position);
         }
 
         public void SetColor(Color color)
         {
-            _sprite.SetColor(color);
+            Sprite.SetColor(color);
         }
 
         public Missile(Texture missileTexture)
         {
-            _sprite.Texture = missileTexture;
+            Sprite.Texture = missileTexture;
 
             // Some default values
             Dead = false;
@@ -48,7 +48,7 @@ namespace AnotherCastle
             {
                 return;
             }
-            renderer.DrawSprite(_sprite);
+            renderer.DrawSprite(Sprite);
         }
 
         public void Update(double elapsedTime)
@@ -58,9 +58,9 @@ namespace AnotherCastle
                 return;
             }
 
-            Vector position = _sprite.GetPosition();
+            Vector position = Sprite.GetPosition();
             position += Direction * Speed * elapsedTime;
-            _sprite.SetPosition(position);
+            Sprite.SetPosition(position);
         }
     }
 }

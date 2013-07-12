@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Engine;
+﻿using Engine;
 using Engine.Input;
 using Tao.OpenGl;
 
@@ -10,34 +6,32 @@ namespace AnotherCastle
 {
     class GameOverState : IGameObject
     {
-        const double _timeOut = 4;
-        double _countDown = _timeOut;
+        const double TimeOut = 4;
+        double _countDown = TimeOut;
 
-        StateSystem _system;
-        Input _input;
-        Font _generalFont;
-        Font _titleFont;
-        PersistentGameData _gameData;
-        Renderer _renderer = new Renderer();
+        readonly StateSystem _system;
+        readonly Input _input;
+        readonly PersistentGameData _gameData;
+        readonly Renderer _renderer = new Renderer();
 
-        Text _titleWin;
-        Text _blurbWin;
+        readonly Text _titleWin;
+        readonly Text _blurbWin;
 
-        Text _titleLose;
-        Text _blurbLose;
+        readonly Text _titleLose;
+        readonly Text _blurbLose;
 
         public GameOverState(PersistentGameData data, StateSystem system, Input input, Font generalFont, Font titleFont)
         {
             _gameData = data;
             _system = system;
             _input = input;
-            _generalFont = generalFont;
-            _titleFont = titleFont;
+            var generalFont1 = generalFont;
+            var titleFont1 = titleFont;
 
-            _titleWin = new Text("Complete!", _titleFont);
-            _blurbWin = new Text("Congratulations, you won!", _generalFont);
-            _titleLose = new Text("Game Over!", _titleFont);
-            _blurbLose = new Text("Please try again...", _generalFont);
+            _titleWin = new Text("Complete!", titleFont1);
+            _blurbWin = new Text("Congratulations, you won!", generalFont1);
+            _titleLose = new Text("Game Over!", titleFont1);
+            _blurbLose = new Text("Please try again...", generalFont1);
 
             FormatText(_titleWin, 300);
             FormatText(_blurbWin, 200);
@@ -47,10 +41,10 @@ namespace AnotherCastle
 
         }
 
-        private void FormatText(Text _text, int yPosition)
+        private static void FormatText(Text text, int yPosition)
         {
-            _text.SetPosition(-_text.Width / 2, yPosition);
-            _text.SetColor(new Color(0, 0, 0, 1));
+            text.SetPosition(-text.Width / 2, yPosition);
+            text.SetColor(new Color(0, 0, 0, 1));
         }
 
         #region IGameObject Members
@@ -69,7 +63,7 @@ namespace AnotherCastle
         {
             _gameData.JustWon = false;
             _system.ChangeState("start_menu");
-            _countDown = _timeOut;
+            _countDown = TimeOut;
         }
 
         public void Render()

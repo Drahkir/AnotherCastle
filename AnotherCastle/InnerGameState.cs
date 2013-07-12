@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tao.OpenGl;
+﻿using Tao.OpenGl;
 using Engine;
 using Engine.Input;
 
@@ -12,11 +7,11 @@ namespace AnotherCastle
     class InnerGameState : IGameObject
     {
         Level _level;
-        TextureManager _textureManager;
-        Renderer _renderer = new Renderer();
-        Input _input;
-        StateSystem _system;
-        PersistentGameData _gameData;
+        readonly TextureManager _textureManager;
+        readonly Renderer _renderer = new Renderer();
+        readonly Input _input;
+        readonly StateSystem _system;
+        readonly PersistentGameData _gameData;
         Font _generalFont;
 
         double _gameTime;

@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Engine;
 
 namespace AnotherCastle
 {
     public class EffectsManager
     {
-        List<AnimatedSprite> _effects = new List<AnimatedSprite>();
-        TextureManager _textureManager;
+        readonly List<AnimatedSprite> _effects = new List<AnimatedSprite>();
+        readonly TextureManager _textureManager;
 
         public EffectsManager(TextureManager textureManager)
         {
@@ -18,8 +15,7 @@ namespace AnotherCastle
 
         public void AddExplosion(Vector position)
         {
-            AnimatedSprite explosion = new AnimatedSprite();
-            explosion.Texture = _textureManager.Get("explosion");
+            var explosion = new AnimatedSprite {Texture = _textureManager.Get("explosion")};
             explosion.SetAnimation(4, 4);
             explosion.SetPosition(position);
             _effects.Add(explosion);
@@ -33,12 +29,12 @@ namespace AnotherCastle
 
         public void Render(Renderer renderer)
         {
-            _effects.ForEach(x => renderer.DrawSprite(x));
+            _effects.ForEach(renderer.DrawSprite);
         }
 
         private void RemoveDeadExplosions()
         {
-            for (int i = _effects.Count - 1; i >= 0; i--)
+            for (var i = _effects.Count - 1; i >= 0; i--)
             {
                 if (_effects[i].Finished)
                 {

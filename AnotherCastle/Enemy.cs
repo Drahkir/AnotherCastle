@@ -1,30 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Engine;
-using Tao.OpenGl;
-using System.Drawing;
 
 namespace AnotherCastle
 {
     public class Enemy : Entity
     {
         public int Health { get; set; }
-        public int damage = 20;
-        double _scale = .2;
-        static readonly double HitFlashTime = 0.25;
-        double _hitFlashCountDown = 0;
-        EffectsManager _effectsManager;
+        public int Damage = 20;
+        private const double Scale = .2;
+        private const double HitFlashTime = 0.25;
+        double _hitFlashCountDown;
+        readonly EffectsManager _effectsManager;
         public Path Path { get; set; }
         public double MaxTimeToShoot { get; set; }
         public double MinTimeToShoot { get; set; }
-        Random _random = new Random();
+        readonly Random _random = new Random();
         double _shootCountDown;
-        double _speed = 256;
+        private const double Speed = 256;
         MissileManager _missileManager;
-        Texture _missileTexture;
-        IEnemyBrain _enemyBrain;
+        readonly IEnemyBrain _enemyBrain;
 
         public void RestartShootCountDown()
         {
@@ -35,13 +29,13 @@ namespace AnotherCastle
         {
             _enemyBrain = new SkeletonBrain();
             Health = 50;
-            _sprite.Texture = textureManager.Get("villager");
+            Sprite.Texture = textureManager.Get("villager");
             //_sprite.TextureList.Add(textureManager.Get("skeleton"));
             //_sprite.TextureList.Add(textureManager.Get("skeleton_b"));
-            _sprite.SetScale(_scale, _scale);
+            Sprite.SetScale(Scale, Scale);
             //_sprite.SetRotation(Math.PI);
-            _sprite.SetPosition(200, 0);
-            _sprite.Speed = 1;
+            Sprite.SetPosition(200, 0);
+            Sprite.Speed = 1;
             _effectsManager = effectsManager;
             _missileManager = missileManager;
             //_missileTexture = textureManager.Get("missile");
@@ -64,7 +58,7 @@ namespace AnotherCastle
 
             Health = Math.Max(0, Health - 25);
             _hitFlashCountDown = HitFlashTime;
-            _sprite.SetColor(new Engine.Color(1, 1, 0, 1));
+            Sprite.SetColor(new Color(1, 1, 0, 1));
 
             if (Health == 0)
             {
@@ -84,12 +78,12 @@ namespace AnotherCastle
 
         public bool IsPathDone()
         {
-            return this._sprite.GetPosition() == this._sprite.VertexPositions[this._sprite.VertexPositions.Length - 1];
+            return Sprite.GetPosition() == Sprite.VertexPositions[Sprite.VertexPositions.Length - 1];
         }
 
         private void OnDestroyed()
         {
-            _effectsManager.AddExplosion(_sprite.GetPosition());
+            _effectsManager.AddExplosion(Sprite.GetPosition());
         }
 
         public bool IsDead
@@ -99,13 +93,13 @@ namespace AnotherCastle
 
         internal void SetPosition(Vector position)
         {
-            _sprite.SetPosition(position);
+            Sprite.SetPosition(position);
         }
 
         public void Move(Vector amount)
         {
-            amount *= _speed;
-            _sprite.SetPosition(_sprite.GetPosition() + amount);
+            amount *= Speed;
+            Sprite.SetPosition(Sprite.GetPosition() + amount);
         }
 
         public void Update(double elapsedTime)
@@ -129,20 +123,20 @@ namespace AnotherCastle
             //}
             if (_enemyBrain != null)
             {
-                Move(_enemyBrain.NextMove(_sprite.GetPosition(), elapsedTime) * elapsedTime);
+                Move(_enemyBrain.NextMove(Sprite.GetPosition(), elapsedTime) * elapsedTime);
             }
 
             if (_hitFlashCountDown != 0)
             {
                 _hitFlashCountDown = Math.Max(0, _hitFlashCountDown - elapsedTime);
                 double scaledTime = 1 - (_hitFlashCountDown / HitFlashTime);
-                _sprite.SetColor(new Engine.Color(1, 1, (float)scaledTime, 1));
+                Sprite.SetColor(new Color(1, 1, (float)scaledTime, 1));
             }
         }
 
         public void Render(Renderer renderer)
         {
-            renderer.DrawSprite(_sprite);
+            renderer.DrawSprite(Sprite);
             //Render_Debug();
         }
     }

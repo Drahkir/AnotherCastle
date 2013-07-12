@@ -27,19 +27,19 @@ namespace AnotherCastle
         {
             _missileManager = missileManager;
             //_missileTexture = textureManager.Get("arrow");
-            _sprite.Texture = textureManager.Get("pixela_down");
+            Sprite.Texture = textureManager.Get("pixela_down");
             _upTexture = textureManager.Get("pixela_up");
             _downTexture = textureManager.Get("pixela_down");
             _leftTexture = textureManager.Get("pixela_left");
             _rightTexture = textureManager.Get("pixela_right");
-            _sprite.SetScale(_scale, _scale);
+            Sprite.SetScale(_scale, _scale);
             //_sprite.SetRotation(Math.PI / 2);
             Health = 100;
         }
 
         public void Render(Renderer renderer)
         {
-            renderer.DrawSprite(_sprite);
+            renderer.DrawSprite(Sprite);
             Render_Debug();
         }
 
@@ -58,7 +58,7 @@ namespace AnotherCastle
         {
             if (!_isInvulnerable)
             {
-                Health -= enemy.damage;
+                Health -= enemy.Damage;
                 _isInvulnerable = true;
             }
         }
@@ -110,32 +110,32 @@ namespace AnotherCastle
         public void Move(Vector amount)
         {
             amount *= _speed;
-            _sprite.SetPosition(_sprite.GetPosition() + amount);
+            Sprite.SetPosition(Sprite.GetPosition() + amount);
         }
 
         public void HandleCollision(Vector amount)
         {
-            _sprite.SetPosition(_sprite.GetPosition() + amount);
+            Sprite.SetPosition(Sprite.GetPosition() + amount);
         }
 
         public void MoveUp()
         {
-            _sprite.Texture = _upTexture;
+            Sprite.Texture = _upTexture;
         }
 
         public void MoveDown()
         {
-            _sprite.Texture = _downTexture;
+            Sprite.Texture = _downTexture;
         }
 
         public void MoveLeft()
         {
-            _sprite.Texture = _leftTexture;
+            Sprite.Texture = _leftTexture;
         }
 
         public void MoveRight()
         {
-            _sprite.Texture = _rightTexture;
+            Sprite.Texture = _rightTexture;
         }
     }
 }

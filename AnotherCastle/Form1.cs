@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Engine;
 using Engine.Input;
@@ -16,14 +10,13 @@ namespace AnotherCastle
 {
     public partial class Form1 : Form
     {
-        bool _fullscreen = false;
-        FastLoop _fastLoop;
-        StateSystem _system = new StateSystem();
-        Input _input = new Input();
-        TextureManager _textureManager = new TextureManager();
+        private const bool Fullscreen = false;
+        readonly StateSystem _system = new StateSystem();
+        readonly Input _input = new Input();
+        readonly TextureManager _textureManager = new TextureManager();
         Engine.Font _generalFont;
         Engine.Font _titleFont;
-        PersistentGameData _gameData = new PersistentGameData();
+        readonly PersistentGameData _gameData = new PersistentGameData();
         //SoundManager _soundManager = new SoundManager();
 
         public Form1()
@@ -40,7 +33,7 @@ namespace AnotherCastle
             InitializeFonts();
             InitializeGameState();
 
-            _fastLoop = new FastLoop(GameLoop);
+            new FastLoop(GameLoop);
         }
 
         private void InitializeFonts()
@@ -56,7 +49,7 @@ namespace AnotherCastle
 
         private void InitializeGameState()
         {
-            LevelDescription level = new LevelDescription();
+            var level = new LevelDescription();
             _gameData.CurrentLevel = level;
 
             // Game states are loaded here
@@ -104,7 +97,7 @@ namespace AnotherCastle
 
         private void InitializeDisplay()
         {
-            if (_fullscreen)
+            if (Fullscreen)
             {
                 FormBorderStyle = FormBorderStyle.None;
                 WindowState = FormWindowState.Maximized;
@@ -121,14 +114,14 @@ namespace AnotherCastle
         protected override void OnClientSizeChanged(EventArgs e)
         {
             base.OnClientSizeChanged(e);
-            Gl.glViewport(0, 0, this.ClientSize.Width, this.ClientSize.Height);
+            Gl.glViewport(0, 0, ClientSize.Width, ClientSize.Height);
             Setup2DGraphics(ClientSize.Width, ClientSize.Height);
         }
 
-        private void Setup2DGraphics(double width, double height)
+        private static void Setup2DGraphics(double width, double height)
         {
-            double halfWidth = width / 2;
-            double halfHeight = height / 2;
+            var halfWidth = width / 2;
+            var halfHeight = height / 2;
             Gl.glMatrixMode(Gl.GL_PROJECTION);
             Gl.glLoadIdentity();
             Gl.glOrtho(-halfWidth, halfWidth, -halfHeight, halfHeight, -100, 100);

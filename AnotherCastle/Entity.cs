@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tao.OpenGl;
+﻿using Tao.OpenGl;
 using System.Drawing;
 using Engine;
 
@@ -11,13 +6,13 @@ namespace AnotherCastle
 {
     public class Entity
     {
-        protected Sprite _sprite = new Sprite();
+        protected Sprite Sprite = new Sprite();
 
         public RectangleF GetBoundingBox()
         {
-            float width = (float)(_sprite.Texture.Width * _sprite.ScaleX);
-            float height = (float)(_sprite.Texture.Height * _sprite.ScaleY);
-            return new RectangleF((float)_sprite.GetPosition().X - width / 2, (float)_sprite.GetPosition().Y - height / 2, width, height);
+            var width = (float)(Sprite.Texture.Width * Sprite.ScaleX);
+            var height = (float)(Sprite.Texture.Height * Sprite.ScaleY);
+            return new RectangleF((float)Sprite.GetPosition().X - width / 2, (float)Sprite.GetPosition().Y - height / 2, width, height);
         }
 
         // Render a bounding box
@@ -25,7 +20,7 @@ namespace AnotherCastle
         {
             Gl.glDisable(Gl.GL_TEXTURE_2D);
 
-            RectangleF bounds = GetBoundingBox();
+            var bounds = GetBoundingBox();
 
             Gl.glBegin(Gl.GL_LINE_LOOP);
             {

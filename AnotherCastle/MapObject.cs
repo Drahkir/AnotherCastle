@@ -17,7 +17,7 @@ namespace AnotherCastle
 
         public MapObject(TextureManager textureManager, EffectsManager effectsManager)
         {
-            _sprite.Texture = textureManager.Get("rock_wall");
+            Sprite.Texture = textureManager.Get("rock_wall");
         }
 
         public void Update(double elapsedTime)
@@ -32,12 +32,12 @@ namespace AnotherCastle
 
         internal void SetPosition(Vector position)
         {
-            _sprite.SetPosition(position);
+            Sprite.SetPosition(position);
         }
 
         public void Render(Renderer renderer)
         {
-            renderer.DrawSprite(_sprite);
+            renderer.DrawSprite(Sprite);
             Render_Debug();
         }
     }

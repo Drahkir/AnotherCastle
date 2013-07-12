@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Engine;
 
 namespace AnotherCastle
@@ -12,21 +10,15 @@ namespace AnotherCastle
         public int SouthBound;
         public int WestBound;
         public int EastBound;
-
-        public ClientBounds()
-        {
-
-        }
     }
 
     public class EnemyManager
     {
-        List<Enemy> _enemies = new List<Enemy>();
-        List<EnemyDef> _upComingEnemies = new List<EnemyDef>();
-        TextureManager _textureManager;
-        EffectsManager _effectsManager;
-        MissileManager _missileManager;
-        ClientBounds _clientBounds;
+        readonly List<Enemy> _enemies = new List<Enemy>();
+        readonly List<EnemyDef> _upComingEnemies = new List<EnemyDef>();
+        readonly TextureManager _textureManager;
+        readonly EffectsManager _effectsManager;
+        readonly MissileManager _missileManager;
 
         public List<Enemy> EnemyList
         {
@@ -36,13 +28,12 @@ namespace AnotherCastle
             }
         }
 
-        public EnemyManager(TextureManager textureManager, EffectsManager effectsManager, MissileManager missileManager, ClientBounds clientBounds)
+        public EnemyManager(TextureManager textureManager, EffectsManager effectsManager, MissileManager missileManager)
         {
             _textureManager = textureManager;
             _effectsManager = effectsManager;
             _missileManager = missileManager;
             //_leftBound = leftBound;
-            _clientBounds = clientBounds;
 
             //_upComingEnemies.Add(new EnemyDef("cannon_fodder", 30));
             //_upComingEnemies.Add(new EnemyDef("cannon_fodder", 29.5));
@@ -88,15 +79,12 @@ namespace AnotherCastle
         private void QueueUpcomingEnemies(double gameTime)
         {
             var prng = new Random();
-            var typesList = Enum.GetNames(typeof(EnemyType));
-            int numTypes = typesList.Length;
-            var randomEnemy = typesList[prng.Next(0, numTypes)];
             var randomCount = prng.Next(1, 1);
             var launchTime = gameTime + 2;
 
-            for (int i = 0; i < randomCount; i++)
+            for (var i = 0; i < randomCount; i++)
             {
-                _upComingEnemies.Add(new EnemyDef(EnemyType.skeleton.ToString(), launchTime));
+                _upComingEnemies.Add(new EnemyDef(EnemyType.Skeleton.ToString(), launchTime));
                 launchTime += 2;
             }
         }
@@ -109,12 +97,10 @@ namespace AnotherCastle
                 QueueUpcomingEnemies(gameTime);
             }
 
-            EnemyDef lastElement = _upComingEnemies[_upComingEnemies.Count - 1];
-            if (gameTime > lastElement.LaunchTime)
-            {
-                _upComingEnemies.RemoveAt(_upComingEnemies.Count - 1);
-                _enemies.Add(CreateEnemyFromDef(lastElement));
-            }
+            var lastElement = _upComingEnemies[_upComingEnemies.Count - 1];
+            if (!(gameTime > lastElement.LaunchTime)) return;
+            _upComingEnemies.RemoveAt(_upComingEnemies.Count - 1);
+            _enemies.Add(CreateEnemyFromDef(lastElement));
         }
 
         //private void UpdateEnemySpawns(double gameTime)
@@ -135,11 +121,11 @@ namespace AnotherCastle
 
         private Enemy CreateEnemyFromDef(EnemyDef definition)
         {
-            Enemy enemy = new Enemy(_textureManager, _effectsManager, _missileManager);
+            var enemy = new Enemy(_textureManager, _effectsManager, _missileManager);
             
             if (definition.EnemyType == "skeleton")
             {
-                List<Vector> _pathPoints = new List<Vector>();
+                var pathPoints = new List<Vector>();
                 var prng = new Random();
                 var ranX = prng.Next(-580, 580);
                 var ranY = prng.Next(-350, 350);
@@ -149,69 +135,73 @@ namespace AnotherCastle
 
             if (definition.EnemyType == "cannon_fodder")
             {
-                List<Vector> _pathPoints = new List<Vector>();
-                _pathPoints.Add(new Vector(1400, 0, 0));
-                _pathPoints.Add(new Vector(0, 0, 0));
-                _pathPoints.Add(new Vector(-1400, 0, 0));
+                var pathPoints = new List<Vector>
+                {
+                    new Vector(1400, 0, 0),
+                    new Vector(0, 0, 0),
+                    new Vector(-1400, 0, 0)
+                };
 
-                enemy.Path = new Path(_pathPoints, 15);
+                enemy.Path = new Path(pathPoints, 15);
             }
 
             if (definition.EnemyType == "cannon_fodder_high")
             {
-                List<Vector> _pathPoints = new List<Vector>();
-                _pathPoints.Add(new Vector(1400, 0, 0));
-                _pathPoints.Add(new Vector(0, 250, 0));
-                _pathPoints.Add(new Vector(-1400, 0, 0));
+                var pathPoints = new List<Vector>
+                {
+                    new Vector(1400, 0, 0),
+                    new Vector(0, 250, 0),
+                    new Vector(-1400, 0, 0)
+                };
 
-                enemy.Path = new Path(_pathPoints, 15);
+                enemy.Path = new Path(pathPoints, 15);
             }
 
             else if (definition.EnemyType == "cannon_fodder_low")
             {
-                List<Vector> _pathPoints = new List<Vector>();
-                _pathPoints.Add(new Vector(1400, 0, 0));
-                _pathPoints.Add(new Vector(0, -250, 0));
-                _pathPoints.Add(new Vector(-1400, 0, 0));
+                var pathPoints = new List<Vector>
+                {
+                    new Vector(1400, 0, 0),
+                    new Vector(0, -250, 0),
+                    new Vector(-1400, 0, 0)
+                };
 
-                enemy.Path = new Path(_pathPoints, 15);
+                enemy.Path = new Path(pathPoints, 15);
             }
 
             else if (definition.EnemyType == "cannon_fodder_straight")
             {
-                List<Vector> _pathPoints = new List<Vector>();
-                _pathPoints.Add(new Vector(1400, 0, 0));
-                _pathPoints.Add(new Vector(-1400, 0, 0));
+                var pathPoints = new List<Vector> {new Vector(1400, 0, 0), new Vector(-1400, 0, 0)};
 
-                enemy.Path = new Path(_pathPoints, 21);
+                enemy.Path = new Path(pathPoints, 21);
             }
 
             else if (definition.EnemyType == "up_l")
             {
-                List<Vector> _pathPoints = new List<Vector>();
-                _pathPoints.Add(new Vector(500, -375, 0));
-                _pathPoints.Add(new Vector(500, 0, 0));
-                _pathPoints.Add(new Vector(500, 0, 0));
-                _pathPoints.Add(new Vector(-1400, 200, 0));
+                var pathPoints = new List<Vector>
+                {
+                    new Vector(500, -375, 0),
+                    new Vector(500, 0, 0),
+                    new Vector(500, 0, 0),
+                    new Vector(-1400, 200, 0)
+                };
 
-                enemy.Path = new Path(_pathPoints, 15);
+                enemy.Path = new Path(pathPoints, 15);
             }
 
             else if (definition.EnemyType == "down_l")
             {
-                List<Vector> _pathPoints = new List<Vector>();
-                _pathPoints.Add(new Vector(500, 375, 0));
-                _pathPoints.Add(new Vector(500, 0, 0));
-                _pathPoints.Add(new Vector(500, 0, 0));
-                _pathPoints.Add(new Vector(-1400, -200, 0));
+                var pathPoints = new List<Vector>
+                {
+                    new Vector(500, 375, 0),
+                    new Vector(500, 0, 0),
+                    new Vector(500, 0, 0),
+                    new Vector(-1400, -200, 0)
+                };
 
-                enemy.Path = new Path(_pathPoints, 15);
+                enemy.Path = new Path(pathPoints, 15);
             }
 
-            //else
-            //{
-            //    System.Diagnostics.Debug.Assert(false, "Unknown enemy type.");
-            //}
             return enemy;
         }
 
@@ -225,7 +215,7 @@ namespace AnotherCastle
 
         private void CheckForOutOfBounds()
         {
-            foreach (Enemy enemy in _enemies)
+            foreach (var enemy in _enemies)
             {
                 if (enemy.IsPathDone())
                     //|| enemy.GetBoundingBox().Left > _clientBounds.EastBound
@@ -244,7 +234,7 @@ namespace AnotherCastle
 
         private void RemoveDeadEnemies()
         {
-            for (int i = _enemies.Count - 1; i >= 0; i--)
+            for (var i = _enemies.Count - 1; i >= 0; i--)
             {
                 if (_enemies[i].IsDead)
                 {
