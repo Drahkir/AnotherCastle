@@ -11,7 +11,7 @@ namespace AnotherCastle
         public string MapObjectType { get; set; }
         public double LaunchTime { get; set; }
         public Vector SpawnPoint { get; set; }
-        public string CellName { get; set; }
+        public string TileName { get; set; }
 
         public MapObjectDef()
         {
@@ -20,12 +20,12 @@ namespace AnotherCastle
             SpawnPoint = RandomSpawnPoint();
         }
 
-        public MapObjectDef(string mapObjectType, double launchTime, Cell cell)
+        public MapObjectDef(string mapObjectType, double launchTime, Tile tile)
         {
             MapObjectType = mapObjectType;
             LaunchTime = launchTime;
-            CellName = cell.CellName;
-            SpawnPoint = new Vector(cell.X, cell.Y, 0);
+            TileName = tile.TileName;
+            SpawnPoint = new Vector(tile.X, tile.Y, 0);
         }
 
         public MapObjectDef(string mapObjectType, double launchTime, Vector spawnPoint)

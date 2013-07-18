@@ -1,4 +1,5 @@
-﻿using Tao.OpenGl;
+﻿using System.IO;
+using Tao.OpenGl;
 using Engine;
 using Engine.Input;
 
@@ -12,24 +13,25 @@ namespace AnotherCastle
         readonly Input _input;
         readonly StateSystem _system;
         readonly PersistentGameData _gameData;
-        Font _generalFont;
 
         double _gameTime;
 
-        public InnerGameState(StateSystem system, Input input, TextureManager textureManager, PersistentGameData gameData, Font generalFont)
+        public InnerGameState(StateSystem system, Input input, TextureManager textureManager, PersistentGameData gameData)
         {
             _system = system;
             _input = input;
             _textureManager = textureManager;
             _gameData = gameData;
-            _generalFont = generalFont;
             OnGameStart();
         }
 
         public void OnGameStart()
         {
-            _level = new Level(_input, _textureManager, _gameData);
-            _gameTime = _gameData.CurrentLevel.Time;
+            using (var fileStream = File.Open("./Content/Levels/0.txt", FileMode.Open))
+            {
+                _level = new Level(_input, _textureManager, _gameData, fileStream);
+                _gameTime = _gameData.CurrentLevel.Time;
+            }
         }
 
         #region IGameObject Members

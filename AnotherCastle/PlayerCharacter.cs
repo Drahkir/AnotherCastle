@@ -10,8 +10,6 @@ namespace AnotherCastle
 {
     public class PlayerCharacter : Entity
     {
-        int _health;
-        bool _isDead;
         bool _isInvulnerable;
         double _invulnerabilityTimer;
         double _scale = 1;
@@ -43,24 +41,19 @@ namespace AnotherCastle
             Render_Debug();
         }
 
-        public bool IsDead
-        {
-            get { return _isDead; }
-        }
+        /// <summary>
+        /// Returns true if the PlayerCharacter is dead
+        /// </summary>
+        /// <returns>true if dead; else false</returns>
+        public bool IsDead { get; private set; }
 
-        public int Health
-        {
-            get { return _health; }
-            set { _health = value; }
-        }
+        public int Health { get; set; }
 
         internal void OnCollision(Enemy enemy)
         {
-            if (!_isInvulnerable)
-            {
-                Health -= enemy.Damage;
-                _isInvulnerable = true;
-            }
+            if (_isInvulnerable) return;
+            Health -= enemy.Damage;
+            _isInvulnerable = true;
         }
 
         internal void OnCollision(Missile missile)
@@ -81,24 +74,22 @@ namespace AnotherCastle
         public void Update(double elapsedTime)
         {
             // Normally some fire recovery code would go here
-            if (Health <= 0) _isDead = true;
-            if (_isInvulnerable)
+            if (Health <= 0) IsDead = true;
+            if (!_isInvulnerable) return;
+            if (_invulnerabilityTimer == -1)
             {
-                if (_invulnerabilityTimer == -1)
-                {
-                    _invulnerabilityTimer = 0;
-                }
+                _invulnerabilityTimer = 0;
+            }
 
-                else if (_invulnerabilityTimer > 2)
-                {
-                    _invulnerabilityTimer = -1;
-                    _isInvulnerable = false;
-                }
+            else if (_invulnerabilityTimer > 2)
+            {
+                _invulnerabilityTimer = -1;
+                _isInvulnerable = false;
+            }
 
-                else
-                {
-                    _invulnerabilityTimer += elapsedTime;
-                }
+            else
+            {
+                _invulnerabilityTimer += elapsedTime;
             }
         }
 

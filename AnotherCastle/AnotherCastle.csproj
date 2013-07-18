@@ -33,22 +33,22 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="background.tga">
+    <None Include="Content\Backgrounds\background.tga">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="background_p.tga">
+    <None Include="Content\Backgrounds\background_p.tga">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="general_font.fnt">
+    <None Include="Content\Fonts\general_font.fnt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="general_font.tga">
+    <None Include="Content\Fonts\general_font.tga">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="title_font.fnt">
+    <None Include="Content\Fonts\title_font.fnt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="title_font.tga">
+    <None Include="Content\Fonts\title_font.tga">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -59,8 +59,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cell.cs" />
-    <Compile Include="CellTypes.cs" />
+    <Compile Include="Tile.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="MapObject.cs" />
     <Compile Include="MapObjectDef.cs" />
@@ -118,45 +117,58 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="background.png">
+    <Content Include="Content\Backgrounds\background.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="dirt_floor.png">
+    <Content Include="Content\Tiles\dirt_floor.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="pixela_down.png">
+    <Content Include="Content\Tiles\rock_wall.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="pixela_left.png">
+    <Content Include="Content\Tiles\rock_wall2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="pixela_right.png">
+    <Content Include="Content\Tiles\dirt_floor2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="pixela_up.png">
+    <Content Include="Content\Levels\0.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="player_character.png">
+    <Content Include="Content\Sprites\pixela_down.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Sprites\pixela_left.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Sprites\pixela_right.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Sprites\pixela_up.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Sprites\player_character.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="rock_wall.png">
+    <Content Include="Content\Sprites\skeleton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="skeleton.png">
+    <Content Include="Content\Sprites\skeleton_a.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="skeleton_a.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="skeleton_b.png">
+    <Content Include="Content\Sprites\skeleton_b.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="sprite_sheet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="villager.png">
+    <Content Include="Content\Sprites\villager.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\Overlays\" />
+    <Folder Include="Content\Sounds\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

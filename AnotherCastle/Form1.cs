@@ -38,8 +38,8 @@ namespace AnotherCastle
 
         private void InitializeFonts()
         {
-            _titleFont = new Engine.Font(_textureManager.Get("title_font"), FontParser.Parse("title_font.fnt"));
-            _generalFont = new Engine.Font(_textureManager.Get("general_font"), FontParser.Parse("general_font.fnt"));
+            _titleFont = new Engine.Font(_textureManager.Get("title_font"), FontParser.Parse("./Content/Fonts/title_font.fnt"));
+            _generalFont = new Engine.Font(_textureManager.Get("general_font"), FontParser.Parse("./Content/Fonts/general_font.fnt"));
         }
 
         private void InitializeSounds()
@@ -54,7 +54,7 @@ namespace AnotherCastle
 
             // Game states are loaded here
             _system.AddState("start_menu", new StartMenuState(_titleFont, _generalFont, _input, _system));
-            _system.AddState("inner_game", new InnerGameState(_system, _input, _textureManager, _gameData, _generalFont));
+            _system.AddState("inner_game", new InnerGameState(_system, _input, _textureManager, _gameData));
             _system.AddState("game_over", new GameOverState(_gameData, _system, _input, _generalFont, _titleFont));
             _system.ChangeState("start_menu");
         }
@@ -68,18 +68,18 @@ namespace AnotherCastle
             Ilut.ilutRenderer(Ilut.ILUT_OPENGL);
 
             // Textures are loaded here
-            _textureManager.LoadTexture("title_font", "title_font.tga");
-            _textureManager.LoadTexture("general_font", "general_font.tga");
+            _textureManager.LoadTexture("title_font", "./Content/Fonts/title_font.tga");
+            _textureManager.LoadTexture("general_font", "./Content/Fonts/general_font.tga");
             //_textureManager.LoadTexture("pixel_princess", "pixel_princess.png");
-            _textureManager.LoadTexture("pixela_up", "pixela_up.png");
-            _textureManager.LoadTexture("pixela_down", "pixela_down.png");
-            _textureManager.LoadTexture("pixela_left", "pixela_left.png");
-            _textureManager.LoadTexture("pixela_right", "pixela_right.png");
-            _textureManager.LoadTexture("villager", "villager.png");
-            _textureManager.LoadTexture("background", "background.png");
-            _textureManager.LoadTexture("background_layer_1", "background_p.tga");
-            _textureManager.LoadTexture("rock_wall", "rock_wall.png");
-            _textureManager.LoadTexture("dirt_floor", "dirt_floor.png");
+            _textureManager.LoadTexture("pixela_up", "./Content/Sprites/pixela_up.png");
+            _textureManager.LoadTexture("pixela_down", "./Content/Sprites/pixela_down.png");
+            _textureManager.LoadTexture("pixela_left", "./Content/Sprites/pixela_left.png");
+            _textureManager.LoadTexture("pixela_right", "./Content/Sprites/pixela_right.png");
+            _textureManager.LoadTexture("villager", "./Content/Sprites/villager.png");
+            _textureManager.LoadTexture("background", "./Content/Backgrounds/background.png");
+            _textureManager.LoadTexture("background_layer_1", "./Content/Backgrounds/background_p.tga");
+            _textureManager.LoadTexture("dirt_floor", "./Content/Tiles/dirt_floor.png");
+            _textureManager.LoadTexture("rock_wall", "./Content/Tiles/rock_wall.png");
         }
 
         private void UpdateInput(double elapsedTime)

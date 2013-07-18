@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Engine;
 using Engine.Input;
 using System.Windows.Forms;
@@ -18,21 +19,26 @@ namespace AnotherCastle
         readonly MissileManager _missileManager = new MissileManager(new RectangleF(-1300 / 2, -750 / 2, 1300, 750));
         readonly EffectsManager _effectsManager;
         readonly Room _currentRoom;
+        private Dictionary<string, Tile> _tileDictionary;
+        private const double startX = -600;
+        private const double startY = 340;
+        private const double incrementX = 85;
+        private const double incrementY = -85;
 
-        public Level(Input input, TextureManager textureManager, PersistentGameData gameData)
+        public Level(Input input, TextureManager textureManager, PersistentGameData gameData, Stream mapFile)
         {
-            var levelOne = new List<CellTypes> { 
-                CellTypes.RockWall, CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,
-                CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
-                CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
-                CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
-                CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
-                CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
-                CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
-                CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
-                CellTypes.RockWall, CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,        
-            };
-
+            //var levelOne = new List<CellTypes> { 
+            //    CellTypes.RockWall, CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,
+            //    CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
+            //    CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
+            //    CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
+            //    CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
+            //    CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
+            //    CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
+            //    CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
+            //    CellTypes.RockWall, CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,        
+            //};
+            var levelOne = LoadTiles(mapFile, textureManager);
             _currentRoom = new Room(textureManager, levelOne);
             _input = input;
             _gameData = gameData;
@@ -50,6 +56,45 @@ namespace AnotherCastle
             //_backgroundLayer = new ScrollingBackground(textureManager.Get("background_layer_1"));
             //_backgroundLayer.Speed = 0.1f;
             //_backgroundLayer.SetScale(2.0, 2.0);
+        }
+
+        private List<Tile> LoadTiles(Stream mapFile, TextureManager textureManager)
+        {
+            var curX = startX;
+            var curY = startY;
+            var tileList = new List<Tile>();
+
+            using(var reader = new StreamReader(mapFile))
+            {
+                while (!reader.EndOfStream)
+                {
+                    var tileChar = (char)reader.Read();
+                    if (tileChar == '\r' || tileChar == '\n') continue;
+                    var tile = LoadTile(tileChar, textureManager);
+                    tile.X = curX;
+                    tile.Y = curY;
+                    tileList.Add(tile);
+                    curX += incrementX;
+
+                    if (!(curX >= 600)) continue;
+                    curX = startX;
+                    curY += incrementY;
+                }
+            }
+            return tileList;
+        }
+
+        private static Tile LoadTile(Char tileChar, TextureManager textureManager)
+        {
+            switch (tileChar)
+            {
+                case 'R':
+                    return new Tile("rock_wall", textureManager.Get("rock_wall"), TileCollision.Impassable);
+                case 'D':
+                    return new Tile("dirt_floor", textureManager.Get("dirt_floor"), TileCollision.Passable);
+                default:
+                    throw new ArgumentNullException("tileChar");
+            }
         }
 
         public bool HasPlayerDied()
