@@ -11,7 +11,6 @@ namespace AnotherCastle
     class Level
     {
         readonly Input _input;
-        PersistentGameData _gameData;
         readonly PlayerCharacter _playerCharacter;
         //List<Enemy> _enemyList = new List<Enemy>();
         readonly EnemyManager _enemyManager;
@@ -19,13 +18,12 @@ namespace AnotherCastle
         readonly MissileManager _missileManager = new MissileManager(new RectangleF(-1300 / 2, -750 / 2, 1300, 750));
         readonly EffectsManager _effectsManager;
         readonly Room _currentRoom;
-        private Dictionary<string, Tile> _tileDictionary;
-        private const double startX = -600;
-        private const double startY = 340;
-        private const double incrementX = 85;
-        private const double incrementY = -85;
+        private const double StartX = -600;
+        private const double StartY = 340;
+        private const double IncrementX = 85;
+        private const double IncrementY = -85;
 
-        public Level(Input input, TextureManager textureManager, PersistentGameData gameData, Stream mapFile)
+        public Level(Input input, TextureManager textureManager, Stream mapFile)
         {
             //var levelOne = new List<CellTypes> { 
             //    CellTypes.RockWall, CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,
@@ -41,7 +39,6 @@ namespace AnotherCastle
             var levelOne = LoadTiles(mapFile, textureManager);
             _currentRoom = new Room(textureManager, levelOne);
             _input = input;
-            _gameData = gameData;
             var textureManager1 = textureManager;
             _effectsManager = new EffectsManager(textureManager1);
             _playerCharacter = new PlayerCharacter(textureManager1, _missileManager);
@@ -58,10 +55,10 @@ namespace AnotherCastle
             //_backgroundLayer.SetScale(2.0, 2.0);
         }
 
-        private List<Tile> LoadTiles(Stream mapFile, TextureManager textureManager)
+        private static IEnumerable<Tile> LoadTiles(Stream mapFile, TextureManager textureManager)
         {
-            var curX = startX;
-            var curY = startY;
+            var curX = StartX;
+            var curY = StartY;
             var tileList = new List<Tile>();
 
             using(var reader = new StreamReader(mapFile))
@@ -70,15 +67,16 @@ namespace AnotherCastle
                 {
                     var tileChar = (char)reader.Read();
                     if (tileChar == '\r' || tileChar == '\n') continue;
+
                     var tile = LoadTile(tileChar, textureManager);
                     tile.X = curX;
                     tile.Y = curY;
                     tileList.Add(tile);
-                    curX += incrementX;
+                    curX += IncrementX;
 
                     if (!(curX >= 600)) continue;
-                    curX = startX;
-                    curY += incrementY;
+                    curX = StartX;
+                    curY += IncrementY;
                 }
             }
             return tileList;
