@@ -37,11 +37,11 @@ namespace AnotherCastle
             //    CellTypes.RockWall, CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,        
             //};
             var levelOne = LoadTiles(mapFile, textureManager);
-            _currentRoom = new Room(textureManager, levelOne);
+            _currentRoom = new Room(levelOne);
             _input = input;
             var textureManager1 = textureManager;
             _effectsManager = new EffectsManager(textureManager1);
-            _playerCharacter = new PlayerCharacter(textureManager1, _missileManager);
+            _playerCharacter = new PlayerCharacter(textureManager1);
             _enemyManager = new EnemyManager(textureManager1, _effectsManager, _missileManager);
             _mapObjectManager = new MapObjectManager(textureManager1, _effectsManager, _currentRoom);
             //_enemyList.Add(new Enemy(_textureManager, _effectsManager));
@@ -69,8 +69,7 @@ namespace AnotherCastle
                     if (tileChar == '\r' || tileChar == '\n') continue;
 
                     var tile = LoadTile(tileChar, textureManager);
-                    tile.X = curX;
-                    tile.Y = curY;
+                    tile.SetPosition(curX, curY);
                     tileList.Add(tile);
                     curX += IncrementX;
 

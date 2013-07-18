@@ -12,26 +12,21 @@ namespace AnotherCastle
     {
         bool _isInvulnerable;
         double _invulnerabilityTimer;
-        double _scale = 1;
-        double _speed = 256;
-        MissileManager _missileManager;
-        Texture _missileTexture;
-        Texture _upTexture;
-        Texture _downTexture;
-        Texture _leftTexture;
-        Texture _rightTexture;
+        private const double Scale = 1;
+        private const double Speed = 256;
+        readonly Texture _upTexture;
+        readonly Texture _downTexture;
+        readonly Texture _leftTexture;
+        readonly Texture _rightTexture;
 
-        public PlayerCharacter(TextureManager textureManager, MissileManager missileManager)
+        public PlayerCharacter(TextureManager textureManager)
         {
-            _missileManager = missileManager;
-            //_missileTexture = textureManager.Get("arrow");
             Sprite.Texture = textureManager.Get("pixela_down");
             _upTexture = textureManager.Get("pixela_up");
             _downTexture = textureManager.Get("pixela_down");
             _leftTexture = textureManager.Get("pixela_left");
             _rightTexture = textureManager.Get("pixela_right");
-            Sprite.SetScale(_scale, _scale);
-            //_sprite.SetRotation(Math.PI / 2);
+            Sprite.SetScale(Scale, Scale);
             Health = 100;
         }
 
@@ -100,7 +95,7 @@ namespace AnotherCastle
 
         public void Move(Vector amount)
         {
-            amount *= _speed;
+            amount *= Speed;
             Sprite.SetPosition(Sprite.GetPosition() + amount);
         }
 

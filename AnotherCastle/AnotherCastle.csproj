@@ -159,9 +159,6 @@
     <Content Include="Content\Sprites\skeleton_b.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="sprite_sheet.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\Sprites\villager.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

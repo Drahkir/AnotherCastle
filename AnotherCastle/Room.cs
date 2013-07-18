@@ -6,7 +6,6 @@ namespace AnotherCastle
     public class Room
     {
         private readonly Dictionary<string, Tile> _tileDictionary;
-        //private const double incrementY = -85;
 
         // Rooms are constructed such that the cells in the 2D array are assigned from NW (Top-Left) to SE (Bottom-Right)
         public Room(IEnumerable<Tile> tileList)

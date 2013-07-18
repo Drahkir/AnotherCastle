@@ -36,6 +36,7 @@ namespace AnotherCastle
             TileCollision = tileCollision;
             Sprite.Texture = texture;
         }
+        
         public Tile(string tileName, Texture texture, TileCollision tileCollision, double x, double y)
         {
             X = x;
@@ -46,6 +47,12 @@ namespace AnotherCastle
             Sprite.Texture = texture;
         }
 
+        public void SetPosition(double x, double y)
+        {
+            X = x;
+            Y = y;
+            Sprite.SetPosition(X, Y);
+        }
         public string TileName { get; set; }
 
         public TileCollision TileCollision { get; set; }

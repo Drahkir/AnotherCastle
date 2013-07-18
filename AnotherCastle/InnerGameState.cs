@@ -29,7 +29,7 @@ namespace AnotherCastle
         {
             using (var fileStream = File.Open("./Content/Levels/0.txt", FileMode.Open))
             {
-                _level = new Level(_input, _textureManager, _gameData, fileStream);
+                _level = new Level(_input, _textureManager, fileStream);
                 _gameTime = _gameData.CurrentLevel.Time;
             }
         }
