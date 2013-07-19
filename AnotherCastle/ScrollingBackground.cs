@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Engine;
+﻿using Engine;
 
 namespace AnotherCastle
 {
     public class ScrollingBackground
     {
-        Sprite _background = new Sprite();
+        readonly Sprite _background = new Sprite();
 
         public float Speed { get; set; }
         public Vector Direction { get; set; }
-        Point _topLeft = new Point(0, 0);
-        Point _bottomRight = new Point(1, 1);
 
         public void SetScale(double x, double y)
         {

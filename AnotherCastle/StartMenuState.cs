@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tao.OpenGl;
 using Engine;
 using Engine.Input;
@@ -11,12 +7,12 @@ namespace AnotherCastle
 {
     class StartMenuState : IGameObject
     {
-        Renderer _renderer = new Renderer();
-        Text _title;
-        Engine.Font _generalFont;
-        Input _input;
+        readonly Renderer _renderer = new Renderer();
+        readonly Text _title;
+        readonly Engine.Font _generalFont;
+        readonly Input _input;
         VerticalMenu _menu;
-        StateSystem _system;
+        readonly StateSystem _system;
 
         public StartMenuState(Engine.Font titleFont, Engine.Font generalFont, Input input, StateSystem system)
         {
@@ -34,9 +30,9 @@ namespace AnotherCastle
         private void InitializeMenu()
         {
             _menu = new VerticalMenu(0, 150, _input);
-            Button startGame = new Button(delegate(object o, EventArgs e) { _system.ChangeState("inner_game"); }, new Text("Start", _generalFont));
-            Button gameSettings = new Button(delegate(object o, EventArgs e) { /* Go To Settings */ }, new Text("Settings", _generalFont));
-            Button exitGame = new Button(delegate(object o, EventArgs e) { System.Windows.Forms.Application.Exit(); }, new Text("Exit", _generalFont));
+            var startGame = new Button(delegate(object o, EventArgs e) { _system.ChangeState("inner_game"); }, new Text("Start", _generalFont));
+            var gameSettings = new Button(delegate(object o, EventArgs e) { /* Go To Settings */ }, new Text("Settings", _generalFont));
+            var exitGame = new Button(delegate(object o, EventArgs e) { System.Windows.Forms.Application.Exit(); }, new Text("Exit", _generalFont));
 
             _menu.AddButton(startGame);
             _menu.AddButton(gameSettings);

@@ -31,7 +31,6 @@ namespace AnotherCastle
 
         public Vector RandomSpawnPoint()
         {
-            //throw new NotImplementedException();
             return new Vector(0, 0, 0);
         }
     }

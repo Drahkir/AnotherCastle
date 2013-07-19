@@ -61,7 +61,6 @@
   <ItemGroup>
     <Compile Include="Tile.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="MapObjectType.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="SkeletonBrain.cs" />
     <Compile Include="EnemyDef.cs" />

@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Engine;
 
 namespace AnotherCastle
 {
     public class Path
     {
-        Spline _spline = new Spline();
-        Tween _tween;
+        readonly Spline _spline = new Spline();
+        readonly Tween _tween;
 
-        public Path(List<Vector> points, double travelTime)
+        public Path(IEnumerable<Vector> points, double travelTime)
         {
             foreach (Vector v in points)
             {

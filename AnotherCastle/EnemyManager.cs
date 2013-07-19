@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Engine;
 
 namespace AnotherCastle
@@ -33,47 +34,9 @@ namespace AnotherCastle
             _textureManager = textureManager;
             _effectsManager = effectsManager;
             _missileManager = missileManager;
-            //_leftBound = leftBound;
-
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder", 30));
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder", 29.5));
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder", 29));
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder", 28.5));
-
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 30));
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 29.5));
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 29));
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 28.5));
-
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder", 25));
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder", 24.5));
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder", 24));
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder", 23.5));
-
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 20));
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 19.5));
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 19));
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_low", 18.5));
-
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_straight", 16));
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_straight", 15.8));
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_straight", 15.6));
-            //_upComingEnemies.Add(new EnemyDef("cannon_fodder_straight", 15.4));
-
-
-            //_upComingEnemies.Add(new EnemyDef("up_l", 10));
-            //_upComingEnemies.Add(new EnemyDef("down_l", 9));
-            //_upComingEnemies.Add(new EnemyDef("up_l", 8));
-            //_upComingEnemies.Add(new EnemyDef("down_l", 7));
-            //_upComingEnemies.Add(new EnemyDef("up_l", 6));
-
-
 
             // Sort enemies so the greater launch time appears first.
-            _upComingEnemies.Sort(delegate(EnemyDef firstEnemy, EnemyDef secondEnemy)
-            {
-                return firstEnemy.LaunchTime.CompareTo(secondEnemy.LaunchTime);
-            });
+            _upComingEnemies.Sort((firstEnemy, secondEnemy) => firstEnemy.LaunchTime.CompareTo(secondEnemy.LaunchTime));
         }
 
         private void QueueUpcomingEnemies(double gameTime)
@@ -103,29 +66,12 @@ namespace AnotherCastle
             _enemies.Add(CreateEnemyFromDef(lastElement));
         }
 
-        //private void UpdateEnemySpawns(double gameTime)
-        //{
-        //    // If no upcoming enemies then there's nothing to spawn
-        //    if (_upComingEnemies.Count == 0)
-        //    {
-        //        return;
-        //    }
-
-        //    EnemyDef lastElement = _upComingEnemies[_upComingEnemies.Count - 1];
-        //    if (gameTime < lastElement.LaunchTime)
-        //    {
-        //        _upComingEnemies.RemoveAt(_upComingEnemies.Count - 1);
-        //        _enemies.Add(CreateEnemyFromDef(lastElement));
-        //    }
-        //}
-
         private Enemy CreateEnemyFromDef(EnemyDef definition)
         {
             var enemy = new Enemy(_textureManager, _effectsManager, _missileManager);
             
             if (definition.EnemyType == "skeleton")
             {
-                var pathPoints = new List<Vector>();
                 var prng = new Random();
                 var ranX = prng.Next(-580, 580);
                 var ranY = prng.Next(-350, 350);
@@ -215,16 +161,10 @@ namespace AnotherCastle
 
         private void CheckForOutOfBounds()
         {
-            foreach (var enemy in _enemies)
+            foreach (var enemy in _enemies.Where(enemy => enemy.IsPathDone()))
             {
-                if (enemy.IsPathDone())
-                    //|| enemy.GetBoundingBox().Left > _clientBounds.EastBound
-                    //|| enemy.GetBoundingBox().Top < _clientBounds.NorthBound
-                    //|| enemy.GetBoundingBox().Bottom > _clientBounds.SouthBound)
-                {
-                    enemy.Health = 0;
-                }
-             }
+                enemy.Health = 0;
+            }
         }
 
         public void Render(Renderer renderer)

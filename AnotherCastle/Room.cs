@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Engine;
 
 namespace AnotherCastle
@@ -27,9 +28,8 @@ namespace AnotherCastle
 
         public void Render(Renderer renderer)
         {
-            foreach (var tilePair in TileDictionary)
+            foreach (var tile in TileDictionary.Select(tilePair => tilePair.Value))
             {
-                var tile = tilePair.Value;
                 tile.Render(renderer);
             }
         }

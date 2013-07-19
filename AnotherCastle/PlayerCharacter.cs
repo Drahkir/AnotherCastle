@@ -55,12 +55,6 @@ namespace AnotherCastle
             }
         }
 
-        //internal void OnCollision(MapObject mapObject)
-        //{
-        //    //Impede Movement
-
-        //}
-
         public void Update(double elapsedTime)
         {
             // Normally some fire recovery code would go here

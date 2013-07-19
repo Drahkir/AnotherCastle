@@ -17,7 +17,6 @@ namespace AnotherCastle
         readonly Random _random = new Random();
         double _shootCountDown;
         private const double Speed = 256;
-        MissileManager _missileManager;
         readonly IEnemyBrain _enemyBrain;
 
         public void RestartShootCountDown()
@@ -30,15 +29,10 @@ namespace AnotherCastle
             _enemyBrain = new SkeletonBrain();
             Health = 50;
             Sprite.Texture = textureManager.Get("villager");
-            //_sprite.TextureList.Add(textureManager.Get("skeleton"));
-            //_sprite.TextureList.Add(textureManager.Get("skeleton_b"));
             Sprite.SetScale(Scale, Scale);
-            //_sprite.SetRotation(Math.PI);
             Sprite.SetPosition(200, 0);
             Sprite.Speed = 1;
             _effectsManager = effectsManager;
-            _missileManager = missileManager;
-            //_missileTexture = textureManager.Get("missile");
             MaxTimeToShoot = 12;
             MinTimeToShoot = 1;
             RestartShootCountDown();
@@ -78,7 +72,7 @@ namespace AnotherCastle
 
         public void ReverseCourse()
         {
-            //comment
+            throw new NotImplementedException();
         }
 
         public bool IsPathDone()
@@ -111,32 +105,15 @@ namespace AnotherCastle
         {
             _shootCountDown = _shootCountDown - elapsedTime;
 
-            //if (_shootCountDown <= 0)
-            //{
-            //    Missile missile = new Missile(_missileTexture);
-            //    missile.Speed = 350;
-            //    missile.Direction = new Vector(-1, 0, 0);
-            //    missile.SetPosition(_sprite.GetPosition());
-            //    missile.SetColor(new Engine.Color(1, 0, 0, 1));
-            //    _missileManager.EnemyShoot(missile);
-            //    RestartShootCountDown();
-            //}
-
-            //if (Path != null)
-            //{
-            //    Path.UpdatePosition(elapsedTime, this);
-            //}
             if (_enemyBrain != null)
             {
                 Move(_enemyBrain.NextMove(Sprite.GetPosition(), elapsedTime) * elapsedTime);
             }
 
-            if (_hitFlashCountDown != 0)
-            {
-                _hitFlashCountDown = Math.Max(0, _hitFlashCountDown - elapsedTime);
-                double scaledTime = 1 - (_hitFlashCountDown / HitFlashTime);
-                Sprite.SetColor(new Color(1, 1, (float)scaledTime, 1));
-            }
+            if (_hitFlashCountDown == 0) return;
+            _hitFlashCountDown = Math.Max(0, _hitFlashCountDown - elapsedTime);
+            var scaledTime = 1 - (_hitFlashCountDown / HitFlashTime);
+            Sprite.SetColor(new Color(1, 1, (float)scaledTime, 1));
         }
 
         public void Render(Renderer renderer)

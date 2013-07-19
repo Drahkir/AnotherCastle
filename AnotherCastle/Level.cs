@@ -12,9 +12,7 @@ namespace AnotherCastle
     {
         readonly Input _input;
         readonly PlayerCharacter _playerCharacter;
-        //List<Enemy> _enemyList = new List<Enemy>();
         readonly EnemyManager _enemyManager;
-        //readonly MapObjectManager _mapObjectManager;
         readonly MissileManager _missileManager = new MissileManager(new RectangleF(-1300 / 2, -750 / 2, 1300, 750));
         readonly EffectsManager _effectsManager;
         readonly Room _currentRoom;
@@ -32,8 +30,6 @@ namespace AnotherCastle
             _effectsManager = new EffectsManager(textureManager1);
             _playerCharacter = new PlayerCharacter(textureManager1);
             _enemyManager = new EnemyManager(textureManager1, _effectsManager, _missileManager);
-            //_mapObjectManager = new MapObjectManager(textureManager1, _effectsManager, _currentRoom);
-            //_enemyList.Add(new Enemy(_textureManager, _effectsManager));
 
             //_background = new ScrollingBackground(textureManager.Get("background"));
             //_background.SetScale(5, 5);
@@ -102,13 +98,6 @@ namespace AnotherCastle
 
                 _missileManager.UpdateEnemyCollisions(enemy);
             }
-
-            //foreach (var mapObject in _mapObjectManager.MapObjectList)
-            //{
-            //    if (!mapObject.GetBoundingBox().IntersectsWith(_playerCharacter.GetBoundingBox())) continue;
-            //    mapObject.OnCollision(_playerCharacter);
-            //    _playerCharacter.OnCollision(mapObject);
-            //}
         }
         
         public void Update(double elapsedTime, double gameTime)
@@ -120,7 +109,6 @@ namespace AnotherCastle
 
             UpdateCollisions();
             _enemyManager.Update(elapsedTime, gameTime);
-            //_mapObjectManager.Update(elapsedTime, gameTime);
             _missileManager.Update(elapsedTime);
             _effectsManager.Update(elapsedTime);
 
@@ -147,9 +135,9 @@ namespace AnotherCastle
             var controlInput = new Vector(x, y, 0);
 
             if (!(Math.Abs(controlInput.Length()) < 0.0001)) return;
+
             // If the input is very small, then the player may not be using
             // a controller; he might be using the keyboard.
-            //var box = _playerCharacter.GetBoundingBox();
 
             foreach (var tilePair in _currentRoom.TileDictionary)
             {
@@ -167,6 +155,7 @@ namespace AnotherCastle
                 _playerCharacter.HandleCollision(absDepthX > absDepthY
                     ? new Vector(0, depth.Y, 0)
                     : new Vector(depth.X, 0, 0));
+
                 // Perform further collisions with the new bounds.
                 //bounds = BoundingRectangle;
             }
@@ -229,7 +218,6 @@ namespace AnotherCastle
             _currentRoom.Render(renderer);
 
             _enemyManager.Render(renderer);
-            //_mapObjectManager.Render(renderer);
             _playerCharacter.Render(renderer);
             _missileManager.Render(renderer);
             _effectsManager.Render(renderer);
