@@ -61,9 +61,6 @@
   <ItemGroup>
     <Compile Include="Tile.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="MapObject.cs" />
-    <Compile Include="MapObjectDef.cs" />
-    <Compile Include="MapObjectManager.cs" />
     <Compile Include="MapObjectType.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="SkeletonBrain.cs" />

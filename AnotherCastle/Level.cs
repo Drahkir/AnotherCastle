@@ -14,7 +14,7 @@ namespace AnotherCastle
         readonly PlayerCharacter _playerCharacter;
         //List<Enemy> _enemyList = new List<Enemy>();
         readonly EnemyManager _enemyManager;
-        readonly MapObjectManager _mapObjectManager;
+        //readonly MapObjectManager _mapObjectManager;
         readonly MissileManager _missileManager = new MissileManager(new RectangleF(-1300 / 2, -750 / 2, 1300, 750));
         readonly EffectsManager _effectsManager;
         readonly Room _currentRoom;
@@ -25,17 +25,6 @@ namespace AnotherCastle
 
         public Level(Input input, TextureManager textureManager, Stream mapFile)
         {
-            //var levelOne = new List<CellTypes> { 
-            //    CellTypes.RockWall, CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,
-            //    CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
-            //    CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
-            //    CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
-            //    CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
-            //    CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
-            //    CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
-            //    CellTypes.RockWall, CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.DirtFloor,  CellTypes.RockWall,    
-            //    CellTypes.RockWall, CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,  CellTypes.RockWall,        
-            //};
             var levelOne = LoadTiles(mapFile, textureManager);
             _currentRoom = new Room(levelOne);
             _input = input;
@@ -43,7 +32,7 @@ namespace AnotherCastle
             _effectsManager = new EffectsManager(textureManager1);
             _playerCharacter = new PlayerCharacter(textureManager1);
             _enemyManager = new EnemyManager(textureManager1, _effectsManager, _missileManager);
-            _mapObjectManager = new MapObjectManager(textureManager1, _effectsManager, _currentRoom);
+            //_mapObjectManager = new MapObjectManager(textureManager1, _effectsManager, _currentRoom);
             //_enemyList.Add(new Enemy(_textureManager, _effectsManager));
 
             //_background = new ScrollingBackground(textureManager.Get("background"));
@@ -114,13 +103,14 @@ namespace AnotherCastle
                 _missileManager.UpdateEnemyCollisions(enemy);
             }
 
-            foreach (var mapObject in _mapObjectManager.MapObjectList)
-            {
-                if (!mapObject.GetBoundingBox().IntersectsWith(_playerCharacter.GetBoundingBox())) continue;
-                mapObject.OnCollision(_playerCharacter);
-                _playerCharacter.OnCollision(mapObject);
-            }
+            //foreach (var mapObject in _mapObjectManager.MapObjectList)
+            //{
+            //    if (!mapObject.GetBoundingBox().IntersectsWith(_playerCharacter.GetBoundingBox())) continue;
+            //    mapObject.OnCollision(_playerCharacter);
+            //    _playerCharacter.OnCollision(mapObject);
+            //}
         }
+        
         public void Update(double elapsedTime, double gameTime)
         {
             _playerCharacter.Update(elapsedTime);
@@ -130,7 +120,7 @@ namespace AnotherCastle
 
             UpdateCollisions();
             _enemyManager.Update(elapsedTime, gameTime);
-            _mapObjectManager.Update(elapsedTime, gameTime);
+            //_mapObjectManager.Update(elapsedTime, gameTime);
             _missileManager.Update(elapsedTime);
             _effectsManager.Update(elapsedTime);
 
@@ -159,29 +149,16 @@ namespace AnotherCastle
             if (!(Math.Abs(controlInput.Length()) < 0.0001)) return;
             // If the input is very small, then the player may not be using
             // a controller; he might be using the keyboard.
-            var box = _playerCharacter.GetBoundingBox();
+            //var box = _playerCharacter.GetBoundingBox();
 
-            foreach (var mapObject in _mapObjectManager.MapObjectList)
+            foreach (var tilePair in _currentRoom.TileDictionary)
             {
-                var objectBox = mapObject.GetBoundingBox();
-
-                //if (box.IntersectsWith(objectBox))
-                //{
-                //    if (!leftBlock && (Math.Abs(objectBox.Right - left) < Math.Abs(objectBox.Left - left)) && !(objectBox.Top > bottom || objectBox.Bottom < top))
-                //        leftBlock = true;
-
-                //    if (!rightBlock && (Math.Abs(objectBox.Left - right) < Math.Abs(objectBox.Right - right)) && !(objectBox.Top > bottom || objectBox.Bottom < top))
-                //        rightBlock = true;
-
-                //    if (!topBlock && (Math.Abs(objectBox.Bottom - top) < Math.Abs(objectBox.Top - top)) && !(objectBox.Left > right || objectBox.Right < left))
-                //        bottomBlock = true;
-
-                //    if (!bottomBlock && (Math.Abs(objectBox.Top - bottom) < Math.Abs(objectBox.Bottom - bottom)) && !(objectBox.Left > right || objectBox.Right < left))
-                //        topBlock = true;
-                //}
+                var box = _playerCharacter.GetBoundingBox();
+                var tile = tilePair.Value;
+                if (tile.TileCollision != TileCollision.Impassable) continue;
+                var objectBox = tile.GetBoundingBox();
 
                 var depth = box.GetIntersectionDepth(objectBox);
-
 
                 if (depth == Vector.Zero) continue;
                 var absDepthX = Math.Abs(depth.X);
@@ -192,6 +169,29 @@ namespace AnotherCastle
                     : new Vector(depth.X, 0, 0));
                 // Perform further collisions with the new bounds.
                 //bounds = BoundingRectangle;
+            }
+
+            foreach (var enemy in _enemyManager.EnemyList)
+            {
+                var box = enemy.GetBoundingBox();
+                foreach (var tilePair in _currentRoom.TileDictionary)
+                {
+                    var tile = tilePair.Value;
+                    if (tile.TileCollision != TileCollision.Impassable) continue;
+                    var objectBox = tile.GetBoundingBox();
+
+                    var depth = box.GetIntersectionDepth(objectBox);
+
+                    if (depth == Vector.Zero) continue;
+                    var absDepthX = Math.Abs(depth.X);
+                    var absDepthY = Math.Abs(depth.Y);
+
+                    enemy.HandleCollision(absDepthX > absDepthY
+                        ? new Vector(0, depth.Y, 0)
+                        : new Vector(depth.X, 0, 0));
+                    // Perform further collisions with the new bounds.
+                    //bounds = BoundingRectangle;
+                }
             }
 
             if (_input.Keyboard.IsKeyHeld(Keys.Left))
@@ -229,7 +229,7 @@ namespace AnotherCastle
             _currentRoom.Render(renderer);
 
             _enemyManager.Render(renderer);
-            _mapObjectManager.Render(renderer);
+            //_mapObjectManager.Render(renderer);
             _playerCharacter.Render(renderer);
             _missileManager.Render(renderer);
             _effectsManager.Render(renderer);

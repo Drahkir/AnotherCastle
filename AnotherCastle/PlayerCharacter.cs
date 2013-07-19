@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Engine;
-using Tao.OpenGl;
 
 namespace AnotherCastle
 {
@@ -60,11 +55,11 @@ namespace AnotherCastle
             }
         }
 
-        internal void OnCollision(MapObject mapObject)
-        {
-            //Impede Movement
+        //internal void OnCollision(MapObject mapObject)
+        //{
+        //    //Impede Movement
 
-        }
+        //}
 
         public void Update(double elapsedTime)
         {

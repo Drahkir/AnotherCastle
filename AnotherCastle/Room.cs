@@ -5,29 +5,29 @@ namespace AnotherCastle
 {
     public class Room
     {
-        private readonly Dictionary<string, Tile> _tileDictionary;
+        public readonly Dictionary<string, Tile> TileDictionary;
 
         // Rooms are constructed such that the cells in the 2D array are assigned from NW (Top-Left) to SE (Bottom-Right)
         public Room(IEnumerable<Tile> tileList)
         {
-            _tileDictionary = new Dictionary<string, Tile>();
+            TileDictionary = new Dictionary<string, Tile>();
             var i = 0;
 
             foreach (var tile in tileList)
             {
                 var roomName = Constants.RoomNames[i++];
-                _tileDictionary.Add(roomName, tile);
+                TileDictionary.Add(roomName, tile);
             }
         }
 
         public Tile GetCell(string cellName)
         {
-            return _tileDictionary[cellName];
+            return TileDictionary[cellName];
         }
 
         public void Render(Renderer renderer)
         {
-            foreach (var tilePair in _tileDictionary)
+            foreach (var tilePair in TileDictionary)
             {
                 var tile = tilePair.Value;
                 tile.Render(renderer);
