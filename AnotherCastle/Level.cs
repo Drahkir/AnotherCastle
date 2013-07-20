@@ -10,26 +10,24 @@ namespace AnotherCastle
 {
     class Level
     {
+        private Tile[,] tiles;
         readonly Input _input;
         readonly PlayerCharacter _playerCharacter;
         readonly EnemyManager _enemyManager;
         readonly MissileManager _missileManager = new MissileManager(new RectangleF(-1300 / 2, -750 / 2, 1300, 750));
         readonly EffectsManager _effectsManager;
         readonly Room _currentRoom;
-        private const double StartX = -600;
-        private const double StartY = 340;
-        private const double IncrementX = 85;
-        private const double IncrementY = -85;
+        private const int xOffset = -650;
+        private const int yOffset = -410;
 
         public Level(Input input, TextureManager textureManager, Stream mapFile)
         {
-            var levelOne = LoadTiles(mapFile, textureManager);
-            _currentRoom = new Room(levelOne);
             _input = input;
-            var textureManager1 = textureManager;
-            _effectsManager = new EffectsManager(textureManager1);
-            _playerCharacter = new PlayerCharacter(textureManager1);
-            _enemyManager = new EnemyManager(textureManager1, _effectsManager, _missileManager);
+            _effectsManager = new EffectsManager(textureManager);
+            _playerCharacter = new PlayerCharacter(textureManager);
+            _enemyManager = new EnemyManager();
+            LoadTiles(mapFile, textureManager);
+            _currentRoom = new Room(tiles);
 
             //_background = new ScrollingBackground(textureManager.Get("background"));
             //_background.SetScale(5, 5);
@@ -40,43 +38,108 @@ namespace AnotherCastle
             //_backgroundLayer.SetScale(2.0, 2.0);
         }
 
-        private static IEnumerable<Tile> LoadTiles(Stream mapFile, TextureManager textureManager)
-        {
-            var curX = StartX;
-            var curY = StartY;
-            var tileList = new List<Tile>();
-
-            using(var reader = new StreamReader(mapFile))
+        private void LoadTiles(Stream mapFile, TextureManager textureManager)
+        {            
+            // Load the level and ensure all of the lines are the same length.
+            int width;
+            var lines = new List<string>();
+            using (var reader = new StreamReader(mapFile))
             {
-                while (!reader.EndOfStream)
+                var line = reader.ReadLine();
+                width = line.Length;
+                while (line != null)
                 {
-                    var tileChar = (char)reader.Read();
-                    if (tileChar == '\r' || tileChar == '\n') continue;
-
-                    var tile = LoadTile(tileChar, textureManager);
-                    tile.SetPosition(curX, curY);
-                    tileList.Add(tile);
-                    curX += IncrementX;
-
-                    if (!(curX >= 600)) continue;
-                    curX = StartX;
-                    curY += IncrementY;
+                    lines.Add(line);
+                    if (line.Length != width)
+                        throw new Exception(String.Format("The length of line {0} is different from all preceeding lines.", lines.Count));
+                    line = reader.ReadLine();
                 }
             }
-            return tileList;
+
+            // Allocate the tile grid.
+            tiles = new Tile[width, lines.Count];
+
+            // Loop over every tile position,
+            for (var y = 0; y < Height; ++y)
+            {
+                for (var x = 0; x < Width; ++x)
+                {
+                    // to load each tile.
+                    var tileType = lines[y][x];
+                    tiles[x, y] = LoadTile(tileType, textureManager, x, y);
+                }
+            }
+
+            // Verify that the level has a beginning and an end.
+            //if (Player == null)
+            //    throw new NotSupportedException("A level must have a starting point.");
+            //if (exit == InvalidPosition)
+            //    throw new NotSupportedException("A level must have an exit.");
         }
 
-        private static Tile LoadTile(Char tileChar, TextureManager textureManager)
+        /// <summary>
+        /// Loads an individual tile's appearance and behavior.
+        /// </summary>
+        /// <param name="tileChar">
+        /// The character loaded from the structure file which
+        /// indicates what should be loaded.
+        /// </param>
+        /// <param name="textureManager">
+        /// The texture manager
+        /// </param>
+        /// <param name="x">
+        /// The X location of this tile in tile space.
+        /// </param>
+        /// <param name="y">
+        /// The Y location of this tile in tile space.
+        /// </param>
+        /// <returns>The loaded tile.</returns>
+        private Tile LoadTile(Char tileChar, TextureManager textureManager, int x, int y)
         {
+            var position = GetBounds(x, y).GetBottomCenter();
+
             switch (tileChar)
             {
                 case 'R':
-                    return new Tile("rock_wall", textureManager.Get("rock_wall"), TileCollision.Impassable);
+                    return new Tile("rock_wall", textureManager.Get("rock_wall"), TileCollision.Impassable, position);
                 case 'D':
-                    return new Tile("dirt_floor", textureManager.Get("dirt_floor"), TileCollision.Passable);
+                    return new Tile("dirt_floor", textureManager.Get("dirt_floor"), TileCollision.Passable, position);
+                case 'S':
+                    return LoadSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
                 default:
-                    throw new ArgumentNullException("tileChar");
+                    throw new NotSupportedException(String.Format("Unsupported tile type character '{0}' at position {1}, {2}.", tileChar, x, y));
             }
+        }
+
+        private Tile LoadSkeleton(Texture texture, Texture floorTexture, Vector position)
+        {
+            _enemyManager.EnemyList.Add(new Enemy(texture, new SkeletonBrain(), position));
+
+            return new Tile("dirt_floor", floorTexture, TileCollision.Passable, position);
+        }
+
+        /// <summary>
+        /// Gets the bounding rectangle of a tile in world space.
+        /// </summary>        
+        public Rectangle GetBounds(int x, int y)
+        {
+            return new Rectangle((x * Tile.Width) + xOffset, (y * Tile.Height) + yOffset, Tile.Width, Tile.Height);
+        }
+
+        /// <summary>
+        /// Width of level measured in tiles.
+        /// </summary>
+        public int Width
+        {
+            get { return tiles.GetLength(0); }
+        }
+
+        /// <summary>
+        /// Height of the level measured in tiles.
+        /// </summary>
+        public int Height
+        {
+            get { return tiles.GetLength(1); }
         }
 
         public bool HasPlayerDied()

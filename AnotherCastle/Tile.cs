@@ -23,6 +23,13 @@ namespace AnotherCastle
     {
         public double X;
         public double Y;
+        public static int Width = 85;
+        public static int Height = 85;
+
+        public Tile(TileCollision tileCollision)
+        {
+            TileCollision = tileCollision;
+        }
 
         public Tile(Texture texture, TileCollision tileCollision)
         {
@@ -30,11 +37,12 @@ namespace AnotherCastle
             TileCollision = tileCollision;
         }
 
-        public Tile(string tileName, Texture texture, TileCollision tileCollision)
+        public Tile(string tileName, Texture texture, TileCollision tileCollision, Vector position)
         {
             TileName = tileName;
             TileCollision = tileCollision;
             Sprite.Texture = texture;
+            Sprite.SetPosition(position);
         }
         
         public Tile(string tileName, Texture texture, TileCollision tileCollision, double x, double y)

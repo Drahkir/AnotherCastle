@@ -7,7 +7,7 @@ namespace AnotherCastle
     {
         bool _isInvulnerable;
         double _invulnerabilityTimer;
-        private const double Scale = 1;
+        private const double Scale = 1.8;
         private const double Speed = 256;
         readonly Texture _upTexture;
         readonly Texture _downTexture;
@@ -22,13 +22,13 @@ namespace AnotherCastle
             _leftTexture = textureManager.Get("pixela_left");
             _rightTexture = textureManager.Get("pixela_right");
             Sprite.SetScale(Scale, Scale);
-            Health = 100;
+            Health = 1;
         }
 
         public void Render(Renderer renderer)
         {
             renderer.DrawSprite(Sprite);
-            Render_Debug();
+            //Render_Debug();
         }
 
         /// <summary>

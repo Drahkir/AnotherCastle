@@ -7,7 +7,7 @@ namespace AnotherCastle
     {
         public int Health { get; set; }
         public int Damage = 20;
-        private const double Scale = .2;
+        private const double Scale = 1.8;
         private const double HitFlashTime = 0.25;
         double _hitFlashCountDown;
         readonly EffectsManager _effectsManager;
@@ -24,11 +24,17 @@ namespace AnotherCastle
             _shootCountDown = MinTimeToShoot + (_random.NextDouble() * MaxTimeToShoot);
         }
 
+        /// <summary>
+        /// Constructs a default skeleton if the constructor is only given managers as arguments
+        /// </summary>
+        /// <param name="textureManager">The texture manager</param>
+        /// <param name="effectsManager">The effects manager</param>
+        /// <param name="missileManager">The missile manager</param>
         public Enemy(TextureManager textureManager, EffectsManager effectsManager, MissileManager missileManager)
         {
             _enemyBrain = new SkeletonBrain();
             Health = 50;
-            Sprite.Texture = textureManager.Get("villager");
+            Sprite.Texture = textureManager.Get("skeleton");
             Sprite.SetScale(Scale, Scale);
             Sprite.SetPosition(200, 0);
             Sprite.Speed = 1;
@@ -38,6 +44,27 @@ namespace AnotherCastle
             RestartShootCountDown();
         }
 
+        /// <summary>
+        /// Constructs an enemy given the texture and AI (IEnemyBrain)
+        /// </summary>
+        /// <param name="texture">The texture for the enemy</param>
+        /// <param name="enemyBrain">The AI for the enemy</param>
+        /// <param name="position">The spawn point for this enemy</param>
+        public Enemy(Texture texture, IEnemyBrain enemyBrain, Vector position)
+        {
+            _enemyBrain = enemyBrain;
+            Health = 50;
+            Sprite.Texture = texture;
+            Sprite.SetPosition(position);
+            Sprite.SetScale(Scale, Scale);
+            MaxTimeToShoot = 12;
+            MinTimeToShoot = 1;
+            RestartShootCountDown();
+        }
+        /// <summary>
+        /// Handles the on collision event
+        /// </summary>
+        /// <param name="playerCharacter">The player</param>
         internal void OnCollision(PlayerCharacter playerCharacter)
         {
             playerCharacter.OnCollision(this);

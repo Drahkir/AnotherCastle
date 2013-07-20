@@ -70,12 +70,12 @@ namespace AnotherCastle
             // Textures are loaded here
             _textureManager.LoadTexture("title_font", "./Content/Fonts/title_font.tga");
             _textureManager.LoadTexture("general_font", "./Content/Fonts/general_font.tga");
-            //_textureManager.LoadTexture("pixel_princess", "pixel_princess.png");
             _textureManager.LoadTexture("pixela_up", "./Content/Sprites/pixela_up.png");
             _textureManager.LoadTexture("pixela_down", "./Content/Sprites/pixela_down.png");
             _textureManager.LoadTexture("pixela_left", "./Content/Sprites/pixela_left.png");
             _textureManager.LoadTexture("pixela_right", "./Content/Sprites/pixela_right.png");
             _textureManager.LoadTexture("villager", "./Content/Sprites/villager.png");
+            _textureManager.LoadTexture("skeleton", "./Content/Sprites/skeleton.png");
             _textureManager.LoadTexture("background", "./Content/Backgrounds/background.png");
             _textureManager.LoadTexture("background_layer_1", "./Content/Backgrounds/background_p.tga");
             _textureManager.LoadTexture("dirt_floor", "./Content/Tiles/dirt_floor.png");

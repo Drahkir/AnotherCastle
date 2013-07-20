@@ -9,7 +9,7 @@ namespace AnotherCastle
         public readonly Dictionary<string, Tile> TileDictionary;
 
         // Rooms are constructed such that the cells in the 2D array are assigned from NW (Top-Left) to SE (Bottom-Right)
-        public Room(IEnumerable<Tile> tileList)
+        public Room(Tile[,] tileList)
         {
             TileDictionary = new Dictionary<string, Tile>();
             var i = 0;
@@ -33,5 +33,6 @@ namespace AnotherCastle
                 tile.Render(renderer);
             }
         }
+
     }
 }
