@@ -14,8 +14,18 @@ namespace AnotherCastle
         readonly Texture _leftTexture;
         readonly Texture _rightTexture;
 
-        public PlayerCharacter(TextureManager textureManager)
+        #region Missile Properties
+        MissileManager _missileManager;
+        Texture _missileTexture;
+        private const double FireRecovery = 0.25;
+        double _fireRecoveryTime = FireRecovery;
+
+        #endregion Missile Properties
+
+        public PlayerCharacter(TextureManager textureManager, MissileManager missileManager)
         {
+            _missileManager = missileManager;
+            _missileTexture = textureManager.Get("fireball");
             Sprite.Texture = textureManager.Get("pixela_down");
             _upTexture = textureManager.Get("pixela_up");
             _downTexture = textureManager.Get("pixela_down");
@@ -57,7 +67,7 @@ namespace AnotherCastle
 
         public void Update(double elapsedTime)
         {
-            // Normally some fire recovery code would go here
+            _fireRecoveryTime = Math.Max(0, (_fireRecoveryTime - elapsedTime));
             if (Health <= 0) IsDead = true;
             if (!_isInvulnerable) return;
             if (_invulnerabilityTimer == -1)
@@ -75,11 +85,21 @@ namespace AnotherCastle
             {
                 _invulnerabilityTimer += elapsedTime;
             }
+
         }
 
-        public void Attack()
+        public void Attack(Vector direction)
         {
-            throw new NotImplementedException();
+            if (_fireRecoveryTime > 0)
+            {
+                return;
+            }
+            
+            _fireRecoveryTime = FireRecovery;
+            var missile = new Missile(_missileTexture, direction);
+            //missile.SetColor(new Color(0, 1, 0, 1));
+            missile.SetPosition(Sprite.GetPosition() + direction);
+            _missileManager.Shoot(missile);
         }
 
         public void Move(Vector amount)

@@ -29,13 +29,10 @@ namespace AnotherCastle
 
         public void UpdatePlayerCollision(PlayerCharacter playerCharacter)
         {
-            foreach (Missile missile in _enemyMissiles)
+            foreach (var missile in _enemyMissiles.Where(missile => missile.GetBoundingBox().IntersectsWith(playerCharacter.GetBoundingBox())))
             {
-                if (missile.GetBoundingBox().IntersectsWith(playerCharacter.GetBoundingBox()))
-                {
-                    missile.Dead = true;
-                    playerCharacter.OnCollision(missile);
-                }
+                missile.Dead = true;
+                playerCharacter.OnCollision(missile);
             }
         }
 
@@ -60,7 +57,7 @@ namespace AnotherCastle
             }
         }
 
-        private void RemoveDeadMissile(IList<Missile> missileList)
+        private static void RemoveDeadMissile(IList<Missile> missileList)
         {
             //foreach(Missile missile in missileList)
             for (var i = missileList.Count - 1; i >= 0; i--)

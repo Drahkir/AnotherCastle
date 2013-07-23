@@ -28,13 +28,13 @@ namespace AnotherCastle
             Sprite.SetColor(color);
         }
 
-        public Missile(Texture missileTexture)
+        public Missile(Texture missileTexture, Vector direction)
         {
             Sprite.Texture = missileTexture;
 
             // Some default values
             Dead = false;
-            Direction = new Vector(1, 0, 0);
+            Direction = direction;
             Speed = 512; // pixels per second
         }
 
@@ -54,7 +54,7 @@ namespace AnotherCastle
                 return;
             }
 
-            Vector position = Sprite.GetPosition();
+            var position = Sprite.GetPosition();
             position += Direction * Speed * elapsedTime;
             Sprite.SetPosition(position);
         }

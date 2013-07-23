@@ -7,7 +7,7 @@ namespace AnotherCastle
     {
         public int Health { get; set; }
         public int Damage = 20;
-        private const double Scale = 1.8;
+        private const double Scale = .2;
         private const double HitFlashTime = 0.25;
         double _hitFlashCountDown;
         readonly EffectsManager _effectsManager;
@@ -34,7 +34,7 @@ namespace AnotherCastle
         {
             _enemyBrain = new SkeletonBrain();
             Health = 50;
-            Sprite.Texture = textureManager.Get("skeleton");
+            Sprite.Texture = textureManager.Get("villager");
             Sprite.SetScale(Scale, Scale);
             Sprite.SetPosition(200, 0);
             Sprite.Speed = 1;
@@ -109,7 +109,7 @@ namespace AnotherCastle
 
         private void OnDestroyed()
         {
-            _effectsManager.AddExplosion(Sprite.GetPosition());
+            //_effectsManager.AddExplosion(Sprite.GetPosition());
         }
 
         public bool IsDead

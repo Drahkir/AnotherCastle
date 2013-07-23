@@ -17,6 +17,7 @@ namespace AnotherCastle
         readonly MissileManager _missileManager = new MissileManager(new RectangleF(-1300 / 2, -750 / 2, 1300, 750));
         readonly EffectsManager _effectsManager;
         readonly Room _currentRoom;
+        //MissileManager _missileManager = new MissileManager(new RectangleF(-1300 / 2, -750 / 2, 1300, 750));
         private const int xOffset = -650;
         private const int yOffset = -410;
 
@@ -24,7 +25,7 @@ namespace AnotherCastle
         {
             _input = input;
             _effectsManager = new EffectsManager(textureManager);
-            _playerCharacter = new PlayerCharacter(textureManager);
+            _playerCharacter = new PlayerCharacter(textureManager, _missileManager);
             _enemyManager = new EnemyManager();
             LoadTiles(mapFile, textureManager);
             _currentRoom = new Room(tiles);
@@ -105,7 +106,7 @@ namespace AnotherCastle
                 case 'D':
                     return new Tile("dirt_floor", textureManager.Get("dirt_floor"), TileCollision.Passable, position);
                 case 'S':
-                    return LoadSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
+                    return LoadSkeleton(textureManager.Get("villager"), textureManager.Get("dirt_floor"), position);
                 default:
                     throw new NotSupportedException(String.Format("Unsupported tile type character '{0}' at position {1}, {2}.", tileChar, x, y));
             }
@@ -181,10 +182,10 @@ namespace AnotherCastle
         private void UpdateInput(double elapsedTime)
         {
 
-            if (_input.Keyboard.IsKeyHeld(Keys.Space) || _input.Keyboard.IsKeyPressed(Keys.Space) || (_input.Controller != null && _input.Controller.ButtonA.Pressed))
-            {
-                _playerCharacter.Attack();
-            }
+            //if (_input.Keyboard.IsKeyHeld(Keys.Space) || _input.Keyboard.IsKeyPressed(Keys.Space) || (_input.Controller != null && _input.Controller.ButtonA.Pressed))
+            //{
+            //    _playerCharacter.Attack();
+            //}
 
             // Get controls and apply to player character
             double x = 0;
@@ -196,6 +197,7 @@ namespace AnotherCastle
                 y = _input.Controller.LeftControlStick.Y * -1;
             }
             var controlInput = new Vector(x, y, 0);
+            var attackInput = new Vector(x, y, 0);
 
             if (!(Math.Abs(controlInput.Length()) < 0.0001)) return;
 
@@ -246,30 +248,50 @@ namespace AnotherCastle
                 }
             }
 
-            if (_input.Keyboard.IsKeyHeld(Keys.Left))
-            {
-                _playerCharacter.MoveLeft();
-                controlInput.X = -1;
-            }
-
-            if (_input.Keyboard.IsKeyHeld(Keys.Right))
-            {
-                _playerCharacter.MoveRight();
-                controlInput.X = 1;
-            }
-
-            if (_input.Keyboard.IsKeyHeld(Keys.Up))
+            if (_input.Keyboard.IsKeyHeld(Keys.W))
             {
                 _playerCharacter.MoveUp();
                 controlInput.Y = 1;
             }
 
-            if (_input.Keyboard.IsKeyHeld(Keys.Down))
+            if (_input.Keyboard.IsKeyHeld(Keys.A))
+            {
+                _playerCharacter.MoveLeft();
+                controlInput.X = -1;
+            }
+
+            if (_input.Keyboard.IsKeyHeld(Keys.S))
             {
                 _playerCharacter.MoveDown();
                 controlInput.Y = -1;
             }
 
+            if (_input.Keyboard.IsKeyHeld(Keys.D))
+            {
+                _playerCharacter.MoveRight();
+                controlInput.X = 1;
+            }
+
+            if (_input.Keyboard.IsKeyHeld(Keys.Left))
+            {
+                attackInput.X = -1;
+            }
+
+            if (_input.Keyboard.IsKeyHeld(Keys.Right))
+            {
+                attackInput.X = 1;
+            }
+
+            if (_input.Keyboard.IsKeyHeld(Keys.Up))
+            {
+                attackInput.Y = 1;
+            }
+
+            if (_input.Keyboard.IsKeyHeld(Keys.Down))
+            {
+                attackInput.Y = -1;
+            }
+            if(attackInput != Vector.Zero) _playerCharacter.Attack(attackInput);
             _playerCharacter.Move(controlInput * elapsedTime);
         }
 

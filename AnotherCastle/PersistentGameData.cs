@@ -1,4 +1,6 @@
-﻿namespace AnotherCastle
+﻿using System.Drawing;
+
+namespace AnotherCastle
 {
     class PersistentGameData
     {
