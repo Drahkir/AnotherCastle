@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Engine;
 using Engine.Input;
 using System.Windows.Forms;
@@ -106,7 +107,7 @@ namespace AnotherCastle
                 case 'D':
                     return new Tile("dirt_floor", textureManager.Get("dirt_floor"), TileCollision.Passable, position);
                 case 'S':
-                    return LoadSkeleton(textureManager.Get("villager"), textureManager.Get("dirt_floor"), position);
+                    return LoadSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
                 default:
                     throw new NotSupportedException(String.Format("Unsupported tile type character '{0}' at position {1}, {2}.", tileChar, x, y));
             }
@@ -190,26 +191,42 @@ namespace AnotherCastle
             // Get controls and apply to player character
             double x = 0;
             double y = 0;
+            double u = 0;
+            double v = 0;
 
             if (_input.Controller != null)
             {
                 x = _input.Controller.LeftControlStick.X;
                 y = _input.Controller.LeftControlStick.Y * -1;
+                u = _input.Controller.RightControlStick.X;
+                v = _input.Controller.RightControlStick.Y * -1;
             }
             var controlInput = new Vector(x, y, 0);
-            var attackInput = new Vector(x, y, 0);
+            var attackInput = new Vector(u, v, 0);
 
-            if (!(Math.Abs(controlInput.Length()) < 0.0001)) return;
+            //if (!(Math.Abs(controlInput.Length()) < 0.0001)) return;
 
             // If the input is very small, then the player may not be using
             // a controller; he might be using the keyboard.
 
             foreach (var tilePair in _currentRoom.TileDictionary)
             {
-                var box = _playerCharacter.GetBoundingBox();
                 var tile = tilePair.Value;
                 if (tile.TileCollision != TileCollision.Impassable) continue;
                 var objectBox = tile.GetBoundingBox();
+
+                foreach (var missile in _missileManager.MissileList.Where(a => a.Dead == false))
+                {
+                    var missileBox = missile.GetBoundingBox();
+
+                    var missileDepth = missileBox.GetIntersectionDepth(objectBox);
+
+                    if (missileDepth == Vector.Zero) continue;
+
+                    missile.HandleCollision();
+                }
+
+                var box = _playerCharacter.GetBoundingBox();
 
                 var depth = box.GetIntersectionDepth(objectBox);
 
@@ -223,6 +240,7 @@ namespace AnotherCastle
 
                 // Perform further collisions with the new bounds.
                 //bounds = BoundingRectangle;
+
             }
 
             foreach (var enemy in _enemyManager.EnemyList)

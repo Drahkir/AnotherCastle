@@ -12,6 +12,14 @@ namespace AnotherCastle
 
         readonly RectangleF _bounds;
 
+        public List<Missile> MissileList
+        {
+            get
+            {
+                return _missiles;
+            }
+        } 
+
         public MissileManager(RectangleF playArea)
         {
             _bounds = playArea;

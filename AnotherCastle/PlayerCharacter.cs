@@ -25,7 +25,7 @@ namespace AnotherCastle
         public PlayerCharacter(TextureManager textureManager, MissileManager missileManager)
         {
             _missileManager = missileManager;
-            _missileTexture = textureManager.Get("fireball");
+            _missileTexture = textureManager.Get("heart_missile");
             Sprite.Texture = textureManager.Get("pixela_down");
             _upTexture = textureManager.Get("pixela_up");
             _downTexture = textureManager.Get("pixela_down");
@@ -105,6 +105,8 @@ namespace AnotherCastle
         public void Move(Vector amount)
         {
             amount *= Speed;
+
+
             Sprite.SetPosition(Sprite.GetPosition() + amount);
         }
 

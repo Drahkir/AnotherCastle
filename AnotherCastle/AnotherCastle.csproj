@@ -122,6 +122,9 @@
     <Content Include="Content\Sprites\fireball.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Sprites\heart_missile.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Tiles\dirt_floor.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

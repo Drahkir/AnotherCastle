@@ -47,6 +47,12 @@ namespace AnotherCastle
             renderer.DrawSprite(Sprite);
         }
 
+        public void HandleCollision()
+        {
+            Dead = true;
+            //Sprite.SetColor(new Color(0, 0, 1, 1));
+        }
+
         public void Update(double elapsedTime)
         {
             if (Dead)
