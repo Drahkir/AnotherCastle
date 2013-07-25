@@ -41,7 +41,7 @@ namespace AnotherCastle
         }
 
         private void LoadTiles(Stream mapFile, TextureManager textureManager)
-        {            
+        {
             // Load the level and ensure all of the lines are the same length.
             int width;
             var lines = new List<string>();
@@ -164,7 +164,7 @@ namespace AnotherCastle
                 _missileManager.UpdateEnemyCollisions(enemy);
             }
         }
-        
+
         public void Update(double elapsedTime, double gameTime)
         {
             _playerCharacter.Update(elapsedTime);
@@ -211,10 +211,13 @@ namespace AnotherCastle
 
             foreach (var tilePair in _currentRoom.TileDictionary)
             {
+                Vector depth;
+                double absDepthX, absDepthY;
                 var tile = tilePair.Value;
                 if (tile.TileCollision != TileCollision.Impassable) continue;
                 var objectBox = tile.GetBoundingBox();
 
+                // Check missiles for collisions
                 foreach (var missile in _missileManager.MissileList.Where(a => a.Dead == false))
                 {
                     var missileBox = missile.GetBoundingBox();
@@ -226,13 +229,29 @@ namespace AnotherCastle
                     missile.HandleCollision();
                 }
 
+                // Check enemies for collisions
+                foreach (var enemy in _enemyManager.EnemyList)
+                {
+                    var enemyBox = enemy.GetBoundingBox();
+
+                    depth = enemyBox.GetIntersectionDepth(objectBox);
+
+                    if (depth == Vector.Zero) continue;
+                    absDepthX = Math.Abs(depth.X);
+                    absDepthY = Math.Abs(depth.Y);
+
+                    enemy.HandleCollision(absDepthX > absDepthY
+                        ? new Vector(0, depth.Y, 0)
+                        : new Vector(depth.X, 0, 0));
+                }
+
                 var box = _playerCharacter.GetBoundingBox();
 
-                var depth = box.GetIntersectionDepth(objectBox);
+                depth = box.GetIntersectionDepth(objectBox);
 
                 if (depth == Vector.Zero) continue;
-                var absDepthX = Math.Abs(depth.X);
-                var absDepthY = Math.Abs(depth.Y);
+                absDepthX = Math.Abs(depth.X);
+                absDepthY = Math.Abs(depth.Y);
 
                 _playerCharacter.HandleCollision(absDepthX > absDepthY
                     ? new Vector(0, depth.Y, 0)
@@ -246,13 +265,12 @@ namespace AnotherCastle
             foreach (var enemy in _enemyManager.EnemyList)
             {
                 var box = enemy.GetBoundingBox();
-                foreach (var tilePair in _currentRoom.TileDictionary)
-                {
-                    var tile = tilePair.Value;
-                    if (tile.TileCollision != TileCollision.Impassable) continue;
-                    var objectBox = tile.GetBoundingBox();
 
-                    var depth = box.GetIntersectionDepth(objectBox);
+                foreach (var otherEnemy in _enemyManager.EnemyList.Where(a => a != enemy))
+                {
+                    var otherEnemyBox = otherEnemy.GetBoundingBox();
+
+                    var depth = box.GetIntersectionDepth(otherEnemyBox);
 
                     if (depth == Vector.Zero) continue;
                     var absDepthX = Math.Abs(depth.X);
@@ -268,25 +286,21 @@ namespace AnotherCastle
 
             if (_input.Keyboard.IsKeyHeld(Keys.W))
             {
-                _playerCharacter.MoveUp();
                 controlInput.Y = 1;
             }
 
             if (_input.Keyboard.IsKeyHeld(Keys.A))
             {
-                _playerCharacter.MoveLeft();
                 controlInput.X = -1;
             }
 
             if (_input.Keyboard.IsKeyHeld(Keys.S))
             {
-                _playerCharacter.MoveDown();
                 controlInput.Y = -1;
             }
 
             if (_input.Keyboard.IsKeyHeld(Keys.D))
             {
-                _playerCharacter.MoveRight();
                 controlInput.X = 1;
             }
 
@@ -309,7 +323,7 @@ namespace AnotherCastle
             {
                 attackInput.Y = -1;
             }
-            if(attackInput != Vector.Zero) _playerCharacter.Attack(attackInput);
+            if (attackInput != Vector.Zero) _playerCharacter.Attack(attackInput);
             _playerCharacter.Move(controlInput * elapsedTime);
         }
 

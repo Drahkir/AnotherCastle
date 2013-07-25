@@ -106,6 +106,29 @@ namespace AnotherCastle
         {
             amount *= Speed;
 
+            if (Math.Abs(amount.X) > Math.Abs(amount.Y))
+            {
+                if (amount.X > 0)
+                {
+                    MoveRight();
+                }
+                else
+                {
+                    MoveLeft();
+                }
+            }
+
+            else
+            {
+                if (amount.Y > 0)
+                {
+                    MoveUp();
+                }
+                else
+                {
+                    MoveDown();
+                }
+            }
 
             Sprite.SetPosition(Sprite.GetPosition() + amount);
         }
