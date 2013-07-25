@@ -29,11 +29,10 @@ namespace AnotherCastle
         /// </summary>
         /// <param name="textureManager">The texture manager</param>
         /// <param name="effectsManager">The effects manager</param>
-        /// <param name="missileManager">The missile manager</param>
-        public Enemy(TextureManager textureManager, EffectsManager effectsManager, MissileManager missileManager)
+        public Enemy(TextureManager textureManager, EffectsManager effectsManager)
         {
             _enemyBrain = new SkeletonBrain();
-            Health = 500;
+            Health = 100;
             Sprite.Texture = textureManager.Get("skeleton");
             Sprite.SetScale(Scale, Scale);
             Sprite.SetPosition(200, 0);
@@ -53,7 +52,7 @@ namespace AnotherCastle
         public Enemy(Texture texture, IEnemyBrain enemyBrain, Vector position)
         {
             _enemyBrain = enemyBrain;
-            Health = 500;
+            Health = 100;
             Sprite.Texture = texture;
             Sprite.SetPosition(position);
             Sprite.SetScale(Scale, Scale);

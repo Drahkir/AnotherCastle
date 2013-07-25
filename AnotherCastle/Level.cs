@@ -21,6 +21,7 @@ namespace AnotherCastle
         //MissileManager _missileManager = new MissileManager(new RectangleF(-1300 / 2, -750 / 2, 1300, 750));
         private const int xOffset = -650;
         private const int yOffset = -410;
+        public bool IsLevelComplete { get; set; }
 
         public Level(Input input, TextureManager textureManager, Stream mapFile)
         {
@@ -102,6 +103,8 @@ namespace AnotherCastle
 
             switch (tileChar)
             {
+                case '1':
+                    return LoadPlayer(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
                 case 'R':
                     return new Tile("rock_wall", textureManager.Get("rock_wall"), TileCollision.Impassable, position);
                 case 'D':
@@ -111,6 +114,13 @@ namespace AnotherCastle
                 default:
                     throw new NotSupportedException(String.Format("Unsupported tile type character '{0}' at position {1}, {2}.", tileChar, x, y));
             }
+        }
+
+        private Tile LoadPlayer(Texture texture, Texture floorTexture, Vector position)
+        {
+            _playerCharacter.SetPosition(position);
+
+            return new Tile("dirt_floor", floorTexture, TileCollision.Passable, position);
         }
 
         private Tile LoadSkeleton(Texture texture, Texture floorTexture, Vector position)
@@ -176,6 +186,11 @@ namespace AnotherCastle
             _enemyManager.Update(elapsedTime, gameTime);
             _missileManager.Update(elapsedTime);
             _effectsManager.Update(elapsedTime);
+
+            if (_enemyManager.EnemyList.Count <= 0)
+            {
+                IsLevelComplete = true;
+            }
 
             UpdateInput(elapsedTime);
         }

@@ -133,6 +133,11 @@ namespace AnotherCastle
             Sprite.SetPosition(Sprite.GetPosition() + amount);
         }
 
+        public void SetPosition(Vector position)
+        {
+            Sprite.SetPosition(position);
+        }
+
         public void HandleCollision(Vector amount)
         {
             Sprite.SetPosition(Sprite.GetPosition() + amount);

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Tao.OpenGl;
 using Engine;
 using Engine.Input;
@@ -7,6 +8,8 @@ namespace AnotherCastle
 {
     class InnerGameState : IGameObject
     {
+        private int _currentLevel;
+        private const int MaxLevel = 2;
         Level _level;
         readonly TextureManager _textureManager;
         readonly Renderer _renderer = new Renderer();
@@ -30,7 +33,17 @@ namespace AnotherCastle
             using (var fileStream = File.Open("./Content/Levels/0.txt", FileMode.Open))
             {
                 _level = new Level(_input, _textureManager, fileStream);
-                _gameTime = _gameData.CurrentLevel.Time;
+                //_gameTime = _gameData.CurrentLevel.Time;
+            }
+        }
+
+        private void LoadNextLevel()
+        {
+            var fileString = String.Format("./Content/Levels/{0}.txt", ++_currentLevel);
+
+            using (var fileStream = File.Open(fileString, FileMode.Open))
+            {
+                _level = new Level(_input, _textureManager, fileStream);
             }
         }
 
@@ -41,8 +54,11 @@ namespace AnotherCastle
             _level.Update(elapsedTime, _gameTime);
             _gameTime += elapsedTime;
 
-            if (_gameTime <= 0)
+            if (_level.IsLevelComplete)
             {
+                if (_currentLevel == MaxLevel) _currentLevel = -1;
+                _gameTime = 0;
+                LoadNextLevel();
                 //OnGameStart();
                 //_gameData.JustWon = true;
                 //_system.ChangeState("game_over");
