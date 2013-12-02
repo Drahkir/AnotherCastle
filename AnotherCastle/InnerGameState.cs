@@ -16,7 +16,6 @@ namespace AnotherCastle
         readonly Input _input;
         readonly StateSystem _system;
         readonly PersistentGameData _gameData;
-
         double _gameTime;
 
         public InnerGameState(StateSystem system, Input input, TextureManager textureManager, PersistentGameData gameData)

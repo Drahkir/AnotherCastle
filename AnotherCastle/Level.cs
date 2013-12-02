@@ -23,6 +23,7 @@ namespace AnotherCastle
         private const int xOffset = -650;
         private const int yOffset = -410;
         public bool IsLevelComplete { get; set; }
+        public bool IsGamePaused { get; set; }
 
         public Level(Input input, TextureManager textureManager, Stream mapFile)
         {
@@ -178,15 +179,18 @@ namespace AnotherCastle
 
         public void Update(double elapsedTime, double gameTime)
         {
-            _playerCharacter.Update(elapsedTime);
+            if (!IsGamePaused)
+            {
+                _playerCharacter.Update(elapsedTime);
 
-            //_background.Update((float)elapsedTime);
-            //_backgroundLayer.Update((float)elapsedTime);
+                //_background.Update((float)elapsedTime);
+                //_backgroundLayer.Update((float)elapsedTime);
 
-            UpdateCollisions();
-            _enemyManager.Update(elapsedTime, gameTime);
-            _missileManager.Update(elapsedTime);
-            _effectsManager.Update(elapsedTime);
+                UpdateCollisions();
+                _enemyManager.Update(elapsedTime, gameTime);
+                _missileManager.Update(elapsedTime);
+                _effectsManager.Update(elapsedTime);
+            }
 
             if (_enemyManager.EnemyList.Count <= 0)
             {
@@ -205,6 +209,14 @@ namespace AnotherCastle
             //}
 
             // Get controls and apply to player character
+
+            if (_input.Controller.ButtonStart.Pressed || _input.Keyboard.IsKeyHeld(Keys.Escape))
+            {
+                IsGamePaused = !IsGamePaused;
+            }
+
+            if (IsGamePaused) return;
+
             double x = 0;
             double y = 0;
             double u = 0;
@@ -227,6 +239,7 @@ namespace AnotherCastle
                 }
             }
             var controlInput = new Vector(x, y, 0);
+
             var attackInput = new Vector(u, v, 0);
 
             //if (!(Math.Abs(controlInput.Length()) < 0.0001)) return;
@@ -349,9 +362,9 @@ namespace AnotherCastle
                 attackInput.Y = -1;
             }
 
-            if (attackInput != Vector.Zero) 
-            { 
-                _playerCharacter.Attack(attackInput); 
+            if (attackInput != Vector.Zero)
+            {
+                _playerCharacter.Attack(attackInput);
             }
 
             _playerCharacter.Move(controlInput * elapsedTime);

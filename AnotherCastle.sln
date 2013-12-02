@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Windows Desktop
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnotherCastle", "AnotherCastle\AnotherCastle.csproj", "{DF8064B2-C3ED-47EA-BDFD-61B39BFD380E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "..\Engine\Engine\Engine\Engine.csproj", "{AFA102C7-B119-4DD7-AEFF-AF724D1EDD2F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C4165B3A-41D2-41A0-9093-4D4A60735852}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
