@@ -6,6 +6,7 @@ using Engine;
 using Engine.Input;
 using System.Windows.Forms;
 using System.Drawing;
+using Platformer;
 
 namespace AnotherCastle
 {
@@ -215,6 +216,15 @@ namespace AnotherCastle
                 y = _input.Controller.LeftControlStick.Y * -1;
                 u = _input.Controller.RightControlStick.X;
                 v = _input.Controller.RightControlStick.Y * -1;
+
+                if (Math.Abs(u) > Math.Abs(v))
+                {
+                    u = u < 0 ? -1 : 1;
+                }
+                else if (Math.Abs(v) > Math.Abs(u))
+                {
+                    v = v < 0 ? -1 : 1;
+                }
             }
             var controlInput = new Vector(x, y, 0);
             var attackInput = new Vector(u, v, 0);
@@ -338,7 +348,12 @@ namespace AnotherCastle
             {
                 attackInput.Y = -1;
             }
-            if (attackInput != Vector.Zero) _playerCharacter.Attack(attackInput);
+
+            if (attackInput != Vector.Zero) 
+            { 
+                _playerCharacter.Attack(attackInput); 
+            }
+
             _playerCharacter.Move(controlInput * elapsedTime);
         }
 

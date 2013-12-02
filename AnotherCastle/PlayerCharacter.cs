@@ -7,7 +7,7 @@ namespace AnotherCastle
     {
         bool _isInvulnerable;
         double _invulnerabilityTimer;
-        private const double Scale = 1.8;
+        private const double Scale = 1;
         private const double Speed = 256;
         readonly Texture _upTexture;
         readonly Texture _downTexture;
@@ -140,6 +140,7 @@ namespace AnotherCastle
 
         public void HandleCollision(Vector amount)
         {
+
             Sprite.SetPosition(Sprite.GetPosition() + amount);
         }
 
