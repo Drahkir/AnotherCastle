@@ -112,6 +112,10 @@ namespace AnotherCastle
                     return new Tile("dirt_floor", textureManager.Get("dirt_floor"), TileCollision.Passable, position);
                 case 'S':
                     return LoadSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
+                case 'N':
+                    return LoadNorthSouthSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
+                case 'E':
+                    return LoadEastWestSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
                 case 'Z':
                     return LoadPlayer(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
                 case 'X':
@@ -131,6 +135,20 @@ namespace AnotherCastle
         private Tile LoadSkeleton(Texture texture, Texture floorTexture, Vector position)
         {
             _enemyManager.EnemyList.Add(new Enemy(texture, new SkeletonBrain(), position));
+
+            return new Tile("dirt_floor", floorTexture, TileCollision.Passable, position);
+        }
+
+        private Tile LoadEastWestSkeleton(Texture texture, Texture floorTexture, Vector position)
+        {
+            _enemyManager.EnemyList.Add(new Enemy(texture, new EastWestSkeletonBrain(), position));
+
+            return new Tile("dirt_floor", floorTexture, TileCollision.Passable, position);
+        }
+
+        private Tile LoadNorthSouthSkeleton(Texture texture, Texture floorTexture, Vector position)
+        {
+            _enemyManager.EnemyList.Add(new Enemy(texture, new NorthSouthSkeletonBrain(), position));
 
             return new Tile("dirt_floor", floorTexture, TileCollision.Passable, position);
         }
