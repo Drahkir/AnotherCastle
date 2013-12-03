@@ -52,7 +52,7 @@ namespace AnotherCastle
         public Enemy(Texture texture, IEnemyBrain enemyBrain, Vector position)
         {
             _enemyBrain = enemyBrain;
-            Health = 100;
+            Health = 15;
             Sprite.Texture = texture;
             Sprite.SetPosition(position);
             Sprite.SetScale(Scale, Scale);

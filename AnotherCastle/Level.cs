@@ -23,6 +23,7 @@ namespace AnotherCastle
         private const int xOffset = -650;
         private const int yOffset = -410;
         public bool IsLevelComplete { get; set; }
+        public bool AreAllEnemiesDead { get; set; }
         public bool IsGamePaused { get; set; }
 
         public Level(Input input, TextureManager textureManager, Stream mapFile)
@@ -55,8 +56,8 @@ namespace AnotherCastle
                 while (line != null)
                 {
                     lines.Add(line);
-                    if (line.Length != width)
-                        throw new Exception(String.Format("The length of line {0} is different from all preceeding lines.", lines.Count));
+                    //if (line.Length != width)
+                    //    throw new Exception(String.Format("The length of line {0} is different from all preceeding lines.", lines.Count));
                     line = reader.ReadLine();
                 }
             }
@@ -105,14 +106,16 @@ namespace AnotherCastle
 
             switch (tileChar)
             {
-                case '1':
-                    return LoadPlayer(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
                 case 'R':
                     return new Tile("rock_wall", textureManager.Get("rock_wall"), TileCollision.Impassable, position);
                 case 'D':
                     return new Tile("dirt_floor", textureManager.Get("dirt_floor"), TileCollision.Passable, position);
                 case 'S':
                     return LoadSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
+                case 'Z':
+                    return LoadPlayer(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
+                case 'X':
+                    return new Tile("exit", textureManager.Get("dirt_floor"), TileCollision.Impassable, position);
                 default:
                     throw new NotSupportedException(String.Format("Unsupported tile type character '{0}' at position {1}, {2}.", tileChar, x, y));
             }
@@ -122,7 +125,7 @@ namespace AnotherCastle
         {
             _playerCharacter.SetPosition(position);
 
-            return new Tile("dirt_floor", floorTexture, TileCollision.Passable, position);
+            return new Tile("entrance", floorTexture, TileCollision.Passable, position);
         }
 
         private Tile LoadSkeleton(Texture texture, Texture floorTexture, Vector position)
@@ -194,7 +197,7 @@ namespace AnotherCastle
 
             if (_enemyManager.EnemyList.Count <= 0)
             {
-                IsLevelComplete = true;
+                AreAllEnemiesDead = true;
             }
 
             UpdateInput(elapsedTime);
@@ -288,6 +291,7 @@ namespace AnotherCastle
                 depth = box.GetIntersectionDepth(objectBox);
 
                 if (depth == Vector.Zero) continue;
+                if (AreAllEnemiesDead && tile.TileName == "exit") IsLevelComplete = true;
                 absDepthX = Math.Abs(depth.X);
                 absDepthY = Math.Abs(depth.Y);
 
