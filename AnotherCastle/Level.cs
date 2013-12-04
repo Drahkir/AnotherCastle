@@ -20,8 +20,10 @@ namespace AnotherCastle
         readonly EffectsManager _effectsManager;
         readonly Room _currentRoom;
         //MissileManager _missileManager = new MissileManager(new RectangleF(-1300 / 2, -750 / 2, 1300, 750));
-        private const int xOffset = -650;
-        private const int yOffset = -410;
+        //private const int xOffset = -650;
+        //private const int yOffset = -410;
+        private const int xOffset = -722;
+        private const int yOffset = -510;
         public bool IsLevelComplete { get; set; }
         public bool AreAllEnemiesDead { get; set; }
         public bool IsGamePaused { get; set; }
@@ -106,6 +108,8 @@ namespace AnotherCastle
 
             switch (tileChar)
             {
+                case 'B':
+                    return new Tile("border", textureManager.Get("dirt_floor"), TileCollision.Impassable, position);
                 case 'R':
                     return new Tile("rock_wall", textureManager.Get("rock_wall"), TileCollision.Impassable, position);
                 case 'D':
