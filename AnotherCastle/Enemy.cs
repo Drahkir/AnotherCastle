@@ -31,19 +31,6 @@ namespace AnotherCastle
         }
 
         /// <summary>
-        /// Constructs a default skeleton if the constructor is only given managers as arguments
-        /// </summary>
-        /// <param name="textureManager">The texture manager</param>
-        /// <param name="effectsManager">The effects manager</param>
-        //public Enemy(string texture, TextureManager textureManager, EffectsManager effectsManager, IEnemyBrain brain)
-        //{
-        //    _enemyBrain = brain;
-        //    Sprite.Texture = textureManager.Get(texture);
-        //    _effectsManager = effectsManager;
-        //    RestartShootCountDown();
-        //}
-
-        /// <summary>
         /// Constructs an enemy given the texture and AI (IEnemyBrain)
         /// </summary>
         /// <param name="texture">The texture for the enemy</param>
