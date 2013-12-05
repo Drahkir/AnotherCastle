@@ -14,9 +14,9 @@ namespace AnotherCastle
 
     public class EnemyManager
     {
-        readonly List<IEnemy> _enemies = new List<IEnemy>();
+        readonly List<Enemy> _enemies = new List<Enemy>();
 
-        public List<IEnemy> EnemyList
+        public List<Enemy> EnemyList
         {
             get
             {

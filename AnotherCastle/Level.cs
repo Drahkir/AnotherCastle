@@ -154,14 +154,14 @@ namespace AnotherCastle
 
         private Tile LoadEastWestSkeleton(Texture texture, Texture floorTexture, Vector position)
         {
-            _enemyManager.EnemyList.Add(new Enemy(texture, new EastWestSkeletonBrain(), position));
+            _enemyManager.EnemyList.Add(new EastWestSkeleton(texture, new EastWestSkeletonBrain(), position));
 
             return new Tile("dirt_floor", floorTexture, TileCollision.Passable, position);
         }
 
         private Tile LoadNorthSouthSkeleton(Texture texture, Texture floorTexture, Vector position)
         {
-            _enemyManager.EnemyList.Add(new Enemy(texture, new NorthSouthSkeletonBrain(), position));
+            _enemyManager.EnemyList.Add(new NorthSouthSkeleton(texture, new NorthSouthSkeletonBrain(), position));
 
             return new Tile("dirt_floor", floorTexture, TileCollision.Passable, position);
         }

@@ -6,9 +6,10 @@ namespace AnotherCastle
     public class Enemy : Entity
     {
         public int Health { get; set; }
-        public int Damage = 20;
-        private const double Scale = 1.8;
-        private const double HitFlashTime = 0.25;
+        public int Damage { get; set; }
+        private double Scale { get; set; }
+        private double HitFlashTime { get; set; }
+        private double Speed { get; set; }
         double _hitFlashCountDown;
         readonly EffectsManager _effectsManager;
         public Path Path { get; set; }
@@ -16,8 +17,13 @@ namespace AnotherCastle
         public double MinTimeToShoot { get; set; }
         readonly Random _random = new Random();
         double _shootCountDown;
-        private const double Speed = 256;
         readonly IEnemyBrain _enemyBrain;
+
+        #region Missile Properties
+        MissileManager _missileManager;
+        Texture _missileTexture;
+        public double FireRecovery { get; set; }
+        #endregion Missile Properties
 
         public void RestartShootCountDown()
         {
@@ -29,19 +35,13 @@ namespace AnotherCastle
         /// </summary>
         /// <param name="textureManager">The texture manager</param>
         /// <param name="effectsManager">The effects manager</param>
-        public Enemy(TextureManager textureManager, EffectsManager effectsManager)
-        {
-            _enemyBrain = new SkeletonBrain();
-            Health = 100;
-            Sprite.Texture = textureManager.Get("skeleton");
-            Sprite.SetScale(Scale, Scale);
-            Sprite.SetPosition(200, 0);
-            Sprite.Speed = 1;
-            _effectsManager = effectsManager;
-            MaxTimeToShoot = 12;
-            MinTimeToShoot = 1;
-            RestartShootCountDown();
-        }
+        //public Enemy(string texture, TextureManager textureManager, EffectsManager effectsManager, IEnemyBrain brain)
+        //{
+        //    _enemyBrain = brain;
+        //    Sprite.Texture = textureManager.Get(texture);
+        //    _effectsManager = effectsManager;
+        //    RestartShootCountDown();
+        //}
 
         /// <summary>
         /// Constructs an enemy given the texture and AI (IEnemyBrain)
@@ -52,14 +52,11 @@ namespace AnotherCastle
         public Enemy(Texture texture, IEnemyBrain enemyBrain, Vector position)
         {
             _enemyBrain = enemyBrain;
-            Health = 15;
             Sprite.Texture = texture;
             Sprite.SetPosition(position);
-            Sprite.SetScale(Scale, Scale);
-            MaxTimeToShoot = 12;
-            MinTimeToShoot = 1;
             RestartShootCountDown();
         }
+
         /// <summary>
         /// Handles the on collision event
         /// </summary>

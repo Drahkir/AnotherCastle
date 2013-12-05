@@ -62,8 +62,9 @@
     <Compile Include="AI\EyeballBrain.cs" />
     <Compile Include="AI\EastWestSkeletonBrain.cs" />
     <Compile Include="AI\NorthSouthSkeletonBrain.cs" />
+    <Compile Include="EastWestSkeleton.cs" />
     <Compile Include="Eyeball.cs" />
-    <Compile Include="IEnemy.cs" />
+    <Compile Include="NorthSouthSkeleton.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Room.cs" />
