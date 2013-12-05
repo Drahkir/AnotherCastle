@@ -14,7 +14,9 @@ namespace AnotherCastle
         public NorthSouthSkeleton(Texture texture, IEnemyBrain enemyBrain, Vector position) : base(texture, enemyBrain, position)
         {
             Health = 15;
+            Damage = 10;
             Sprite.SetScale(1.8, 1.8);
+            Speed = 200;
             MaxTimeToShoot = 12;
             MinTimeToShoot = 1;
             RestartShootCountDown();

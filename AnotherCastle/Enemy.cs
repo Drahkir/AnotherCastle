@@ -9,7 +9,7 @@ namespace AnotherCastle
         public int Damage { get; set; }
         private double Scale { get; set; }
         private double HitFlashTime { get; set; }
-        private double Speed { get; set; }
+        public double Speed { get; set; }
         double _hitFlashCountDown;
         readonly EffectsManager _effectsManager;
         public Path Path { get; set; }

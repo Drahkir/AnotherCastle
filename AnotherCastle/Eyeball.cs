@@ -21,6 +21,7 @@ namespace AnotherCastle
         public Eyeball(Texture texture, IEnemyBrain enemyBrain, Vector position) : base(texture, enemyBrain, position)
         {
             Health = 15;
+            Damage = 5;
             Sprite.SetScale(1, 1);
             MaxTimeToShoot = 2;
             MinTimeToShoot = 1;
@@ -35,7 +36,6 @@ namespace AnotherCastle
         {
             Attack();
         }
-        
 
         public void Attack()
         {

@@ -32,7 +32,7 @@ namespace AnotherCastle
             _leftTexture = textureManager.Get("pixela_left");
             _rightTexture = textureManager.Get("pixela_right");
             Sprite.SetScale(Scale, Scale);
-            Health = 1;
+            Health = 20;
         }
 
         public void Render(Renderer renderer)
