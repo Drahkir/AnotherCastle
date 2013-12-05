@@ -120,6 +120,8 @@ namespace AnotherCastle
                     return LoadNorthSouthSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
                 case 'E':
                     return LoadEastWestSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
+                case 'Y':
+                    return LoadEyeball(textureManager.Get("eyeball"), textureManager.Get("dirt_floor"), position);
                 case 'Z':
                     return LoadPlayer(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
                 case 'X':
@@ -139,6 +141,13 @@ namespace AnotherCastle
         private Tile LoadSkeleton(Texture texture, Texture floorTexture, Vector position)
         {
             _enemyManager.EnemyList.Add(new Enemy(texture, new SkeletonBrain(), position));
+
+            return new Tile("dirt_floor", floorTexture, TileCollision.Passable, position);
+        }
+
+        private Tile LoadEyeball(Texture texture, Texture floorTexture, Vector position)
+        {
+            _enemyManager.EnemyList.Add(new Eyeball(texture, new EyeballBrain(), position));
 
             return new Tile("dirt_floor", floorTexture, TileCollision.Passable, position);
         }

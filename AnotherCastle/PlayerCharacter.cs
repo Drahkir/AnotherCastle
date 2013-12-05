@@ -49,7 +49,7 @@ namespace AnotherCastle
 
         public int Health { get; set; }
 
-        internal void OnCollision(Enemy enemy)
+        internal void OnCollision(IEnemy enemy)
         {
             if (_isInvulnerable) return;
             Health -= enemy.Damage;

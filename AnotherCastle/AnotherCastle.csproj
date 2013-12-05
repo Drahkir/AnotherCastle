@@ -59,17 +59,20 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EastWestSkeletonBrain.cs" />
-    <Compile Include="NorthSouthSkeletonBrain.cs" />
+    <Compile Include="AI\EyeballBrain.cs" />
+    <Compile Include="AI\EastWestSkeletonBrain.cs" />
+    <Compile Include="AI\NorthSouthSkeletonBrain.cs" />
+    <Compile Include="Eyeball.cs" />
+    <Compile Include="IEnemy.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Room.cs" />
-    <Compile Include="SkeletonBrain.cs" />
+    <Compile Include="AI\SkeletonBrain.cs" />
     <Compile Include="EnemyDef.cs" />
     <Compile Include="EnemyManager.cs" />
     <Compile Include="EnemyType.cs" />
     <Compile Include="GameOverState.cs" />
-    <Compile Include="IEnemyBrain.cs" />
+    <Compile Include="AI\IEnemyBrain.cs" />
     <Compile Include="Missile.cs" />
     <Compile Include="MissileManager.cs" />
     <Compile Include="EffectsManager.cs" />
@@ -122,6 +125,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Levels\2.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Sprites\eyeball.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Sprites\fireball.png">
