@@ -75,9 +75,11 @@ namespace AnotherCastle
             ReverseCourse();
         }
 
-        public void HandleCollision(Vector amount)
+        public virtual void HandleCollision(Vector amount)
         {
             Sprite.SetPosition(Sprite.GetPosition() + amount);
+            //Move(Sprite.GetPosition() + amount);
+            //Move(amount);
         }
 
         public void ReverseCourse()

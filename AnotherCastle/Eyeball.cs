@@ -34,7 +34,7 @@ namespace AnotherCastle
 
         public void Move(Vector amount)
         {
-            Attack();
+
         }
 
         public void Attack()
@@ -64,6 +64,11 @@ namespace AnotherCastle
             _missileManager.Shoot(missile2);
             _missileManager.Shoot(missile3);
             _missileManager.Shoot(missile4);
+        }
+
+        public override void HandleCollision(Vector amount)
+        {
+            // Do nothing cause Eyeball should be like a rock!
         }
     }
 }
