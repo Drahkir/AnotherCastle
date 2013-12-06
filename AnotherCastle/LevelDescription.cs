@@ -1,6 +1,6 @@
 ﻿namespace AnotherCastle
 {
-    class LevelDescription
+    internal class LevelDescription
     {
         public double Time { get; set; }
     }

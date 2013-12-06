@@ -4,6 +4,16 @@ namespace AnotherCastle
 {
     public class Missile : Entity
     {
+        public Missile(Texture missileTexture, Vector direction)
+        {
+            Sprite.Texture = missileTexture;
+
+            // Some default values
+            Dead = false;
+            Direction = direction;
+            Speed = 512; // pixels per second
+        }
+
         public bool Dead { get; set; }
         public Vector Direction { get; set; }
         public double Speed { get; set; }
@@ -28,16 +38,6 @@ namespace AnotherCastle
             Sprite.SetColor(color);
         }
 
-        public Missile(Texture missileTexture, Vector direction)
-        {
-            Sprite.Texture = missileTexture;
-
-            // Some default values
-            Dead = false;
-            Direction = direction;
-            Speed = 512; // pixels per second
-        }
-
         public void Render(Renderer renderer)
         {
             if (Dead)
@@ -60,8 +60,8 @@ namespace AnotherCastle
                 return;
             }
 
-            var position = Sprite.GetPosition();
-            position += Direction * Speed * elapsedTime;
+            Vector position = Sprite.GetPosition();
+            position += Direction*Speed*elapsedTime;
             Sprite.SetPosition(position);
         }
     }

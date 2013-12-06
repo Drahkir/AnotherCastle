@@ -1,24 +1,25 @@
 ﻿using System;
 using System.IO;
-using Tao.OpenGl;
 using Engine;
 using Engine.Input;
+using Tao.OpenGl;
 
 namespace AnotherCastle
 {
-    class InnerGameState : IGameObject
+    internal class InnerGameState : IGameObject
     {
-        private int _currentLevel;
         private const int MaxLevel = 2;
-        Level _level;
-        readonly TextureManager _textureManager;
-        readonly Renderer _renderer = new Renderer();
-        readonly Input _input;
-        readonly StateSystem _system;
-        readonly PersistentGameData _gameData;
-        double _gameTime;
+        private readonly PersistentGameData _gameData;
+        private readonly Input _input;
+        private readonly Renderer _renderer = new Renderer();
+        private readonly StateSystem _system;
+        private readonly TextureManager _textureManager;
+        private int _currentLevel;
+        private double _gameTime;
+        private Level _level;
 
-        public InnerGameState(StateSystem system, Input input, TextureManager textureManager, PersistentGameData gameData)
+        public InnerGameState(StateSystem system, Input input, TextureManager textureManager,
+            PersistentGameData gameData)
         {
             _system = system;
             _input = input;
@@ -29,7 +30,7 @@ namespace AnotherCastle
 
         public void OnGameStart()
         {
-            using (var fileStream = File.Open("./Content/Levels/0.txt", FileMode.Open))
+            using (FileStream fileStream = File.Open("./Content/Levels/0.txt", FileMode.Open))
             {
                 _level = new Level(_input, _textureManager, fileStream);
                 //_gameTime = _gameData.CurrentLevel.Time;
@@ -38,9 +39,9 @@ namespace AnotherCastle
 
         private void LoadNextLevel()
         {
-            var fileString = String.Format("./Content/Levels/{0}.txt", ++_currentLevel);
+            string fileString = String.Format("./Content/Levels/{0}.txt", ++_currentLevel);
 
-            using (var fileStream = File.Open(fileString, FileMode.Open))
+            using (FileStream fileStream = File.Open(fileString, FileMode.Open))
             {
                 _level = new Level(_input, _textureManager, fileStream);
             }

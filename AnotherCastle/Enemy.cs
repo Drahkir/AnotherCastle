@@ -5,33 +5,22 @@ namespace AnotherCastle
 {
     public class Enemy : Entity
     {
-        public int Health { get; set; }
-        public int Damage { get; set; }
-        private double Scale { get; set; }
-        private double HitFlashTime { get; set; }
-        public double Speed { get; set; }
-        double _hitFlashCountDown;
-        readonly EffectsManager _effectsManager;
-        public Path Path { get; set; }
-        public double MaxTimeToShoot { get; set; }
-        public double MinTimeToShoot { get; set; }
-        readonly Random _random = new Random();
-        double _shootCountDown;
-        readonly IEnemyBrain _enemyBrain;
+        private readonly EffectsManager _effectsManager;
+        private readonly IEnemyBrain _enemyBrain;
+        private readonly Random _random = new Random();
+        private double _hitFlashCountDown;
+        private double _shootCountDown;
 
         #region Missile Properties
-        MissileManager _missileManager;
-        Texture _missileTexture;
+
+        private MissileManager _missileManager;
+        private Texture _missileTexture;
         public double FireRecovery { get; set; }
+
         #endregion Missile Properties
 
-        public void RestartShootCountDown()
-        {
-            _shootCountDown = MinTimeToShoot + (_random.NextDouble() * MaxTimeToShoot);
-        }
-
         /// <summary>
-        /// Constructs an enemy given the texture and AI (IEnemyBrain)
+        ///     Constructs an enemy given the texture and AI (IEnemyBrain)
         /// </summary>
         /// <param name="texture">The texture for the enemy</param>
         /// <param name="enemyBrain">The AI for the enemy</param>
@@ -44,8 +33,27 @@ namespace AnotherCastle
             RestartShootCountDown();
         }
 
+        public int Health { get; set; }
+        public int Damage { get; set; }
+        private double Scale { get; set; }
+        private double HitFlashTime { get; set; }
+        public double Speed { get; set; }
+        public Path Path { get; set; }
+        public double MaxTimeToShoot { get; set; }
+        public double MinTimeToShoot { get; set; }
+
+        public bool IsDead
+        {
+            get { return Health == 0; }
+        }
+
+        public void RestartShootCountDown()
+        {
+            _shootCountDown = MinTimeToShoot + (_random.NextDouble()*MaxTimeToShoot);
+        }
+
         /// <summary>
-        /// Handles the on collision event
+        ///     Handles the on collision event
         /// </summary>
         /// <param name="playerCharacter">The player</param>
         internal void OnCollision(PlayerCharacter playerCharacter)
@@ -97,11 +105,6 @@ namespace AnotherCastle
             //_effectsManager.AddExplosion(Sprite.GetPosition());
         }
 
-        public bool IsDead
-        {
-            get { return Health == 0; }
-        }
-
         internal void SetPosition(Vector position)
         {
             Sprite.SetPosition(position);
@@ -119,13 +122,13 @@ namespace AnotherCastle
 
             if (_enemyBrain != null)
             {
-                Move(_enemyBrain.NextMove(Sprite.GetPosition(), elapsedTime) * elapsedTime);
+                Move(_enemyBrain.NextMove(Sprite.GetPosition(), elapsedTime)*elapsedTime);
             }
 
             if (_hitFlashCountDown == 0) return;
             _hitFlashCountDown = Math.Max(0, _hitFlashCountDown - elapsedTime);
-            var scaledTime = 1 - (_hitFlashCountDown / HitFlashTime);
-            Sprite.SetColor(new Color(1, 1, (float)scaledTime, 1));
+            double scaledTime = 1 - (_hitFlashCountDown/HitFlashTime);
+            Sprite.SetColor(new Color(1, 1, (float) scaledTime, 1));
         }
 
         public void Render(Renderer renderer)

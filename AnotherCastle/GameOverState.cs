@@ -1,32 +1,31 @@
-﻿using Engine;
+﻿using System.Windows.Forms;
+using Engine;
 using Engine.Input;
 using Tao.OpenGl;
 
 namespace AnotherCastle
 {
-    class GameOverState : IGameObject
+    internal class GameOverState : IGameObject
     {
-        const double TimeOut = 4;
-        double _countDown = TimeOut;
+        private const double TimeOut = 4;
+        private readonly Text _blurbLose;
+        private readonly Text _blurbWin;
+        private readonly PersistentGameData _gameData;
+        private readonly Input _input;
+        private readonly Renderer _renderer = new Renderer();
+        private readonly StateSystem _system;
 
-        readonly StateSystem _system;
-        readonly Input _input;
-        readonly PersistentGameData _gameData;
-        readonly Renderer _renderer = new Renderer();
-
-        readonly Text _titleWin;
-        readonly Text _blurbWin;
-
-        readonly Text _titleLose;
-        readonly Text _blurbLose;
+        private readonly Text _titleLose;
+        private readonly Text _titleWin;
+        private double _countDown = TimeOut;
 
         public GameOverState(PersistentGameData data, StateSystem system, Input input, Font generalFont, Font titleFont)
         {
             _gameData = data;
             _system = system;
             _input = input;
-            var generalFont1 = generalFont;
-            var titleFont1 = titleFont;
+            Font generalFont1 = generalFont;
+            Font titleFont1 = titleFont;
 
             _titleWin = new Text("Complete!", titleFont1);
             _blurbWin = new Text("Congratulations, you won!", generalFont1);
@@ -38,12 +37,11 @@ namespace AnotherCastle
 
             FormatText(_titleLose, 300);
             FormatText(_blurbLose, 200);
-
         }
 
         private static void FormatText(Text text, int yPosition)
         {
-            text.SetPosition(-text.Width / 2, yPosition);
+            text.SetPosition(-text.Width/2, yPosition);
             text.SetColor(new Color(0, 0, 0, 1));
         }
 
@@ -53,17 +51,11 @@ namespace AnotherCastle
         {
             _countDown -= elapsedTime;
 
-            if (_countDown <= 0 || (_input.Controller != null && _input.Controller.ButtonA.Pressed) || _input.Keyboard.IsKeyPressed(System.Windows.Forms.Keys.Enter))
+            if (_countDown <= 0 || (_input.Controller != null && _input.Controller.ButtonA.Pressed) ||
+                _input.Keyboard.IsKeyPressed(Keys.Enter))
             {
                 Finish();
             }
-        }
-
-        private void Finish()
-        {
-            _gameData.JustWon = false;
-            _system.ChangeState("start_menu");
-            _countDown = TimeOut;
         }
 
         public void Render()
@@ -85,6 +77,14 @@ namespace AnotherCastle
 
             _renderer.Render();
         }
+
+        private void Finish()
+        {
+            _gameData.JustWon = false;
+            _system.ChangeState("start_menu");
+            _countDown = TimeOut;
+        }
+
         #endregion
     }
 }

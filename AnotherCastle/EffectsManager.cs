@@ -5,8 +5,8 @@ namespace AnotherCastle
 {
     public class EffectsManager
     {
-        readonly List<AnimatedSprite> _effects = new List<AnimatedSprite>();
-        readonly TextureManager _textureManager;
+        private readonly List<AnimatedSprite> _effects = new List<AnimatedSprite>();
+        private readonly TextureManager _textureManager;
 
         public EffectsManager(TextureManager textureManager)
         {

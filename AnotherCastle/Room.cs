@@ -12,11 +12,11 @@ namespace AnotherCastle
         public Room(Tile[,] tileList)
         {
             TileDictionary = new Dictionary<string, Tile>();
-            var i = 0;
+            int i = 0;
 
-            foreach (var tile in tileList)
+            foreach (Tile tile in tileList)
             {
-                var roomName = Constants.RoomNames[i++];
+                string roomName = Constants.RoomNames[i++];
                 TileDictionary.Add(roomName, tile);
             }
         }
@@ -28,11 +28,10 @@ namespace AnotherCastle
 
         public void Render(Renderer renderer)
         {
-            foreach (var tile in TileDictionary.Select(tilePair => tilePair.Value))
+            foreach (Tile tile in TileDictionary.Select(tilePair => tilePair.Value))
             {
                 tile.Render(renderer);
             }
         }
-
     }
 }

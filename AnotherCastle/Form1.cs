@@ -3,20 +3,21 @@ using System.Drawing;
 using System.Windows.Forms;
 using Engine;
 using Engine.Input;
-using Tao.OpenGl;
 using Tao.DevIl;
+using Tao.OpenGl;
+using Font = Engine.Font;
 
 namespace AnotherCastle
 {
     public partial class Form1 : Form
     {
         private const bool Fullscreen = false;
-        readonly StateSystem _system = new StateSystem();
-        readonly Input _input = new Input();
-        readonly TextureManager _textureManager = new TextureManager();
-        Engine.Font _generalFont;
-        Engine.Font _titleFont;
-        readonly PersistentGameData _gameData = new PersistentGameData();
+        private readonly PersistentGameData _gameData = new PersistentGameData();
+        private readonly Input _input = new Input();
+        private readonly StateSystem _system = new StateSystem();
+        private readonly TextureManager _textureManager = new TextureManager();
+        private Font _generalFont;
+        private Font _titleFont;
         //SoundManager _soundManager = new SoundManager();
 
         public Form1()
@@ -38,8 +39,9 @@ namespace AnotherCastle
 
         private void InitializeFonts()
         {
-            _titleFont = new Engine.Font(_textureManager.Get("title_font"), FontParser.Parse("./Content/Fonts/title_font.fnt"));
-            _generalFont = new Engine.Font(_textureManager.Get("general_font"), FontParser.Parse("./Content/Fonts/general_font.fnt"));
+            _titleFont = new Font(_textureManager.Get("title_font"), FontParser.Parse("./Content/Fonts/title_font.fnt"));
+            _generalFont = new Font(_textureManager.Get("general_font"),
+                FontParser.Parse("./Content/Fonts/general_font.fnt"));
         }
 
         private void InitializeSounds()
@@ -106,11 +108,8 @@ namespace AnotherCastle
                 WindowState = FormWindowState.Maximized;
             }
 
-            else
-            {
-                ClientSize = new Size(1280, 720);
-                //ClientSize = new Size(256, 240);
-            }
+            ClientSize = new Size(1280, 720);
+            //ClientSize = new Size(256, 240);
             Setup2DGraphics(ClientSize.Width, ClientSize.Height);
         }
 
@@ -123,8 +122,8 @@ namespace AnotherCastle
 
         private static void Setup2DGraphics(double width, double height)
         {
-            var halfWidth = width / 2;
-            var halfHeight = height / 2;
+            double halfWidth = width/2;
+            double halfHeight = height/2;
             Gl.glMatrixMode(Gl.GL_PROJECTION);
             Gl.glLoadIdentity();
             Gl.glOrtho(-halfWidth, halfWidth, -halfHeight, halfHeight, -100, 100);

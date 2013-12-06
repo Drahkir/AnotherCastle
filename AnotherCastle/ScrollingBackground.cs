@@ -4,7 +4,14 @@ namespace AnotherCastle
 {
     public class ScrollingBackground
     {
-        readonly Sprite _background = new Sprite();
+        private readonly Sprite _background = new Sprite();
+
+        public ScrollingBackground(Texture background)
+        {
+            _background.Texture = background;
+            Speed = 0.05f;
+            Direction = new Vector(1, 0, 0);
+        }
 
         public float Speed { get; set; }
         public Vector Direction { get; set; }
@@ -12,13 +19,6 @@ namespace AnotherCastle
         public void SetScale(double x, double y)
         {
             _background.SetScale(x, y);
-        }
-
-        public ScrollingBackground(Texture background)
-        {
-            _background.Texture = background;
-            Speed = 0.05f;
-            Direction = new Vector(1, 0, 0);
         }
 
         public void Update(float elapsedTime)

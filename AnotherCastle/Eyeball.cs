@@ -1,19 +1,20 @@
-﻿using System;
-using Engine;
+﻿using Engine;
 
 namespace AnotherCastle
 {
     public class Eyeball : Enemy
     {
         #region Missile Properties
-        MissileManager _missileManager;
-        Texture _missileTexture;
+
+        private MissileManager _missileManager;
+        private Texture _missileTexture;
+        private double _shootCountDown;
         public double FireRecovery { get; set; }
-        double _shootCountDown;
+
         #endregion Missile Properties
 
         /// <summary>
-        /// Constructs an enemy given the texture and AI (IEnemyBrain)
+        ///     Constructs an enemy given the texture and AI (IEnemyBrain)
         /// </summary>
         /// <param name="texture">The texture for the enemy</param>
         /// <param name="enemyBrain">The AI for the enemy</param>
@@ -28,13 +29,11 @@ namespace AnotherCastle
         }
 
         /// <summary>
-        /// Handles the on collision event
+        ///     Handles the on collision event
         /// </summary>
         /// <param name="playerCharacter">The player</param>
-
         public void Move(Vector amount)
         {
-
         }
 
         public void Attack()
@@ -43,7 +42,7 @@ namespace AnotherCastle
             {
                 return;
             }
-            
+
             var dir1 = new Vector(1, 0, 0);
             var dir2 = new Vector(0, 1, 0);
             var dir3 = new Vector(0, 0, 0);

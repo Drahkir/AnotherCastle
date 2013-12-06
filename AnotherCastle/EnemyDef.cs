@@ -4,10 +4,6 @@ namespace AnotherCastle
 {
     public class EnemyDef
     {
-        public string EnemyType { get; set; }
-        public double LaunchTime { get; set; }
-        public Vector SpawnPoint { get; set; }
-
         public EnemyDef()
         {
             EnemyType = "cannon_fodder";
@@ -28,6 +24,10 @@ namespace AnotherCastle
             LaunchTime = launchTime;
             SpawnPoint = spawnPoint;
         }
+
+        public string EnemyType { get; set; }
+        public double LaunchTime { get; set; }
+        public Vector SpawnPoint { get; set; }
 
         public Vector RandomSpawnPoint()
         {

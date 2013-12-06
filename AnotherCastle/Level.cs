@@ -1,32 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using Engine;
 using Engine.Input;
-using System.Windows.Forms;
-using System.Drawing;
 using Platformer;
 
 namespace AnotherCastle
 {
-    class Level
+    internal class Level
     {
-        private Tile[,] tiles;
-        readonly Input _input;
-        readonly PlayerCharacter _playerCharacter;
-        readonly EnemyManager _enemyManager;
-        readonly MissileManager _missileManager = new MissileManager(new RectangleF(-1300 / 2, -750 / 2, 1300, 750));
-        readonly EffectsManager _effectsManager;
-        readonly Room _currentRoom;
         //MissileManager _missileManager = new MissileManager(new RectangleF(-1300 / 2, -750 / 2, 1300, 750));
         //private const int xOffset = -650;
         //private const int yOffset = -410;
         private const int xOffset = -722;
         private const int yOffset = -510;
-        public bool IsLevelComplete { get; set; }
-        public bool AreAllEnemiesDead { get; set; }
-        public bool IsGamePaused { get; set; }
+        private readonly Room _currentRoom;
+        private readonly EffectsManager _effectsManager;
+        private readonly EnemyManager _enemyManager;
+        private readonly Input _input;
+        private readonly MissileManager _missileManager = new MissileManager(new RectangleF(-1300/2, -750/2, 1300, 750));
+        private readonly PlayerCharacter _playerCharacter;
+        private Tile[,] tiles;
 
         public Level(Input input, TextureManager textureManager, Stream mapFile)
         {
@@ -46,6 +43,26 @@ namespace AnotherCastle
             //_backgroundLayer.SetScale(2.0, 2.0);
         }
 
+        public bool IsLevelComplete { get; set; }
+        public bool AreAllEnemiesDead { get; set; }
+        public bool IsGamePaused { get; set; }
+
+        /// <summary>
+        ///     Width of level measured in tiles.
+        /// </summary>
+        public int Width
+        {
+            get { return tiles.GetLength(0); }
+        }
+
+        /// <summary>
+        ///     Height of the level measured in tiles.
+        /// </summary>
+        public int Height
+        {
+            get { return tiles.GetLength(1); }
+        }
+
         private void LoadTiles(Stream mapFile, TextureManager textureManager)
         {
             // Load the level and ensure all of the lines are the same length.
@@ -53,7 +70,7 @@ namespace AnotherCastle
             var lines = new List<string>();
             using (var reader = new StreamReader(mapFile))
             {
-                var line = reader.ReadLine();
+                string line = reader.ReadLine();
                 width = line.Length;
                 while (line != null)
                 {
@@ -68,12 +85,12 @@ namespace AnotherCastle
             tiles = new Tile[width, lines.Count];
 
             // Loop over every tile position,
-            for (var y = 0; y < Height; ++y)
+            for (int y = 0; y < Height; ++y)
             {
-                for (var x = 0; x < Width; ++x)
+                for (int x = 0; x < Width; ++x)
                 {
                     // to load each tile.
-                    var tileType = lines[y][x];
+                    char tileType = lines[y][x];
                     tiles[x, y] = LoadTile(tileType, textureManager, x, y);
                 }
             }
@@ -86,25 +103,25 @@ namespace AnotherCastle
         }
 
         /// <summary>
-        /// Loads an individual tile's appearance and behavior.
+        ///     Loads an individual tile's appearance and behavior.
         /// </summary>
         /// <param name="tileChar">
-        /// The character loaded from the structure file which
-        /// indicates what should be loaded.
+        ///     The character loaded from the structure file which
+        ///     indicates what should be loaded.
         /// </param>
         /// <param name="textureManager">
-        /// The texture manager
+        ///     The texture manager
         /// </param>
         /// <param name="x">
-        /// The X location of this tile in tile space.
+        ///     The X location of this tile in tile space.
         /// </param>
         /// <param name="y">
-        /// The Y location of this tile in tile space.
+        ///     The Y location of this tile in tile space.
         /// </param>
         /// <returns>The loaded tile.</returns>
         private Tile LoadTile(Char tileChar, TextureManager textureManager, int x, int y)
         {
-            var position = GetBounds(x, y).GetBottomCenter();
+            Vector position = GetBounds(x, y).GetBottomCenter();
 
             switch (tileChar)
             {
@@ -117,9 +134,11 @@ namespace AnotherCastle
                 case 'S':
                     return LoadSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
                 case 'N':
-                    return LoadNorthSouthSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
+                    return LoadNorthSouthSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"),
+                        position);
                 case 'E':
-                    return LoadEastWestSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
+                    return LoadEastWestSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"),
+                        position);
                 case 'Y':
                     return LoadEyeball(textureManager.Get("eyeball"), textureManager.Get("dirt_floor"), position);
                 case 'Z':
@@ -127,7 +146,8 @@ namespace AnotherCastle
                 case 'X':
                     return new Tile("exit", textureManager.Get("dirt_floor"), TileCollision.Impassable, position);
                 default:
-                    throw new NotSupportedException(String.Format("Unsupported tile type character '{0}' at position {1}, {2}.", tileChar, x, y));
+                    throw new NotSupportedException(
+                        String.Format("Unsupported tile type character '{0}' at position {1}, {2}.", tileChar, x, y));
             }
         }
 
@@ -167,27 +187,11 @@ namespace AnotherCastle
         }
 
         /// <summary>
-        /// Gets the bounding rectangle of a tile in world space.
-        /// </summary>        
+        ///     Gets the bounding rectangle of a tile in world space.
+        /// </summary>
         public Rectangle GetBounds(int x, int y)
         {
-            return new Rectangle((x * Tile.Width) + xOffset, (y * Tile.Height) + yOffset, Tile.Width, Tile.Height);
-        }
-
-        /// <summary>
-        /// Width of level measured in tiles.
-        /// </summary>
-        public int Width
-        {
-            get { return tiles.GetLength(0); }
-        }
-
-        /// <summary>
-        /// Height of the level measured in tiles.
-        /// </summary>
-        public int Height
-        {
-            get { return tiles.GetLength(1); }
+            return new Rectangle((x*Tile.Width) + xOffset, (y*Tile.Height) + yOffset, Tile.Width, Tile.Height);
         }
 
         public bool HasPlayerDied()
@@ -199,7 +203,7 @@ namespace AnotherCastle
         {
             _missileManager.UpdatePlayerCollision(_playerCharacter);
 
-            foreach (var enemy in _enemyManager.EnemyList)
+            foreach (Enemy enemy in _enemyManager.EnemyList)
             {
                 if (enemy.GetBoundingBox().IntersectsWith(_playerCharacter.GetBoundingBox()))
                 {
@@ -236,7 +240,6 @@ namespace AnotherCastle
 
         private void UpdateInput(double elapsedTime)
         {
-
             //if (_input.Keyboard.IsKeyHeld(Keys.Space) || _input.Keyboard.IsKeyPressed(Keys.Space) || (_input.Controller != null && _input.Controller.ButtonA.Pressed))
             //{
             //    _playerCharacter.Attack();
@@ -259,9 +262,9 @@ namespace AnotherCastle
             if (_input.Controller != null)
             {
                 x = _input.Controller.LeftControlStick.X;
-                y = _input.Controller.LeftControlStick.Y * -1;
+                y = _input.Controller.LeftControlStick.Y*-1;
                 u = _input.Controller.RightControlStick.X;
-                v = _input.Controller.RightControlStick.Y * -1;
+                v = _input.Controller.RightControlStick.Y*-1;
 
                 if (Math.Abs(u) > Math.Abs(v))
                 {
@@ -285,16 +288,16 @@ namespace AnotherCastle
             {
                 Vector depth;
                 double absDepthX, absDepthY;
-                var tile = tilePair.Value;
+                Tile tile = tilePair.Value;
                 if (tile.TileCollision != TileCollision.Impassable) continue;
-                var objectBox = tile.GetBoundingBox();
+                RectangleF objectBox = tile.GetBoundingBox();
 
                 // Check missiles for collisions
-                foreach (var missile in _missileManager.MissileList.Where(a => a.Dead == false))
+                foreach (Missile missile in _missileManager.MissileList.Where(a => a.Dead == false))
                 {
-                    var missileBox = missile.GetBoundingBox();
+                    RectangleF missileBox = missile.GetBoundingBox();
 
-                    var missileDepth = missileBox.GetIntersectionDepth(objectBox);
+                    Vector missileDepth = missileBox.GetIntersectionDepth(objectBox);
 
                     if (missileDepth == Vector.Zero) continue;
 
@@ -302,9 +305,9 @@ namespace AnotherCastle
                 }
 
                 // Check enemies for collisions
-                foreach (var enemy in _enemyManager.EnemyList)
+                foreach (Enemy enemy in _enemyManager.EnemyList)
                 {
-                    var enemyBox = enemy.GetBoundingBox();
+                    RectangleF enemyBox = enemy.GetBoundingBox();
 
                     depth = enemyBox.GetIntersectionDepth(objectBox);
 
@@ -317,7 +320,7 @@ namespace AnotherCastle
                         : new Vector(depth.X, 0, 0));
                 }
 
-                var box = _playerCharacter.GetBoundingBox();
+                RectangleF box = _playerCharacter.GetBoundingBox();
 
                 depth = box.GetIntersectionDepth(objectBox);
 
@@ -332,22 +335,21 @@ namespace AnotherCastle
 
                 // Perform further collisions with the new bounds.
                 //bounds = BoundingRectangle;
-
             }
 
-            foreach (var enemy in _enemyManager.EnemyList)
+            foreach (Enemy enemy in _enemyManager.EnemyList)
             {
-                var box = enemy.GetBoundingBox();
+                RectangleF box = enemy.GetBoundingBox();
 
-                foreach (var otherEnemy in _enemyManager.EnemyList.Where(a => a != enemy))
+                foreach (Enemy otherEnemy in _enemyManager.EnemyList.Where(a => a != enemy))
                 {
-                    var otherEnemyBox = otherEnemy.GetBoundingBox();
+                    RectangleF otherEnemyBox = otherEnemy.GetBoundingBox();
 
-                    var depth = box.GetIntersectionDepth(otherEnemyBox);
+                    Vector depth = box.GetIntersectionDepth(otherEnemyBox);
 
                     if (depth == Vector.Zero) continue;
-                    var absDepthX = Math.Abs(depth.X);
-                    var absDepthY = Math.Abs(depth.Y);
+                    double absDepthX = Math.Abs(depth.X);
+                    double absDepthY = Math.Abs(depth.Y);
 
                     enemy.HandleCollision(absDepthX > absDepthY
                         ? new Vector(0, depth.Y, 0)
@@ -402,7 +404,7 @@ namespace AnotherCastle
                 _playerCharacter.Attack(attackInput);
             }
 
-            _playerCharacter.Move(controlInput * elapsedTime);
+            _playerCharacter.Move(controlInput*elapsedTime);
         }
 
         public void Render(Renderer renderer)

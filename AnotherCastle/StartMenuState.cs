@@ -1,20 +1,21 @@
-﻿using System;
-using Tao.OpenGl;
+﻿using System.Windows.Forms;
 using Engine;
 using Engine.Input;
+using Tao.OpenGl;
+using Button = Engine.Button;
 
 namespace AnotherCastle
 {
-    class StartMenuState : IGameObject
+    internal class StartMenuState : IGameObject
     {
-        readonly Renderer _renderer = new Renderer();
-        readonly Text _title;
-        readonly Engine.Font _generalFont;
-        readonly Input _input;
-        VerticalMenu _menu;
-        readonly StateSystem _system;
+        private readonly Font _generalFont;
+        private readonly Input _input;
+        private readonly Renderer _renderer = new Renderer();
+        private readonly StateSystem _system;
+        private readonly Text _title;
+        private VerticalMenu _menu;
 
-        public StartMenuState(Engine.Font titleFont, Engine.Font generalFont, Input input, StateSystem system)
+        public StartMenuState(Font titleFont, Font generalFont, Input input, StateSystem system)
         {
             _input = input;
             _system = system;
@@ -24,19 +25,7 @@ namespace AnotherCastle
             _title.SetColor(new Color(0, 0, 0, 1));
 
             // Center on x and move toward the top
-            _title.SetPosition(-_title.Width / 2, 300);
-        }
-
-        private void InitializeMenu()
-        {
-            _menu = new VerticalMenu(0, 150, _input);
-            var startGame = new Button(delegate(object o, EventArgs e) { _system.ChangeState("inner_game"); }, new Text("Start", _generalFont));
-            var gameSettings = new Button(delegate(object o, EventArgs e) { /* Go To Settings */ }, new Text("Settings", _generalFont));
-            var exitGame = new Button(delegate(object o, EventArgs e) { System.Windows.Forms.Application.Exit(); }, new Text("Exit", _generalFont));
-
-            _menu.AddButton(startGame);
-            _menu.AddButton(gameSettings);
-            _menu.AddButton(exitGame);
+            _title.SetPosition(-_title.Width/2, 300);
         }
 
         public void Update(double elapsedTime)
@@ -51,6 +40,21 @@ namespace AnotherCastle
             _renderer.DrawText(_title);
             _menu.Render(_renderer);
             _renderer.Render();
+        }
+
+        private void InitializeMenu()
+        {
+            _menu = new VerticalMenu(0, 150, _input);
+            var startGame = new Button(delegate { _system.ChangeState("inner_game"); }, new Text("Start", _generalFont));
+            var gameSettings = new Button(delegate
+            {
+                /* Go To Settings */
+            }, new Text("Settings", _generalFont));
+            var exitGame = new Button(delegate { Application.Exit(); }, new Text("Exit", _generalFont));
+
+            _menu.AddButton(startGame);
+            _menu.AddButton(gameSettings);
+            _menu.AddButton(exitGame);
         }
     }
 }

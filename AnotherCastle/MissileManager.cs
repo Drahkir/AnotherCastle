@@ -7,22 +7,18 @@ namespace AnotherCastle
 {
     public class MissileManager
     {
-        readonly List<Missile> _missiles = new List<Missile>();
-        readonly List<Missile> _enemyMissiles = new List<Missile>();
-
-        readonly RectangleF _bounds;
-
-        public List<Missile> MissileList
-        {
-            get
-            {
-                return _missiles;
-            }
-        } 
+        private readonly RectangleF _bounds;
+        private readonly List<Missile> _enemyMissiles = new List<Missile>();
+        private readonly List<Missile> _missiles = new List<Missile>();
 
         public MissileManager(RectangleF playArea)
         {
             _bounds = playArea;
+        }
+
+        public List<Missile> MissileList
+        {
+            get { return _missiles; }
         }
 
         public void Shoot(Missile missile)
@@ -37,7 +33,10 @@ namespace AnotherCastle
 
         public void UpdatePlayerCollision(PlayerCharacter playerCharacter)
         {
-            foreach (var missile in _enemyMissiles.Where(missile => missile.GetBoundingBox().IntersectsWith(playerCharacter.GetBoundingBox())))
+            foreach (
+                Missile missile in
+                    _enemyMissiles.Where(
+                        missile => missile.GetBoundingBox().IntersectsWith(playerCharacter.GetBoundingBox())))
             {
                 missile.Dead = true;
                 playerCharacter.OnCollision(missile);
@@ -59,7 +58,7 @@ namespace AnotherCastle
 
         private void CheckOutOfBounds(IEnumerable<Missile> missileList)
         {
-            foreach (var missile in missileList.Where(missile => !missile.GetBoundingBox().IntersectsWith(_bounds)))
+            foreach (Missile missile in missileList.Where(missile => !missile.GetBoundingBox().IntersectsWith(_bounds)))
             {
                 missile.Dead = true;
             }
@@ -68,7 +67,7 @@ namespace AnotherCastle
         private static void RemoveDeadMissile(IList<Missile> missileList)
         {
             //foreach(Missile missile in missileList)
-            for (var i = missileList.Count - 1; i >= 0; i--)
+            for (int i = missileList.Count - 1; i >= 0; i--)
             {
                 //if(missile.Dead)
                 if (missileList[i].Dead)
@@ -87,12 +86,13 @@ namespace AnotherCastle
 
         internal void UpdateEnemyCollisions(Enemy enemy)
         {
-            foreach (var missile in _missiles.Where(missile => missile.GetBoundingBox().IntersectsWith(enemy.GetBoundingBox())))
+            foreach (
+                Missile missile in
+                    _missiles.Where(missile => missile.GetBoundingBox().IntersectsWith(enemy.GetBoundingBox())))
             {
                 missile.Dead = true;
                 enemy.OnCollision(missile);
             }
         }
     }
-
 }

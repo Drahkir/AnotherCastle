@@ -6,22 +6,19 @@ namespace AnotherCastle
 {
     public class ClientBounds
     {
+        public int EastBound;
         public int NorthBound;
         public int SouthBound;
         public int WestBound;
-        public int EastBound;
     }
 
     public class EnemyManager
     {
-        readonly List<Enemy> _enemies = new List<Enemy>();
+        private readonly List<Enemy> _enemies = new List<Enemy>();
 
         public List<Enemy> EnemyList
         {
-            get
-            {
-                return _enemies;
-            }
+            get { return _enemies; }
         }
 
         public void Update(double elapsedTime, double gameTime)
@@ -33,7 +30,7 @@ namespace AnotherCastle
 
         private void CheckForOutOfBounds()
         {
-            foreach (var enemy in _enemies.Where(enemy => enemy.IsPathDone()))
+            foreach (Enemy enemy in _enemies.Where(enemy => enemy.IsPathDone()))
             {
                 enemy.Health = 0;
             }
@@ -46,7 +43,7 @@ namespace AnotherCastle
 
         private void RemoveDeadEnemies()
         {
-            for (var i = _enemies.Count - 1; i >= 0; i--)
+            for (int i = _enemies.Count - 1; i >= 0; i--)
             {
                 if (_enemies[i].IsDead)
                 {

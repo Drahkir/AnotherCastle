@@ -5,20 +5,21 @@ namespace AnotherCastle
 {
     public class PlayerCharacter : Entity
     {
-        bool _isInvulnerable;
-        double _invulnerabilityTimer;
         private const double Scale = 1;
         private const double Speed = 256;
-        readonly Texture _upTexture;
-        readonly Texture _downTexture;
-        readonly Texture _leftTexture;
-        readonly Texture _rightTexture;
+        private readonly Texture _downTexture;
+        private readonly Texture _leftTexture;
+        private readonly Texture _rightTexture;
+        private readonly Texture _upTexture;
+        private double _invulnerabilityTimer;
+        private bool _isInvulnerable;
 
         #region Missile Properties
-        MissileManager _missileManager;
-        Texture _missileTexture;
+
         private const double FireRecovery = 0.25;
-        double _fireRecoveryTime = FireRecovery;
+        private readonly MissileManager _missileManager;
+        private readonly Texture _missileTexture;
+        private double _fireRecoveryTime = FireRecovery;
 
         #endregion Missile Properties
 
@@ -35,19 +36,19 @@ namespace AnotherCastle
             Health = 20;
         }
 
-        public void Render(Renderer renderer)
-        {
-            renderer.DrawSprite(Sprite);
-            //Render_Debug();
-        }
-
         /// <summary>
-        /// Returns true if the PlayerCharacter is dead
+        ///     Returns true if the PlayerCharacter is dead
         /// </summary>
         /// <returns>true if dead; else false</returns>
         public bool IsDead { get; private set; }
 
         public int Health { get; set; }
+
+        public void Render(Renderer renderer)
+        {
+            renderer.DrawSprite(Sprite);
+            //Render_Debug();
+        }
 
         internal void OnCollision(Enemy enemy)
         {
@@ -85,7 +86,6 @@ namespace AnotherCastle
             {
                 _invulnerabilityTimer += elapsedTime;
             }
-
         }
 
         public void Attack(Vector direction)
@@ -94,7 +94,7 @@ namespace AnotherCastle
             {
                 return;
             }
-            
+
             _fireRecoveryTime = FireRecovery;
             var missile = new Missile(_missileTexture, direction);
             //missile.SetColor(new Color(0, 1, 0, 1));
@@ -140,7 +140,6 @@ namespace AnotherCastle
 
         public void HandleCollision(Vector amount)
         {
-
             Sprite.SetPosition(Sprite.GetPosition() + amount);
         }
 

@@ -5,8 +5,8 @@ namespace AnotherCastle
 {
     public class Path
     {
-        readonly Spline _spline = new Spline();
-        readonly Tween _tween;
+        private readonly Spline _spline = new Spline();
+        private readonly Tween _tween;
 
         public Path(IEnumerable<Vector> points, double travelTime)
         {

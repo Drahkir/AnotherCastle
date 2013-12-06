@@ -1,6 +1,6 @@
-﻿using Tao.OpenGl;
-using System.Drawing;
+﻿using System.Drawing;
 using Engine;
+using Tao.OpenGl;
 
 namespace AnotherCastle
 {
@@ -10,9 +10,10 @@ namespace AnotherCastle
 
         public RectangleF GetBoundingBox()
         {
-            var width = (float)(Sprite.Texture.Width * Sprite.ScaleX);
-            var height = (float)(Sprite.Texture.Height * Sprite.ScaleY);
-            return new RectangleF((float)Sprite.GetPosition().X - width / 2, (float)Sprite.GetPosition().Y - height / 2, width, height);
+            var width = (float) (Sprite.Texture.Width*Sprite.ScaleX);
+            var height = (float) (Sprite.Texture.Height*Sprite.ScaleY);
+            return new RectangleF((float) Sprite.GetPosition().X - width/2, (float) Sprite.GetPosition().Y - height/2,
+                width, height);
         }
 
         // Render a bounding box
@@ -20,7 +21,7 @@ namespace AnotherCastle
         {
             Gl.glDisable(Gl.GL_TEXTURE_2D);
 
-            var bounds = GetBoundingBox();
+            RectangleF bounds = GetBoundingBox();
 
             Gl.glBegin(Gl.GL_LINE_LOOP);
             {
