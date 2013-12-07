@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using AnotherCastle.AI;
 using Engine;
 using Engine.Input;
 using Platformer;
@@ -21,9 +22,9 @@ namespace AnotherCastle
         private readonly EffectsManager _effectsManager;
         private readonly EnemyManager _enemyManager;
         private readonly Input _input;
-        private readonly MissileManager _missileManager = new MissileManager(new RectangleF(-1300/2, -750/2, 1300, 750));
+        private readonly MissileManager _missileManager = new MissileManager();
         private readonly PlayerCharacter _playerCharacter;
-        private Tile[,] tiles;
+        private Tile[,] _tiles;
 
         public Level(Input input, TextureManager textureManager, Stream mapFile)
         {
@@ -32,7 +33,7 @@ namespace AnotherCastle
             _playerCharacter = new PlayerCharacter(textureManager, _missileManager);
             _enemyManager = new EnemyManager();
             LoadTiles(mapFile, textureManager);
-            _currentRoom = new Room(tiles);
+            _currentRoom = new Room(_tiles);
 
             //_background = new ScrollingBackground(textureManager.Get("background"));
             //_background.SetScale(5, 5);
@@ -52,7 +53,7 @@ namespace AnotherCastle
         /// </summary>
         public int Width
         {
-            get { return tiles.GetLength(0); }
+            get { return _tiles.GetLength(0); }
         }
 
         /// <summary>
@@ -60,29 +61,32 @@ namespace AnotherCastle
         /// </summary>
         public int Height
         {
-            get { return tiles.GetLength(1); }
+            get { return _tiles.GetLength(1); }
         }
 
         private void LoadTiles(Stream mapFile, TextureManager textureManager)
         {
             // Load the level and ensure all of the lines are the same length.
-            int width;
+            int width = 0;
             var lines = new List<string>();
             using (var reader = new StreamReader(mapFile))
             {
-                string line = reader.ReadLine();
-                width = line.Length;
-                while (line != null)
+                var line = reader.ReadLine();
+                if (line != null)
                 {
-                    lines.Add(line);
-                    //if (line.Length != width)
-                    //    throw new Exception(String.Format("The length of line {0} is different from all preceeding lines.", lines.Count));
-                    line = reader.ReadLine();
+                    width = line.Length;
+                    while (line != null)
+                    {
+                        lines.Add(line);
+                        //if (line.Length != width)
+                        //    throw new Exception(String.Format("The length of line {0} is different from all preceeding lines.", lines.Count));
+                        line = reader.ReadLine();
+                    }
                 }
             }
 
             // Allocate the tile grid.
-            tiles = new Tile[width, lines.Count];
+            _tiles = new Tile[width, lines.Count];
 
             // Loop over every tile position,
             for (int y = 0; y < Height; ++y)
@@ -91,7 +95,7 @@ namespace AnotherCastle
                 {
                     // to load each tile.
                     char tileType = lines[y][x];
-                    tiles[x, y] = LoadTile(tileType, textureManager, x, y);
+                    _tiles[x, y] = LoadTile(tileType, textureManager, x, y);
                 }
             }
 
@@ -199,26 +203,37 @@ namespace AnotherCastle
             return _playerCharacter.IsDead;
         }
 
-        private void UpdateCollisions()
+        private static void UpdateCollisions<T>(List<List<T>>  entityList) where T : IEntity
         {
-            _missileManager.UpdatePlayerCollision(_playerCharacter);
-
-            var playerBox = _playerCharacter.GetBoundingBox();
-
-            foreach (Enemy enemy in _enemyManager.EnemyList)
+            foreach (var entList in entityList)
             {
-                var enemyBox = enemy.GetBoundingBox();
-
-                if (enemyBox.IntersectsWith(playerBox))
+                foreach (var otherList in entityList)
                 {
-                    var depth = enemyBox.GetIntersectionDepth(playerBox);
-                    enemy.OnCollision(_playerCharacter, depth);
-                    _playerCharacter.OnCollision(enemy, depth);
-                }
+                    if (entList == otherList) continue;
+                    foreach (var ent in entList)
+                    {
+                        var entBox = ent.GetBoundingBox();
 
-                _missileManager.UpdateEnemyCollisions(enemy);
+                        foreach (var other in otherList)
+                        {
+                            var otherBox = other.GetBoundingBox();
+
+                            if (!entBox.IntersectsWith(otherBox)) continue;
+                            var depth = entBox.GetIntersectionDepth(otherBox);
+                            if (depth == Vector.Zero) continue;
+                            var absDepthX = Math.Abs(depth.X);
+                            var absDepthY = Math.Abs(depth.Y);
+                            var depthVector = absDepthX > absDepthY
+                                ? new Vector(0, depth.Y, 0)
+                                : new Vector(depth.X, 0, 0);
+                            ent.OnCollision(other, depthVector);
+                            other.OnCollision(ent, depthVector);
+                        }
+                        
+                    }
+                }
             }
-        }
+        }  
 
         public void Update(double elapsedTime, double gameTime)
         {
@@ -228,8 +243,19 @@ namespace AnotherCastle
 
                 //_background.Update((float)elapsedTime);
                 //_backgroundLayer.Update((float)elapsedTime);
-
-                UpdateCollisions();
+                //var entityList = new List<List<IEntity>();
+                var enemyList = new List<IEntity>(_enemyManager.EnemyList.ToList());
+                var missileList = new List<IEntity>(_missileManager.MissileList.ToList());
+                var tileList = new List<IEntity>(_currentRoom.TileDictionary.Values.ToList().Where(a => a.TileCollision == TileCollision.Impassable));
+                var entityList = new List<List<IEntity>>
+                {
+                    enemyList,
+                    missileList,
+                    tileList,
+                    new List<IEntity> {_playerCharacter}
+                };
+                
+                UpdateCollisions(entityList);
                 _enemyManager.Update(elapsedTime, gameTime);
                 _missileManager.Update(elapsedTime);
                 _effectsManager.Update(elapsedTime);
@@ -238,6 +264,19 @@ namespace AnotherCastle
             if (_enemyManager.EnemyList.Count <= 0)
             {
                 AreAllEnemiesDead = true;
+            }
+
+            if (AreAllEnemiesDead && _playerCharacter.WaitingAtExit)
+            {
+                IsLevelComplete = true;
+                _playerCharacter.WaitingAtExit = false;
+                AreAllEnemiesDead = false;
+            }
+            else
+            {
+                AreAllEnemiesDead = false;
+                _playerCharacter.WaitingAtExit = false;
+                IsLevelComplete = false;
             }
 
             UpdateInput(elapsedTime);
@@ -288,81 +327,6 @@ namespace AnotherCastle
 
             // If the input is very small, then the player may not be using
             // a controller; he might be using the keyboard.
-
-            foreach (var tilePair in _currentRoom.TileDictionary)
-            {
-                Vector depth;
-                double absDepthX, absDepthY;
-                Tile tile = tilePair.Value;
-                if (tile.TileCollision != TileCollision.Impassable) continue;
-                RectangleF objectBox = tile.GetBoundingBox();
-
-                // Check missiles for collisions
-                foreach (Missile missile in _missileManager.MissileList.Where(a => a.Dead == false))
-                {
-                    RectangleF missileBox = missile.GetBoundingBox();
-
-                    Vector missileDepth = missileBox.GetIntersectionDepth(objectBox);
-
-                    if (missileDepth == Vector.Zero) continue;
-
-                    missile.HandleCollision();
-                }
-
-                // Check enemies for collisions
-                foreach (Enemy enemy in _enemyManager.EnemyList)
-                {
-                    RectangleF enemyBox = enemy.GetBoundingBox();
-
-                    depth = enemyBox.GetIntersectionDepth(objectBox);
-
-                    if (depth == Vector.Zero) continue;
-                    absDepthX = Math.Abs(depth.X);
-                    absDepthY = Math.Abs(depth.Y);
-
-                    enemy.HandleCollision(absDepthX > absDepthY
-                        ? new Vector(0, depth.Y, 0)
-                        : new Vector(depth.X, 0, 0));
-                }
-
-                RectangleF box = _playerCharacter.GetBoundingBox();
-
-                depth = box.GetIntersectionDepth(objectBox);
-
-                if (depth == Vector.Zero) continue;
-                if (AreAllEnemiesDead && tile.TileName == "exit") IsLevelComplete = true;
-                absDepthX = Math.Abs(depth.X);
-                absDepthY = Math.Abs(depth.Y);
-
-                _playerCharacter.HandleCollision(absDepthX > absDepthY
-                    ? new Vector(0, depth.Y, 0)
-                    : new Vector(depth.X, 0, 0));
-
-                // Perform further collisions with the new bounds.
-                //bounds = BoundingRectangle;
-            }
-
-            foreach (Enemy enemy in _enemyManager.EnemyList)
-            {
-                RectangleF box = enemy.GetBoundingBox();
-
-                foreach (Enemy otherEnemy in _enemyManager.EnemyList.Where(a => a != enemy))
-                {
-                    RectangleF otherEnemyBox = otherEnemy.GetBoundingBox();
-
-                    Vector depth = box.GetIntersectionDepth(otherEnemyBox);
-
-                    if (depth == Vector.Zero) continue;
-                    double absDepthX = Math.Abs(depth.X);
-                    double absDepthY = Math.Abs(depth.Y);
-
-                    enemy.HandleCollision(absDepthX > absDepthY
-                        ? new Vector(0, depth.Y, 0)
-                        : new Vector(depth.X, 0, 0));
-                    // Perform further collisions with the new bounds.
-                    //bounds = BoundingRectangle;
-                }
-            }
 
             if (_input.Keyboard.IsKeyHeld(Keys.W))
             {

@@ -44,50 +44,40 @@ namespace AnotherCastle
 
         public bool IsDead
         {
-            get { return Health == 0; }
+            get { return Health <= 0; }
         }
 
         public void RestartShootCountDown()
         {
-            _shootCountDown = MinTimeToShoot + (_random.NextDouble()*MaxTimeToShoot);
+            _shootCountDown = MinTimeToShoot + (_random.NextDouble() * MaxTimeToShoot);
         }
 
-        /// <summary>
-        ///     Handles the on collision event
-        /// </summary>
-        /// <param name="playerCharacter">The player</param>
-        internal void OnCollision(PlayerCharacter playerCharacter, Vector amount)
+        public override void OnCollision(IEntity entity, Vector amount)
         {
-            playerCharacter.OnCollision(this, amount);
-        }
-
-        internal void OnCollision(Missile missile)
-        {
-            if (Health == 0)
+            if (entity.GetType() == typeof(Tile))
             {
-                return;
+                Sprite.SetPosition(Sprite.GetPosition() + amount);
             }
 
-            Health = Math.Max(0, Health - 25);
-            _hitFlashCountDown = HitFlashTime;
-            Sprite.SetColor(new Color(1, 1, 0, 1));
-
-            if (Health == 0)
+            if (entity.GetType() == typeof(Enemy))
             {
-                OnDestroyed();
+                Sprite.SetPosition(Sprite.GetPosition() + amount);
             }
-        }
 
-        internal void OnCollision(Enemy enemy)
-        {
-            ReverseCourse();
-        }
+            if (entity.GetType() == typeof(Missile))
+            {
+                var missile = entity as Missile;
+                if (Health == 0)
+                {
+                    OnDestroyed();
+                    return;
+                }
 
-        public virtual void HandleCollision(Vector amount)
-        {
-            Sprite.SetPosition(Sprite.GetPosition() + amount);
-            //Move(Sprite.GetPosition() + amount);
-            //Move(amount);
+                Health = Math.Max(0, Health - 25);
+                _hitFlashCountDown = HitFlashTime;
+                Sprite.SetColor(new Color(1, 1, 0, 1));
+                Health -= missile.Damage;
+            }
         }
 
         public void ReverseCourse()
@@ -122,13 +112,13 @@ namespace AnotherCastle
 
             if (_enemyBrain != null)
             {
-                Move(_enemyBrain.NextMove(Sprite.GetPosition(), elapsedTime)*elapsedTime);
+                Move(_enemyBrain.NextMove(Sprite.GetPosition(), elapsedTime) * elapsedTime);
             }
 
             if (_hitFlashCountDown == 0) return;
             _hitFlashCountDown = Math.Max(0, _hitFlashCountDown - elapsedTime);
-            double scaledTime = 1 - (_hitFlashCountDown/HitFlashTime);
-            Sprite.SetColor(new Color(1, 1, (float) scaledTime, 1));
+            double scaledTime = 1 - (_hitFlashCountDown / HitFlashTime);
+            Sprite.SetColor(new Color(1, 1, (float)scaledTime, 1));
         }
 
         public void Render(Renderer renderer)

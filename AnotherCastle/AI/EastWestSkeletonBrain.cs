@@ -1,7 +1,7 @@
 ﻿using System;
 using Engine;
 
-namespace AnotherCastle
+namespace AnotherCastle.AI
 {
     public class EastWestSkeletonBrain : IEnemyBrain
     {

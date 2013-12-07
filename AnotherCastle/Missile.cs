@@ -12,11 +12,13 @@ namespace AnotherCastle
             Dead = false;
             Direction = direction;
             Speed = 512; // pixels per second
+            Damage = 10;
         }
 
         public bool Dead { get; set; }
         public Vector Direction { get; set; }
         public double Speed { get; set; }
+        public int Damage { get; set; }
 
         public double X
         {
@@ -47,8 +49,13 @@ namespace AnotherCastle
             renderer.DrawSprite(Sprite);
         }
 
-        public void HandleCollision()
+        public override void OnCollision(IEntity entity, Vector amount)
         {
+            if (entity.GetType() == typeof(PlayerCharacter))
+            {
+                return;
+            }
+
             Dead = true;
             //Sprite.SetColor(new Color(0, 0, 1, 1));
         }

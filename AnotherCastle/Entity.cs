@@ -4,7 +4,13 @@ using Tao.OpenGl;
 
 namespace AnotherCastle
 {
-    public class Entity
+    public interface IEntity
+    {
+        RectangleF GetBoundingBox();
+        void OnCollision(IEntity collidingEntity, Vector amount);
+    }
+
+    public class Entity : IEntity
     {
         protected Sprite Sprite = new Sprite();
 
@@ -14,6 +20,12 @@ namespace AnotherCastle
             var height = (float) (Sprite.Texture.Height*Sprite.ScaleY);
             return new RectangleF((float) Sprite.GetPosition().X - width/2, (float) Sprite.GetPosition().Y - height/2,
                 width, height);
+        }
+
+        public virtual void OnCollision(IEntity collidingEntity, Vector amount)
+        {
+            // If OnCollision is not overridden it will simply return
+            return;
         }
 
         // Render a bounding box

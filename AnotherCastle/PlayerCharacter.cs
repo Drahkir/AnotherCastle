@@ -13,6 +13,7 @@ namespace AnotherCastle
         private readonly Texture _upTexture;
         private double _invulnerabilityTimer;
         private bool _isInvulnerable;
+        public bool WaitingAtExit;
 
         #region Missile Properties
 
@@ -50,20 +51,34 @@ namespace AnotherCastle
             //Render_Debug();
         }
 
-        internal void OnCollision(Enemy enemy, Vector amount)
+        public override void OnCollision(IEntity entity, Vector amount)
         {
-            if (_isInvulnerable) return;
-            Health -= enemy.Damage;
-            _isInvulnerable = true;
-            Sprite.SetPosition(Sprite.GetPosition() + amount);
-        }
-
-        internal void OnCollision(Missile missile)
-        {
-            if (!_isInvulnerable)
+            var type = entity.GetType();
+            if (type == typeof(Tile))
             {
-                //Health -= missile.damage;
+                var tile = entity as Tile;
+                if (tile != null && tile.TileName == "exit")
+                {
+                    WaitingAtExit = true;
+                }
+                Sprite.SetPosition(Sprite.GetPosition() + amount);
+            }
+
+            if (type == typeof(NorthSouthSkeleton) || type == typeof(Eyeball) || type == typeof(EastWestSkeleton))
+            {
+                var enemy = entity as Enemy;
+                if (_isInvulnerable) return;
+                if (enemy != null) Health -= enemy.Damage;
                 _isInvulnerable = true;
+                Sprite.SetPosition(Sprite.GetPosition() + amount);
+            }
+
+            if (type == typeof(Missile))
+            {
+                //if (_isInvulnerable) return;
+                ////Health -= missile.Damage;
+                //_isInvulnerable = true;
+                //Sprite.SetPosition(Sprite.GetPosition() + amount);
             }
         }
 
@@ -139,10 +154,10 @@ namespace AnotherCastle
             Sprite.SetPosition(position);
         }
 
-        public void HandleCollision(Vector amount)
-        {
-            Sprite.SetPosition(Sprite.GetPosition() + amount);
-        }
+        //public void HandleCollision(Vector amount)
+        //{
+        //    Sprite.SetPosition(Sprite.GetPosition() + amount);
+        //}
 
         public void MoveUp()
         {

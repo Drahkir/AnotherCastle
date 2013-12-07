@@ -24,16 +24,7 @@ namespace AnotherCastle
         public void Update(double elapsedTime, double gameTime)
         {
             _enemies.ForEach(x => x.Update(elapsedTime));
-            CheckForOutOfBounds();
             RemoveDeadEnemies();
-        }
-
-        private void CheckForOutOfBounds()
-        {
-            foreach (Enemy enemy in _enemies.Where(enemy => enemy.IsPathDone()))
-            {
-                enemy.Health = 0;
-            }
         }
 
         public void Render(Renderer renderer)
@@ -43,7 +34,7 @@ namespace AnotherCastle
 
         private void RemoveDeadEnemies()
         {
-            for (int i = _enemies.Count - 1; i >= 0; i--)
+            for (var i = _enemies.Count - 1; i >= 0; i--)
             {
                 if (_enemies[i].IsDead)
                 {

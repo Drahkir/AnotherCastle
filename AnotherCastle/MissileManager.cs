@@ -1,20 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using Engine;
 
 namespace AnotherCastle
 {
     public class MissileManager
     {
-        private readonly RectangleF _bounds;
         private readonly List<Missile> _enemyMissiles = new List<Missile>();
         private readonly List<Missile> _missiles = new List<Missile>();
-
-        public MissileManager(RectangleF playArea)
-        {
-            _bounds = playArea;
-        }
 
         public List<Missile> MissileList
         {
@@ -31,18 +23,6 @@ namespace AnotherCastle
             _enemyMissiles.Add(missile);
         }
 
-        public void UpdatePlayerCollision(PlayerCharacter playerCharacter)
-        {
-            foreach (
-                Missile missile in
-                    _enemyMissiles.Where(
-                        missile => missile.GetBoundingBox().IntersectsWith(playerCharacter.GetBoundingBox())))
-            {
-                missile.Dead = true;
-                playerCharacter.OnCollision(missile);
-            }
-        }
-
         public void Update(double elapsedTime)
         {
             UpdateMissileList(_missiles, elapsedTime);
@@ -52,16 +32,8 @@ namespace AnotherCastle
         public void UpdateMissileList(List<Missile> missileList, double elapsedTime)
         {
             missileList.ForEach(x => x.Update(elapsedTime));
-            CheckOutOfBounds(_missiles);
+            //CheckOutOfBounds(_missiles);
             RemoveDeadMissile(missileList);
-        }
-
-        private void CheckOutOfBounds(IEnumerable<Missile> missileList)
-        {
-            foreach (Missile missile in missileList.Where(missile => !missile.GetBoundingBox().IntersectsWith(_bounds)))
-            {
-                missile.Dead = true;
-            }
         }
 
         private static void RemoveDeadMissile(IList<Missile> missileList)
@@ -82,17 +54,6 @@ namespace AnotherCastle
         {
             _missiles.ForEach(x => x.Render(renderer));
             _enemyMissiles.ForEach(x => x.Render(renderer));
-        }
-
-        internal void UpdateEnemyCollisions(Enemy enemy)
-        {
-            foreach (
-                Missile missile in
-                    _missiles.Where(missile => missile.GetBoundingBox().IntersectsWith(enemy.GetBoundingBox())))
-            {
-                missile.Dead = true;
-                enemy.OnCollision(missile);
-            }
         }
     }
 }

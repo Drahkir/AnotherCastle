@@ -65,9 +65,15 @@ namespace AnotherCastle
             _missileManager.Shoot(missile4);
         }
 
-        public override void HandleCollision(Vector amount)
+        public override void OnCollision(IEntity entity, Vector amount)
         {
-            // Do nothing cause Eyeball should be like a rock!
+            // Do nothing, Eyeball is a rock
+
+            if (entity.GetType() == typeof(Missile))
+            {
+                var missile = entity as Missile;
+                Health -= missile.Damage;
+            }
         }
     }
 }
