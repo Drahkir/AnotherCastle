@@ -50,11 +50,12 @@ namespace AnotherCastle
             //Render_Debug();
         }
 
-        internal void OnCollision(Enemy enemy)
+        internal void OnCollision(Enemy enemy, Vector amount)
         {
             if (_isInvulnerable) return;
             Health -= enemy.Damage;
             _isInvulnerable = true;
+            Sprite.SetPosition(Sprite.GetPosition() + amount);
         }
 
         internal void OnCollision(Missile missile)

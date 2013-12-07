@@ -203,12 +203,17 @@ namespace AnotherCastle
         {
             _missileManager.UpdatePlayerCollision(_playerCharacter);
 
+            var playerBox = _playerCharacter.GetBoundingBox();
+
             foreach (Enemy enemy in _enemyManager.EnemyList)
             {
-                if (enemy.GetBoundingBox().IntersectsWith(_playerCharacter.GetBoundingBox()))
+                var enemyBox = enemy.GetBoundingBox();
+
+                if (enemyBox.IntersectsWith(playerBox))
                 {
-                    enemy.OnCollision(_playerCharacter);
-                    _playerCharacter.OnCollision(enemy);
+                    var depth = enemyBox.GetIntersectionDepth(playerBox);
+                    enemy.OnCollision(_playerCharacter, depth);
+                    _playerCharacter.OnCollision(enemy, depth);
                 }
 
                 _missileManager.UpdateEnemyCollisions(enemy);

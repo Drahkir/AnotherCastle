@@ -56,9 +56,9 @@ namespace AnotherCastle
         ///     Handles the on collision event
         /// </summary>
         /// <param name="playerCharacter">The player</param>
-        internal void OnCollision(PlayerCharacter playerCharacter)
+        internal void OnCollision(PlayerCharacter playerCharacter, Vector amount)
         {
-            playerCharacter.OnCollision(this);
+            playerCharacter.OnCollision(this, amount);
         }
 
         internal void OnCollision(Missile missile)
