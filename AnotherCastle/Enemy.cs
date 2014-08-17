@@ -59,12 +59,18 @@ namespace AnotherCastle
                 Sprite.SetPosition(Sprite.GetPosition() + amount);
             }
 
-            if (entity.GetType() == typeof(Enemy))
+            else if (entity.GetType() == typeof(Enemy))
             {
                 Sprite.SetPosition(Sprite.GetPosition() + amount);
             }
 
-            if (entity.GetType() == typeof(Missile))
+
+            else if (entity.GetType() == typeof(Eyeball))
+            {
+                Sprite.SetPosition(Sprite.GetPosition() + amount);
+            }
+
+            else if (entity.GetType() == typeof(Missile))
             {
                 var missile = entity as Missile;
                 if (Health == 0)

@@ -64,16 +64,17 @@ namespace AnotherCastle
                 Sprite.SetPosition(Sprite.GetPosition() + amount);
             }
 
-            if (type == typeof(NorthSouthSkeleton) || type == typeof(Eyeball) || type == typeof(EastWestSkeleton))
+            else if (type == typeof(NorthSouthSkeleton) || type == typeof(Eyeball) || type == typeof(EastWestSkeleton))
             {
                 var enemy = entity as Enemy;
                 if (_isInvulnerable) return;
                 if (enemy != null) Health -= enemy.Damage;
                 _isInvulnerable = true;
-                Sprite.SetPosition(Sprite.GetPosition() + amount);
+                var sprPos = Sprite.GetPosition();
+                Sprite.SetPosition(sprPos + new Vector(0, 20, 0));
             }
 
-            if (type == typeof(Missile))
+            else if (type == typeof(Missile))
             {
                 //if (_isInvulnerable) return;
                 ////Health -= missile.Damage;

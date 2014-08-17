@@ -195,7 +195,7 @@ namespace AnotherCastle
         /// </summary>
         public Rectangle GetBounds(int x, int y)
         {
-            return new Rectangle((x*Tile.Width) + xOffset, (y*Tile.Height) + yOffset, Tile.Width, Tile.Height);
+            return new Rectangle((x * Tile.Width) + xOffset, (y * Tile.Height) + yOffset, Tile.Width, Tile.Height);
         }
 
         public bool HasPlayerDied()
@@ -203,7 +203,7 @@ namespace AnotherCastle
             return _playerCharacter.IsDead;
         }
 
-        private static void UpdateCollisions<T>(List<List<T>>  entityList) where T : IEntity
+        private static void UpdateCollisions<T>(List<List<T>> entityList) where T : IEntity
         {
             foreach (var entList in entityList)
             {
@@ -229,11 +229,11 @@ namespace AnotherCastle
                             ent.OnCollision(other, depthVector);
                             other.OnCollision(ent, depthVector);
                         }
-                        
+
                     }
                 }
             }
-        }  
+        }
 
         public void Update(double elapsedTime, double gameTime)
         {
@@ -254,7 +254,7 @@ namespace AnotherCastle
                     tileList,
                     new List<IEntity> {_playerCharacter}
                 };
-                
+
                 UpdateCollisions(entityList);
                 _enemyManager.Update(elapsedTime, gameTime);
                 _missileManager.Update(elapsedTime);
@@ -299,9 +299,9 @@ namespace AnotherCastle
             if (_input.Controller != null)
             {
                 x = _input.Controller.LeftControlStick.X;
-                y = _input.Controller.LeftControlStick.Y*-1;
+                y = _input.Controller.LeftControlStick.Y * -1;
                 u = _input.Controller.RightControlStick.X;
-                v = _input.Controller.RightControlStick.Y*-1;
+                v = _input.Controller.RightControlStick.Y * -1;
 
                 if (Math.Abs(u) > Math.Abs(v))
                 {
@@ -366,7 +366,7 @@ namespace AnotherCastle
                 _playerCharacter.Attack(attackInput);
             }
 
-            _playerCharacter.Move(controlInput*elapsedTime);
+            _playerCharacter.Move(controlInput * elapsedTime);
         }
 
         public void Render(Renderer renderer)
