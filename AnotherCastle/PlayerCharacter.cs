@@ -14,6 +14,10 @@ namespace AnotherCastle
         private double _invulnerabilityTimer;
         private bool _isInvulnerable;
         public bool WaitingAtExit;
+        private float blinkAlpha = (float)0.0;
+        private float blinkAlphaMax = (float)0.9;
+        private float blinkAlphaMin = (float)0.1;
+        private float blinkAlphaAdjustor = (float)0.01;
 
         #region Missile Properties
 
@@ -34,7 +38,7 @@ namespace AnotherCastle
             _leftTexture = textureManager.Get("pixela_left");
             _rightTexture = textureManager.Get("pixela_right");
             Sprite.SetScale(Scale, Scale);
-            Health = 20;
+            Health = 20;        
         }
 
         /// <summary>
@@ -47,6 +51,29 @@ namespace AnotherCastle
 
         public void Render(Renderer renderer)
         {
+            if (_isInvulnerable)
+            {
+                // Make pixela blink while she is invulnerable
+                if (blinkAlpha >= blinkAlphaMax)
+                {
+                    blinkAlphaAdjustor *= -1;
+                    blinkAlpha = blinkAlphaMax;
+                }
+
+                if (blinkAlpha <= blinkAlphaMin)
+                {
+                    blinkAlphaAdjustor *= -1;
+                    blinkAlpha = blinkAlphaMin;
+                }
+                blinkAlpha += blinkAlphaAdjustor;
+                Color color = new Color(1, 1, 1, blinkAlpha);
+                Sprite.SetColor(color);
+            }
+
+            else
+            {
+                Sprite.SetColor(new Color(1, 1, 1, 1));
+            }
             renderer.DrawSprite(Sprite);
             //Render_Debug();
         }
