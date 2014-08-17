@@ -54,6 +54,7 @@ namespace AnotherCastle
         public override void OnCollision(IEntity entity, Vector amount)
         {
             var type = entity.GetType();
+            var isEnemy = entity as Enemy;
             if (type == typeof(Tile))
             {
                 var tile = entity as Tile;
@@ -64,7 +65,7 @@ namespace AnotherCastle
                 Sprite.SetPosition(Sprite.GetPosition() + amount);
             }
 
-            else if (type == typeof(NorthSouthSkeleton) || type == typeof(Eyeball) || type == typeof(EastWestSkeleton))
+            else if (isEnemy != null) 
             {
                 var enemy = entity as Enemy;
                 if (_isInvulnerable) return;
