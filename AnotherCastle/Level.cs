@@ -284,14 +284,7 @@ namespace AnotherCastle
 
         private void UpdateInput(double elapsedTime)
         {
-            //if (_input.Keyboard.IsKeyHeld(Keys.Space) || _input.Keyboard.IsKeyPressed(Keys.Space) || (_input.Controller != null && _input.Controller.ButtonA.Pressed))
-            //{
-            //    _playerCharacter.Attack();
-            //}
-
-            // Get controls and apply to player character
-
-            if (_input.Controller.ButtonStart.Pressed || _input.Keyboard.IsKeyHeld(Keys.Escape))
+            if ((_input.Controller != null && _input.Controller.ButtonStart.Pressed) || _input.Keyboard.IsKeyHeld(Keys.Escape))
             {
                 IsGamePaused = !IsGamePaused;
             }
