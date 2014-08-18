@@ -7,7 +7,22 @@ namespace AnotherCastle
     {
         private readonly List<Missile> _enemyMissiles = new List<Missile>();
         private readonly List<Missile> _missiles = new List<Missile>();
+        private static MissileManager instance;
 
+        private MissileManager() { }
+
+        public static MissileManager Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new MissileManager();
+                }
+                return instance;
+            }
+        }
+        
         public List<Missile> MissileList
         {
             get { return _missiles; }

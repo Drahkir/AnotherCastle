@@ -22,7 +22,7 @@ namespace AnotherCastle
         private readonly EffectsManager _effectsManager;
         private readonly EnemyManager _enemyManager;
         private readonly Input _input;
-        private readonly MissileManager _missileManager = new MissileManager();
+        private readonly MissileManager _missileManager = MissileManager.Instance;
         private readonly PlayerCharacter _playerCharacter;
         private Tile[,] _tiles;
 
@@ -144,7 +144,7 @@ namespace AnotherCastle
                     return LoadEastWestSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"),
                         position);
                 case 'Y':
-                    return LoadEyeball(textureManager.Get("eyeball"), textureManager.Get("dirt_floor"), position);
+                    return LoadEyeball(textureManager.Get("eyeball"), textureManager.Get("dirt_floor"), position, textureManager.Get("heart_missile"));
                 case 'Z':
                     return LoadPlayer(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
                 case 'X':
@@ -169,9 +169,9 @@ namespace AnotherCastle
             return new Tile("dirt_floor", floorTexture, TileCollision.Passable, position);
         }
 
-        private Tile LoadEyeball(Texture texture, Texture floorTexture, Vector position)
+        private Tile LoadEyeball(Texture texture, Texture floorTexture, Vector position, Texture missileTexture)
         {
-            _enemyManager.EnemyList.Add(new Eyeball(texture, new EyeballBrain(), position));
+            _enemyManager.EnemyList.Add(new Eyeball(texture, new EyeballBrain(), position, missileTexture, MissileManager.Instance));
 
             return new Tile("dirt_floor", floorTexture, TileCollision.Passable, position);
         }

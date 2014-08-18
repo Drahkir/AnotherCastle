@@ -9,7 +9,10 @@ namespace AnotherCastle
         private MissileManager _missileManager;
         private Texture _missileTexture;
         private double _shootCountDown;
-        public double FireRecovery { get; set; }
+        //public double FireRecovery { get; set; }
+
+        private const double FireRecovery = 0.25;
+        private double _fireRecoveryTime = FireRecovery;
 
         #endregion Missile Properties
 
@@ -19,13 +22,15 @@ namespace AnotherCastle
         /// <param name="texture">The texture for the enemy</param>
         /// <param name="enemyBrain">The AI for the enemy</param>
         /// <param name="position">The spawn point for this enemy</param>
-        public Eyeball(Texture texture, IEnemyBrain enemyBrain, Vector position) : base(texture, enemyBrain, position)
+        public Eyeball(Texture texture, IEnemyBrain enemyBrain, Vector position, Texture missileTexture, MissileManager missileManager) : base(texture, enemyBrain, position)
         {
             Health = 15;
             Damage = 5;
             Sprite.SetScale(1, 1);
             MaxTimeToShoot = 2;
             MinTimeToShoot = 1;
+            _missileManager = missileManager;
+            _missileTexture = missileTexture;
         }
 
         /// <summary>
@@ -36,13 +41,14 @@ namespace AnotherCastle
         {
         }
 
-        public void Attack()
+        public override void Attack()
         {
             if (base.FireRecovery > 0)
             {
                 return;
             }
 
+            _fireRecoveryTime = FireRecovery;
             var dir1 = new Vector(1, 0, 0);
             var dir2 = new Vector(0, 1, 0);
             var dir3 = new Vector(0, 0, 0);
@@ -53,16 +59,15 @@ namespace AnotherCastle
             var missile3 = new Missile(_missileTexture, dir3);
             var missile4 = new Missile(_missileTexture, dir4);
 
-            //missile.SetColor(new Color(0, 1, 0, 1));
             missile1.SetPosition(Sprite.GetPosition() + dir1);
             missile2.SetPosition(Sprite.GetPosition() + dir2);
             missile3.SetPosition(Sprite.GetPosition() + dir3);
             missile4.SetPosition(Sprite.GetPosition() + dir4);
 
-            _missileManager.Shoot(missile1);
-            _missileManager.Shoot(missile2);
-            _missileManager.Shoot(missile3);
-            _missileManager.Shoot(missile4);
+            _missileManager.EnemyShoot(missile1);
+            _missileManager.EnemyShoot(missile2);
+            _missileManager.EnemyShoot(missile3);
+            _missileManager.EnemyShoot(missile4);
         }
 
         public override void OnCollision(IEntity entity, Vector amount)
