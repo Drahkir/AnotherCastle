@@ -112,7 +112,7 @@ namespace AnotherCastle
             Sprite.SetPosition(Sprite.GetPosition() + amount);
         }
 
-        public virtual void Attack()
+        public virtual void Attack(double elapsedTime)
         {
 
         }
@@ -124,7 +124,7 @@ namespace AnotherCastle
             if (_enemyBrain != null)
             {
                 Move(_enemyBrain.NextMove(Sprite.GetPosition(), elapsedTime) * elapsedTime);
-                Attack();
+                Attack(elapsedTime);
             }
 
             if (_hitFlashCountDown == 0) return;
