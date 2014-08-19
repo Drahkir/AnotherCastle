@@ -51,8 +51,8 @@ namespace AnotherCastle
             _fireRecoveryTime = FireRecovery;
             var dir1 = new Vector(1, 0, 0);
             var dir2 = new Vector(0, 1, 0);
-            var dir3 = new Vector(0, 0, 0);
-            var dir4 = new Vector(1, 1, 0);
+            var dir3 = new Vector(-1, 0, 0);
+            var dir4 = new Vector(0, -1, 0);
 
             var missile1 = new Missile(_missileTexture, dir1);
             var missile2 = new Missile(_missileTexture, dir2);
