@@ -54,7 +54,11 @@ namespace AnotherCastle
 
         public override void OnCollision(IEntity entity, Vector amount)
         {
-            if (entity.GetType() == typeof(Tile))
+            if (entity.GetType() == typeof(EnemyMissile))
+            {
+                return;
+            }
+            else if (entity.GetType() == typeof(Tile))
             {
                 Sprite.SetPosition(Sprite.GetPosition() + amount);
             }

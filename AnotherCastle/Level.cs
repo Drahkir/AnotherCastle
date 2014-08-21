@@ -246,11 +246,16 @@ namespace AnotherCastle
                 //var entityList = new List<List<IEntity>();
                 var enemyList = new List<IEntity>(_enemyManager.EnemyList.ToList());
                 var missileList = new List<IEntity>(_missileManager.MissileList.ToList());
+                var enemyMissileList = new List<IEntity>(_missileManager.EnemyMissileList.ToList());
+                System.Diagnostics.Debug.WriteLine("Enemy Count: " + enemyList.Count);
+                System.Diagnostics.Debug.WriteLine("Missile Count: " + missileList.Count);
+                System.Diagnostics.Debug.WriteLine("Enemy Missile Count: " + enemyMissileList.Count);
                 var tileList = new List<IEntity>(_currentRoom.TileDictionary.Values.ToList().Where(a => a.TileCollision == TileCollision.Impassable));
                 var entityList = new List<List<IEntity>>
                 {
                     enemyList,
                     missileList,
+                    enemyMissileList,
                     tileList,
                     new List<IEntity> {_playerCharacter}
                 };

@@ -4,6 +4,7 @@ namespace AnotherCastle
 {
     public class Missile : Entity
     {
+        public Missile() { }
         public Missile(Texture missileTexture, Vector direction)
         {
             Sprite.Texture = missileTexture;
@@ -68,7 +69,7 @@ namespace AnotherCastle
             }
 
             Vector position = Sprite.GetPosition();
-            position += Direction*Speed*elapsedTime;
+            position += Direction * Speed * elapsedTime;
             Sprite.SetPosition(position);
         }
     }

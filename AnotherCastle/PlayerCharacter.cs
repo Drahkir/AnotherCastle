@@ -102,12 +102,13 @@ namespace AnotherCastle
                 Sprite.SetPosition(sprPos + new Vector(0, 20, 0));
             }
 
-            else if (type == typeof(Missile))
+            else if (type == typeof(EnemyMissile))
             {
-                //if (_isInvulnerable) return;
-                ////Health -= missile.Damage;
-                //_isInvulnerable = true;
-                //Sprite.SetPosition(Sprite.GetPosition() + amount);
+                if (_isInvulnerable) return;
+                var missile = entity as EnemyMissile;
+                Health -= missile.Damage;
+                _isInvulnerable = true;
+                Sprite.SetPosition(Sprite.GetPosition() + amount);
             }
         }
 

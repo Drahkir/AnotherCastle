@@ -5,7 +5,7 @@ namespace AnotherCastle
 {
     public class MissileManager
     {
-        private readonly List<Missile> _enemyMissiles = new List<Missile>();
+        private readonly List<EnemyMissile> _enemyMissiles = new List<EnemyMissile>();
         private readonly List<Missile> _missiles = new List<Missile>();
         private static MissileManager instance;
 
@@ -22,10 +22,15 @@ namespace AnotherCastle
                 return instance;
             }
         }
-        
+
         public List<Missile> MissileList
         {
             get { return _missiles; }
+        }
+
+        public List<EnemyMissile> EnemyMissileList
+        {
+            get { return _enemyMissiles; }
         }
 
         public void Shoot(Missile missile)
@@ -33,7 +38,7 @@ namespace AnotherCastle
             _missiles.Add(missile);
         }
 
-        public void EnemyShoot(Missile missile)
+        public void EnemyShoot(EnemyMissile missile)
         {
             _enemyMissiles.Add(missile);
         }
@@ -44,22 +49,43 @@ namespace AnotherCastle
             UpdateMissileList(_enemyMissiles, elapsedTime);
         }
 
-        public void UpdateMissileList(List<Missile> missileList, double elapsedTime)
+        public void UpdateMissileList(IList<Missile> missileList, double elapsedTime)
         {
-            missileList.ForEach(x => x.Update(elapsedTime));
+            foreach (var missile in missileList)
+            {
+                missile.Update(elapsedTime);
+            }
             //CheckOutOfBounds(_missiles);
             RemoveDeadMissile(missileList);
         }
 
         private static void RemoveDeadMissile(IList<Missile> missileList)
         {
-            //foreach(Missile missile in missileList)
+            for (int i = missileList.Count - 1; i >= 0; i--)
+            {
+                if (missileList[i].Dead)
+                {
+                    missileList.RemoveAt(i);
+                }
+            }
+        }
+
+        public void UpdateMissileList(IList<EnemyMissile> missileList, double elapsedTime)
+        {
+            foreach (var missile in missileList)
+            {
+                missile.Update(elapsedTime);
+            }
+            RemoveDeadMissile(missileList);
+        }
+
+        private static void RemoveDeadMissile(IList<EnemyMissile> missileList)
+        {
             for (int i = missileList.Count - 1; i >= 0; i--)
             {
                 //if(missile.Dead)
                 if (missileList[i].Dead)
                 {
-                    //missileList.Remove(missile);
                     missileList.RemoveAt(i);
                 }
             }

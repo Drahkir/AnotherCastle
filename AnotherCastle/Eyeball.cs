@@ -54,10 +54,10 @@ namespace AnotherCastle
                 var dir3 = new Vector(-1, 0, 0);
                 var dir4 = new Vector(0, -1, 0);
 
-                var missile1 = new Missile(_missileTexture, dir1);
-                var missile2 = new Missile(_missileTexture, dir2);
-                var missile3 = new Missile(_missileTexture, dir3);
-                var missile4 = new Missile(_missileTexture, dir4);
+                var missile1 = new EnemyMissile(_missileTexture, dir1);
+                var missile2 = new EnemyMissile(_missileTexture, dir2);
+                var missile3 = new EnemyMissile(_missileTexture, dir3);
+                var missile4 = new EnemyMissile(_missileTexture, dir4);
 
                 missile1.SetPosition(Sprite.GetPosition() + dir1);
                 missile2.SetPosition(Sprite.GetPosition() + dir2);
