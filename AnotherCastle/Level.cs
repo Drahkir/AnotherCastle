@@ -144,7 +144,7 @@ namespace AnotherCastle
                     return LoadEastWestSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"),
                         position);
                 case 'Y':
-                    return LoadEyeball(textureManager.Get("eyeball"), textureManager.Get("dirt_floor"), position, textureManager.Get("heart_missile"));
+                    return LoadEyeball(textureManager.Get("eyeball"), textureManager.Get("dirt_floor"), position, textureManager.Get("fireball"));
                 case 'Z':
                     return LoadPlayer(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
                 case 'X':
