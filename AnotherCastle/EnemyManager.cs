@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Engine;
 
 namespace AnotherCastle
@@ -34,7 +33,7 @@ namespace AnotherCastle
 
         private void RemoveDeadEnemies()
         {
-            for (var i = _enemies.Count - 1; i >= 0; i--)
+            for (int i = _enemies.Count - 1; i >= 0; i--)
             {
                 if (_enemies[i].IsDead)
                 {

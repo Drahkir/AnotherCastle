@@ -7,17 +7,17 @@ namespace AnotherCastle
     {
         private const double Scale = 1;
         private const double Speed = 256;
+        private const float BlinkAlphaMax = (float) 0.9;
+        private const float BlinkAlphaMin = (float) 0.1;
         private readonly Texture _downTexture;
         private readonly Texture _leftTexture;
         private readonly Texture _rightTexture;
         private readonly Texture _upTexture;
+        public bool WaitingAtExit;
+        private float _blinkAlpha = (float) 0.0;
+        private float _blinkAlphaAdjustor = (float) 0.01;
         private double _invulnerabilityTimer;
         private bool _isInvulnerable;
-        public bool WaitingAtExit;
-        private float _blinkAlpha = (float)0.0;
-        private const float BlinkAlphaMax = (float) 0.9;
-        private const float BlinkAlphaMin = (float) 0.1;
-        private float _blinkAlphaAdjustor = (float)0.01;
 
         #region Missile Properties
 
@@ -38,7 +38,7 @@ namespace AnotherCastle
             _leftTexture = textureManager.Get("pixela_left");
             _rightTexture = textureManager.Get("pixela_right");
             Sprite.SetScale(Scale, Scale);
-            Health = 20;        
+            Health = 20;
         }
 
         /// <summary>
@@ -80,10 +80,10 @@ namespace AnotherCastle
 
         public override void OnCollision(IEntity entity, Vector amount)
         {
-            var type = entity.GetType();
+            Type type = entity.GetType();
             var enemy = entity as Enemy;
 
-            if (type == typeof(Tile))
+            if (type == typeof (Tile))
             {
                 var tile = entity as Tile;
                 if (tile != null && tile.TileName == "exit")
@@ -93,16 +93,16 @@ namespace AnotherCastle
                 Sprite.SetPosition(Sprite.GetPosition() + amount);
             }
 
-            else if (enemy != null) 
+            else if (enemy != null)
             {
                 if (_isInvulnerable) return;
                 Health -= enemy.Damage;
                 _isInvulnerable = true;
-                var sprPos = Sprite.GetPosition();
+                Vector sprPos = Sprite.GetPosition();
                 Sprite.SetPosition(sprPos + new Vector(0, 20, 0));
             }
 
-            else if (type == typeof(EnemyMissile))
+            else if (type == typeof (EnemyMissile))
             {
                 if (_isInvulnerable) return;
                 var missile = entity as EnemyMissile;

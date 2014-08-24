@@ -49,32 +49,31 @@ namespace AnotherCastle
 
         public void RestartShootCountDown()
         {
-            _shootCountDown = MinTimeToShoot + (_random.NextDouble() * MaxTimeToShoot);
+            _shootCountDown = MinTimeToShoot + (_random.NextDouble()*MaxTimeToShoot);
         }
 
         public override void OnCollision(IEntity entity, Vector amount)
         {
-            if (entity.GetType() == typeof(EnemyMissile))
+            if (entity.GetType() == typeof (EnemyMissile))
             {
-                return;
             }
-            else if (entity.GetType() == typeof(Tile))
-            {
-                Sprite.SetPosition(Sprite.GetPosition() + amount);
-            }
-
-            else if (entity.GetType() == typeof(Enemy))
+            if (entity.GetType() == typeof (Tile))
             {
                 Sprite.SetPosition(Sprite.GetPosition() + amount);
             }
 
-
-            else if (entity.GetType() == typeof(Eyeball))
+            else if (entity.GetType() == typeof (Enemy))
             {
                 Sprite.SetPosition(Sprite.GetPosition() + amount);
             }
 
-            else if (entity.GetType() == typeof(Missile))
+
+            else if (entity.GetType() == typeof (Eyeball))
+            {
+                Sprite.SetPosition(Sprite.GetPosition() + amount);
+            }
+
+            else if (entity.GetType() == typeof (Missile))
             {
                 var missile = entity as Missile;
                 if (Health == 0)
@@ -118,7 +117,6 @@ namespace AnotherCastle
 
         public virtual void Attack(double elapsedTime)
         {
-
         }
 
         public void Update(double elapsedTime)
@@ -127,14 +125,14 @@ namespace AnotherCastle
 
             if (_enemyBrain != null)
             {
-                Move(_enemyBrain.NextMove(Sprite.GetPosition(), elapsedTime) * elapsedTime);
+                Move(_enemyBrain.NextMove(Sprite.GetPosition(), elapsedTime)*elapsedTime);
                 Attack(elapsedTime);
             }
 
             if (_hitFlashCountDown == 0) return;
             _hitFlashCountDown = Math.Max(0, _hitFlashCountDown - elapsedTime);
-            double scaledTime = 1 - (_hitFlashCountDown / HitFlashTime);
-            Sprite.SetColor(new Color(1, 1, (float)scaledTime, 1));
+            double scaledTime = 1 - (_hitFlashCountDown/HitFlashTime);
+            Sprite.SetColor(new Color(1, 1, (float) scaledTime, 1));
         }
 
         public void Render(Renderer renderer)

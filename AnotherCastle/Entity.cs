@@ -16,9 +16,9 @@ namespace AnotherCastle
 
         public RectangleF GetBoundingBox()
         {
-            var width = (float)(Sprite.Texture.Width * Sprite.ScaleX);
-            var height = (float)(Sprite.Texture.Height * Sprite.ScaleY);
-            return new RectangleF((float)Sprite.GetPosition().X - width / 2, (float)Sprite.GetPosition().Y - height / 2,
+            var width = (float) (Sprite.Texture.Width*Sprite.ScaleX);
+            var height = (float) (Sprite.Texture.Height*Sprite.ScaleY);
+            return new RectangleF((float) Sprite.GetPosition().X - width/2, (float) Sprite.GetPosition().Y - height/2,
                 width, height);
         }
 

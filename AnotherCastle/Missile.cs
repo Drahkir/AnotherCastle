@@ -4,7 +4,10 @@ namespace AnotherCastle
 {
     public class Missile : Entity
     {
-        public Missile() { }
+        public Missile()
+        {
+        }
+
         public Missile(Texture missileTexture, Vector direction)
         {
             Sprite.Texture = missileTexture;
@@ -52,7 +55,7 @@ namespace AnotherCastle
 
         public override void OnCollision(IEntity entity, Vector amount)
         {
-            if (entity.GetType() == typeof(PlayerCharacter))
+            if (entity.GetType() == typeof (PlayerCharacter))
             {
                 return;
             }
@@ -69,7 +72,7 @@ namespace AnotherCastle
             }
 
             Vector position = Sprite.GetPosition();
-            position += Direction * Speed * elapsedTime;
+            position += Direction*Speed*elapsedTime;
             Sprite.SetPosition(position);
         }
     }

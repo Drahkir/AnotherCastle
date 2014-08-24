@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -71,7 +72,7 @@ namespace AnotherCastle
             var lines = new List<string>();
             using (var reader = new StreamReader(mapFile))
             {
-                var line = reader.ReadLine();
+                string line = reader.ReadLine();
                 if (line != null)
                 {
                     width = line.Length;
@@ -144,7 +145,8 @@ namespace AnotherCastle
                     return LoadEastWestSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"),
                         position);
                 case 'Y':
-                    return LoadEyeball(textureManager.Get("eyeball"), textureManager.Get("dirt_floor"), position, textureManager.Get("fireball"));
+                    return LoadEyeball(textureManager.Get("eyeball"), textureManager.Get("dirt_floor"), position,
+                        textureManager.Get("fireball"));
                 case 'Z':
                     return LoadPlayer(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
                 case 'X':
@@ -171,7 +173,8 @@ namespace AnotherCastle
 
         private Tile LoadEyeball(Texture texture, Texture floorTexture, Vector position, Texture missileTexture)
         {
-            _enemyManager.EnemyList.Add(new Eyeball(texture, new EyeballBrain(), position, missileTexture, MissileManager.Instance));
+            _enemyManager.EnemyList.Add(new Eyeball(texture, new EyeballBrain(), position, missileTexture,
+                MissileManager.Instance));
 
             return new Tile("dirt_floor", floorTexture, TileCollision.Passable, position);
         }
@@ -195,7 +198,7 @@ namespace AnotherCastle
         /// </summary>
         public Rectangle GetBounds(int x, int y)
         {
-            return new Rectangle((x * Tile.Width) + xOffset, (y * Tile.Height) + yOffset, Tile.Width, Tile.Height);
+            return new Rectangle((x*Tile.Width) + xOffset, (y*Tile.Height) + yOffset, Tile.Width, Tile.Height);
         }
 
         public bool HasPlayerDied()
@@ -210,26 +213,25 @@ namespace AnotherCastle
                 foreach (var otherList in entityList)
                 {
                     if (entList == otherList) continue;
-                    foreach (var ent in entList)
+                    foreach (T ent in entList)
                     {
-                        var entBox = ent.GetBoundingBox();
+                        RectangleF entBox = ent.GetBoundingBox();
 
-                        foreach (var other in otherList)
+                        foreach (T other in otherList)
                         {
-                            var otherBox = other.GetBoundingBox();
+                            RectangleF otherBox = other.GetBoundingBox();
 
                             if (!entBox.IntersectsWith(otherBox)) continue;
-                            var depth = entBox.GetIntersectionDepth(otherBox);
+                            Vector depth = entBox.GetIntersectionDepth(otherBox);
                             if (depth == Vector.Zero) continue;
-                            var absDepthX = Math.Abs(depth.X);
-                            var absDepthY = Math.Abs(depth.Y);
-                            var depthVector = absDepthX > absDepthY
+                            double absDepthX = Math.Abs(depth.X);
+                            double absDepthY = Math.Abs(depth.Y);
+                            Vector depthVector = absDepthX > absDepthY
                                 ? new Vector(0, depth.Y, 0)
                                 : new Vector(depth.X, 0, 0);
                             ent.OnCollision(other, depthVector);
                             other.OnCollision(ent, depthVector);
                         }
-
                     }
                 }
             }
@@ -247,10 +249,13 @@ namespace AnotherCastle
                 var enemyList = new List<IEntity>(_enemyManager.EnemyList.ToList());
                 var missileList = new List<IEntity>(_missileManager.MissileList.ToList());
                 var enemyMissileList = new List<IEntity>(_missileManager.EnemyMissileList.ToList());
-                System.Diagnostics.Debug.WriteLine("Enemy Count: " + enemyList.Count);
-                System.Diagnostics.Debug.WriteLine("Missile Count: " + missileList.Count);
-                System.Diagnostics.Debug.WriteLine("Enemy Missile Count: " + enemyMissileList.Count);
-                var tileList = new List<IEntity>(_currentRoom.TileDictionary.Values.ToList().Where(a => a.TileCollision == TileCollision.Impassable));
+                Debug.WriteLine("Enemy Count: " + enemyList.Count);
+                Debug.WriteLine("Missile Count: " + missileList.Count);
+                Debug.WriteLine("Enemy Missile Count: " + enemyMissileList.Count);
+                var tileList =
+                    new List<IEntity>(
+                        _currentRoom.TileDictionary.Values.ToList()
+                            .Where(a => a.TileCollision == TileCollision.Impassable));
                 var entityList = new List<List<IEntity>>
                 {
                     enemyList,
@@ -289,7 +294,8 @@ namespace AnotherCastle
 
         private void UpdateInput(double elapsedTime)
         {
-            if ((_input.Controller != null && _input.Controller.ButtonStart.Pressed) || _input.Keyboard.IsKeyHeld(Keys.Escape))
+            if ((_input.Controller != null && _input.Controller.ButtonStart.Pressed) ||
+                _input.Keyboard.IsKeyHeld(Keys.Escape))
             {
                 IsGamePaused = !IsGamePaused;
             }
@@ -304,9 +310,9 @@ namespace AnotherCastle
             if (_input.Controller != null)
             {
                 x = _input.Controller.LeftControlStick.X;
-                y = _input.Controller.LeftControlStick.Y * -1;
+                y = _input.Controller.LeftControlStick.Y*-1;
                 u = _input.Controller.RightControlStick.X;
-                v = _input.Controller.RightControlStick.Y * -1;
+                v = _input.Controller.RightControlStick.Y*-1;
 
                 if (Math.Abs(u) > Math.Abs(v))
                 {
@@ -371,7 +377,7 @@ namespace AnotherCastle
                 _playerCharacter.Attack(attackInput);
             }
 
-            _playerCharacter.Move(controlInput * elapsedTime);
+            _playerCharacter.Move(controlInput*elapsedTime);
         }
 
         public void Render(Renderer renderer)

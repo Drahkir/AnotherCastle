@@ -34,7 +34,7 @@ namespace AnotherCastle
 
         private void RemoveDeadExplosions()
         {
-            for (var i = _effects.Count - 1; i >= 0; i--)
+            for (int i = _effects.Count - 1; i >= 0; i--)
             {
                 if (_effects[i].Finished)
                 {

@@ -5,7 +5,6 @@ namespace AnotherCastle
 {
     public class SkeletonBrain : IEnemyBrain
     {
-        public Path Path { get; set; }
         private double _elapsedTime;
         private Vector _lastMove;
 
@@ -14,11 +13,13 @@ namespace AnotherCastle
             _lastMove = new Vector(0, -1, 0);
         }
 
+        public Path Path { get; set; }
+
         public Vector NextMove(Vector currentPosition, double elapsedTime)
         {
             _elapsedTime += elapsedTime;
             var prng = new Random();
-            var ranTime = (double)prng.Next(5, 25) / 10;
+            double ranTime = (double) prng.Next(5, 25)/10;
 
             if (currentPosition.X > 600) _lastMove = new Vector(-1, 0, 0);
             else if (currentPosition.X < -600) _lastMove = new Vector(1, 0, 0);
@@ -28,7 +29,7 @@ namespace AnotherCastle
             else if (_elapsedTime > ranTime)
             {
                 _elapsedTime = 0;
-                var ranNum = prng.Next(0, 3);
+                int ranNum = prng.Next(0, 3);
 
                 switch (ranNum)
                 {

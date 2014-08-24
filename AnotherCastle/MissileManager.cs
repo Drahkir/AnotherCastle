@@ -5,11 +5,13 @@ namespace AnotherCastle
 {
     public class MissileManager
     {
+        private static MissileManager instance;
         private readonly List<EnemyMissile> _enemyMissiles = new List<EnemyMissile>();
         private readonly List<Missile> _missiles = new List<Missile>();
-        private static MissileManager instance;
 
-        private MissileManager() { }
+        private MissileManager()
+        {
+        }
 
         public static MissileManager Instance
         {
@@ -51,7 +53,7 @@ namespace AnotherCastle
 
         public void UpdateMissileList(IList<Missile> missileList, double elapsedTime)
         {
-            foreach (var missile in missileList)
+            foreach (Missile missile in missileList)
             {
                 missile.Update(elapsedTime);
             }
@@ -72,7 +74,7 @@ namespace AnotherCastle
 
         public void UpdateMissileList(IList<EnemyMissile> missileList, double elapsedTime)
         {
-            foreach (var missile in missileList)
+            foreach (EnemyMissile missile in missileList)
             {
                 missile.Update(elapsedTime);
             }

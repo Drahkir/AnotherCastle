@@ -6,14 +6,14 @@ namespace AnotherCastle
     {
         #region Missile Properties
 
-        private MissileManager _missileManager;
-        private Texture _missileTexture;
-        private double _shootCountDown;
+        private const double FireRecovery = 0.25;
+        private readonly MissileManager _missileManager;
+        private readonly Texture _missileTexture;
         private double _elapsedTime;
         //public double FireRecovery { get; set; }
 
-        private const double FireRecovery = 0.25;
         private double _fireRecoveryTime = FireRecovery;
+        private double _shootCountDown;
 
         #endregion Missile Properties
 
@@ -23,7 +23,8 @@ namespace AnotherCastle
         /// <param name="texture">The texture for the enemy</param>
         /// <param name="enemyBrain">The AI for the enemy</param>
         /// <param name="position">The spawn point for this enemy</param>
-        public Eyeball(Texture texture, IEnemyBrain enemyBrain, Vector position, Texture missileTexture, MissileManager missileManager) : base(texture, enemyBrain, position)
+        public Eyeball(Texture texture, IEnemyBrain enemyBrain, Vector position, Texture missileTexture,
+            MissileManager missileManager) : base(texture, enemyBrain, position)
         {
             Health = 15;
             Damage = 5;
@@ -75,7 +76,7 @@ namespace AnotherCastle
         {
             // Do nothing, Eyeball is a rock
 
-            if (entity.GetType() == typeof(Missile))
+            if (entity.GetType() == typeof (Missile))
             {
                 var missile = entity as Missile;
                 Health -= missile.Damage;

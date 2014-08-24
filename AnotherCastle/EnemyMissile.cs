@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Engine;
+﻿using Engine;
 
 namespace AnotherCastle
 {
     public class EnemyMissile : Missile
     {
-        public EnemyMissile(Texture texture, Vector vector) : base(texture, vector) {
+        public EnemyMissile(Texture texture, Vector vector) : base(texture, vector)
+        {
         }
 
         public override void OnCollision(IEntity entity, Vector amount)
         {
-            if (entity.GetType() == typeof(Eyeball))
+            if (entity.GetType() == typeof (Eyeball))
             {
                 return;
             }

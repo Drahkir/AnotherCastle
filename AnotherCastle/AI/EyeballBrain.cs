@@ -1,11 +1,9 @@
-﻿using System;
-using Engine;
+﻿using Engine;
 
 namespace AnotherCastle
 {
     public class EyeballBrain : IEnemyBrain
     {
-        public Path Path { get; set; }
         private double _elapsedTime;
         private Vector _lastMove;
 
@@ -13,6 +11,8 @@ namespace AnotherCastle
         {
             _lastMove = new Vector(0, -1, 0);
         }
+
+        public Path Path { get; set; }
 
         public Vector NextMove(Vector currentPosition, double elapsedTime)
         {
