@@ -14,10 +14,10 @@ namespace AnotherCastle
         private double _invulnerabilityTimer;
         private bool _isInvulnerable;
         public bool WaitingAtExit;
-        private float blinkAlpha = (float)0.0;
-        private float blinkAlphaMax = (float)0.9;
-        private float blinkAlphaMin = (float)0.1;
-        private float blinkAlphaAdjustor = (float)0.01;
+        private float _blinkAlpha = (float)0.0;
+        private const float BlinkAlphaMax = (float) 0.9;
+        private const float BlinkAlphaMin = (float) 0.1;
+        private float _blinkAlphaAdjustor = (float)0.01;
 
         #region Missile Properties
 
@@ -54,19 +54,19 @@ namespace AnotherCastle
             if (_isInvulnerable)
             {
                 // Make pixela blink while she is invulnerable
-                if (blinkAlpha >= blinkAlphaMax)
+                if (_blinkAlpha >= BlinkAlphaMax)
                 {
-                    blinkAlphaAdjustor *= -1;
-                    blinkAlpha = blinkAlphaMax;
+                    _blinkAlphaAdjustor *= -1;
+                    _blinkAlpha = BlinkAlphaMax;
                 }
 
-                if (blinkAlpha <= blinkAlphaMin)
+                if (_blinkAlpha <= BlinkAlphaMin)
                 {
-                    blinkAlphaAdjustor *= -1;
-                    blinkAlpha = blinkAlphaMin;
+                    _blinkAlphaAdjustor *= -1;
+                    _blinkAlpha = BlinkAlphaMin;
                 }
-                blinkAlpha += blinkAlphaAdjustor;
-                Color color = new Color(1, 1, 1, blinkAlpha);
+                _blinkAlpha += _blinkAlphaAdjustor;
+                var color = new Color(1, 1, 1, _blinkAlpha);
                 Sprite.SetColor(color);
             }
 
@@ -96,7 +96,7 @@ namespace AnotherCastle
             else if (enemy != null) 
             {
                 if (_isInvulnerable) return;
-                if (enemy != null) Health -= enemy.Damage;
+                Health -= enemy.Damage;
                 _isInvulnerable = true;
                 var sprPos = Sprite.GetPosition();
                 Sprite.SetPosition(sprPos + new Vector(0, 20, 0));
