@@ -131,26 +131,26 @@ namespace AnotherCastle
             switch (tileChar)
             {
                 case 'B':
-                    return new Tile("border", textureManager.Get("dirt_floor"), TileCollision.Impassable, position);
+                    return new Tile("border", textureManager.Get("dirt_floor2"), TileCollision.Impassable, position);
                 case 'R':
-                    return new Tile("rock_wall", textureManager.Get("rock_wall"), TileCollision.Impassable, position);
+                    return new Tile("rock_wall2", textureManager.Get("rock_wall2"), TileCollision.Impassable, position);
                 case 'D':
-                    return new Tile("dirt_floor", textureManager.Get("dirt_floor"), TileCollision.Passable, position);
+                    return new Tile("dirt_floor2", textureManager.Get("dirt_floor2"), TileCollision.Passable, position);
                 case 'S':
-                    return LoadSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
+                    return LoadSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor2"), position);
                 case 'N':
-                    return LoadNorthSouthSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"),
+                    return LoadNorthSouthSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor2"),
                         position);
                 case 'E':
-                    return LoadEastWestSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"),
+                    return LoadEastWestSkeleton(textureManager.Get("skeleton"), textureManager.Get("dirt_floor2"),
                         position);
                 case 'Y':
-                    return LoadEyeball(textureManager.Get("eyeball"), textureManager.Get("dirt_floor"), position,
+                    return LoadEyeball(textureManager.Get("eyeball"), textureManager.Get("dirt_floor2"), position,
                         textureManager.Get("fireball"));
                 case 'Z':
-                    return LoadPlayer(textureManager.Get("skeleton"), textureManager.Get("dirt_floor"), position);
+                    return LoadPlayer(textureManager.Get("skeleton"), textureManager.Get("dirt_floor2"), position);
                 case 'X':
-                    return new Tile("exit", textureManager.Get("dirt_floor"), TileCollision.Impassable, position);
+                    return new Tile("exit", textureManager.Get("dirt_floor2"), TileCollision.Impassable, position);
                 default:
                     throw new NotSupportedException(
                         String.Format("Unsupported tile type character '{0}' at position {1}, {2}.", tileChar, x, y));

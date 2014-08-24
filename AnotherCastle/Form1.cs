@@ -80,8 +80,8 @@ namespace AnotherCastle
             _textureManager.LoadTexture("skeleton", "./Content/Sprites/skeleton.png");
             _textureManager.LoadTexture("background", "./Content/Backgrounds/background.png");
             _textureManager.LoadTexture("background_layer_1", "./Content/Backgrounds/background_p.tga");
-            _textureManager.LoadTexture("dirt_floor", "./Content/Tiles/dirt_floor.png");
-            _textureManager.LoadTexture("rock_wall", "./Content/Tiles/rock_wall.png");
+            _textureManager.LoadTexture("dirt_floor2", "./Content/Tiles/dirt_floor2.png");
+            _textureManager.LoadTexture("rock_wall2", "./Content/Tiles/rock_wall2.png");
             _textureManager.LoadTexture("heart_missile", "./Content/Sprites/heart_missile.png");
             _textureManager.LoadTexture("fireball", "./Content/Sprites/fireball.png");
             _textureManager.LoadTexture("eyeball", "./Content/Sprites/eyeball.png");
